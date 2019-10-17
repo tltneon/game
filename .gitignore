@@ -1,5 +1,8 @@
 .vs
+*.mdf
+*.ldf
 packages/
 */bin/*
 */obj/*
 */node_modules/*
+*/fonts/*

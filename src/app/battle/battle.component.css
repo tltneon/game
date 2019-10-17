@@ -1,0 +1,3 @@
+#battletable {width: 100%;}
+#battletable tr td {text-align:center;}
+#battletable tr td:first-of-type {text-align:right;}

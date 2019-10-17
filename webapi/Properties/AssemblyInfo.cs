@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("webapi")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("webapi")]
-[assembly: AssemblyCopyright("© Microsoft, 2019")]
+[assembly: AssemblyCopyright("© , 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для ID библиотеки типов typelib, если этот проект видим для COM
-[assembly: Guid("bd786a78-45c6-4ad2-b662-db270db14f45")]
+[assembly: Guid("9fcd5615-2efc-416f-b346-28d527ce07ec")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

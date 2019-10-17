@@ -19,7 +19,7 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: ProductListComponent },
-      { path: 'login', component: ProductListComponent },
+      { path: 'login', component: LoginComponent },
       { path: 'base', component: BaseComponent },
       { path: 'battles', component: BattleComponent },
       { path: 'stats', component: StatsComponent },
