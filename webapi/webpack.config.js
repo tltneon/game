@@ -55,6 +55,10 @@ module.exports = {
             }
         ]
     },
+	
+	node: {
+  fs: 'empty'
+},
 
     plugins: [
         new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
@@ -70,7 +74,7 @@ module.exports = {
             //The CommonsChunkPlugin identifies the hierarchy among three chunks: app -> vendor -> polyfills. 
             //Where Webpack finds that app has shared dependencies with vendor, it removes them from app. 
             //It would remove polyfills from vendor if they shared dependencies, which they don't.
-            name: ['app', 'vendor', 'polyfills']
+            name: ['app'/*, 'vendor'*/, 'polyfills']
         }),
     ]
 };
