@@ -1,0 +1,3 @@
+#settingstable {position: absolute; width: 50%; left: 25%;}
+#settingstable td, #settingstable tr {line-height: 26px;}
+.button {background-color: white; border:1px solid black; color: black;}
