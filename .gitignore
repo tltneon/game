@@ -6,3 +6,5 @@ packages/
 */obj/*
 */node_modules/*
 */fonts/*
+
+webapi/Scripts/*

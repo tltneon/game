@@ -240,11 +240,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\app\_run.js" />
-    <Content Include="Scripts\app\app.datamodel.js" />
-    <Content Include="Scripts\app\app.viewmodel.js" />
-    <Content Include="Scripts\app\common.js" />
-    <Content Include="Scripts\app\home.viewmodel.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
@@ -264,41 +259,15 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="Scripts\libs\app\admin\admin.component.js" />
-    <Content Include="Scripts\libs\app\app.component.js" />
-    <Content Include="Scripts\libs\app\app.module.js" />
-    <Content Include="Scripts\libs\app\base\base.component.js" />
-    <Content Include="Scripts\libs\app\battle\battle.component.js" />
-    <Content Include="Scripts\libs\app\login\login.component.js" />
-    <Content Include="Scripts\libs\app\product-list\product-list.component.js" />
-    <Content Include="Scripts\libs\app\products.js" />
-    <Content Include="Scripts\libs\app\settings\settings.component.js" />
-    <Content Include="Scripts\libs\app\stats\stats.component.js" />
-    <Content Include="Scripts\libs\app\top-bar\top-bar.component.js" />
-    <Content Include="Scripts\libs\environments\environment.js" />
-    <Content Include="Scripts\libs\environments\environment.prod.js" />
-    <Content Include="Scripts\libs\index.html" />
-    <Content Include="Scripts\libs\main.js" />
-    <Content Include="Scripts\libs\polyfills.js" />
-    <Content Include="Scripts\libs\runtime.js" />
-    <Content Include="Scripts\libs\styles.js" />
-    <Content Include="Scripts\libs\vendor.js" />
     <None Include=".bin\git.cmd" />
     <None Include=".bin\node.cmd" />
     <None Include=".bin\npm.cmd" />
     <Content Include="package.json" />
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
-    <Content Include="Scripts\knockout-3.4.2.debug.js" />
-    <Content Include="Scripts\knockout-3.4.2.js" />
-    <Content Include="Scripts\knockout.validation.js" />
-    <Content Include="Scripts\knockout.validation.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\sammy-0.7.5.js" />
-    <Content Include="Scripts\sammy-0.7.5.min.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\polyfills.js" />
+    <Content Include="Scripts\runtime.js" />
+    <Content Include="Scripts\styles.js" />
+    <Content Include="Scripts\vendor.js" />
     <Content Include="src\app\admin\admin.component.css" />
     <Content Include="src\app\admin\admin.component.html" />
     <Content Include="src\app\app.component.css" />
@@ -317,7 +286,6 @@
     <Content Include="src\app\stats\stats.component.html" />
     <Content Include="src\app\top-bar\top-bar.component.css" />
     <Content Include="src\app\top-bar\top-bar.component.html" />
-    <Content Include="src\index.html" />
     <Content Include="src\karma.conf.js" />
     <Content Include="src\styles.css" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -357,36 +325,20 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="tsconfig.json" />
     <Content Include="src\assets\shipping.json" />
-    <Content Include="Scripts\libs\app\admin\admin.component.js.map" />
-    <Content Include="Scripts\libs\app\app.component.js.map" />
-    <Content Include="Scripts\libs\app\app.module.js.map" />
-    <Content Include="Scripts\libs\app\base\base.component.js.map" />
-    <Content Include="Scripts\libs\app\battle\battle.component.js.map" />
-    <Content Include="Scripts\libs\app\login\login.component.js.map" />
-    <Content Include="Scripts\libs\app\product-list\product-list.component.js.map" />
-    <Content Include="Scripts\libs\app\products.js.map" />
-    <Content Include="Scripts\libs\app\settings\settings.component.js.map" />
-    <Content Include="Scripts\libs\app\stats\stats.component.js.map" />
-    <Content Include="Scripts\libs\app\top-bar\top-bar.component.js.map" />
-    <Content Include="Scripts\libs\assets\shipping.json" />
-    <Content Include="Scripts\libs\environments\environment.js.map" />
-    <Content Include="Scripts\libs\environments\environment.prod.js.map" />
-    <Content Include="Scripts\libs\main.js.map" />
-    <Content Include="Scripts\libs\polyfills.js.map" />
-    <Content Include="Scripts\libs\runtime.js.map" />
-    <Content Include="Scripts\libs\styles.js.map" />
-    <Content Include="Scripts\libs\vendor.js.map" />
+    <Content Include="Scripts\assets\shipping.json" />
+    <Content Include="Scripts\main.js.map" />
+    <Content Include="Scripts\polyfills.js.map" />
+    <Content Include="Scripts\runtime.js.map" />
+    <Content Include="Scripts\styles.js.map" />
+    <Content Include="Scripts\vendor.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

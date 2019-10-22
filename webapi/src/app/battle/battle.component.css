@@ -1,5 +1,11 @@
-#content_1 {position: absolute; width: 96%;}
-.separatist {border: 1px solid black; width: 100%; margin: 5px 0 5px 0;}
-#battletable {width: 100%; line-height: 32px;}
-#battletable tr td {text-align:center;}
-#battletable tr td:first-of-type {text-align:right;}
+#battletable {
+    position: absolute;
+    width: 96%;
+}
+#battletable table {width: 100%; line-height: 32px;}
+#battletable table tr td {
+    text-align: center;
+}
+#battletable table tr td:first-of-type {
+    text-align: right;
+}

@@ -1,1 +1,7 @@
-#statstable {position: fixed; width: 100%;text-align:center;line-height: 32px;}
+#statstable {position: absolute; width: 100%;text-align:center;line-height: 32px;}
+#statstable table {
+    width: 100%;
+}
+tr:hover td {
+    background-color: #2e2e313d;
+}
