@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from './http.service';
-import { UserJSON, BaseJSON, StructuresJSON, ResourcesJSON, BattlesJSON, StatsJSON } from './testdata';
+import { UserJSON } from './testdata';
+import { BaseJSON } from './models/base';
+import { BattlesJSON } from './models/battles';
+import { StatsJSON } from './models/stats';
 
 @Component({
     selector: 'app-root',
@@ -16,8 +19,6 @@ export class AppComponent implements OnInit {
    
     userData: UserJSON;
     /*baseData: BaseJSON;
-    structData: StructuresJSON;
-    resData: ResourcesJSON;
     battlesData: BattlesJSON;
     statsData: StatsJSON;*/
  

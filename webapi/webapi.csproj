@@ -351,6 +351,12 @@
     <TypeScriptCompile Include="src\app\http.service.ts" />
     <TypeScriptCompile Include="src\app\login\login.component.ts" />
     <TypeScriptCompile Include="src\app\mainpage\mainpage.component.ts" />
+    <TypeScriptCompile Include="src\app\models\base.ts" />
+    <TypeScriptCompile Include="src\app\models\battles.ts" />
+    <TypeScriptCompile Include="src\app\models\resources.ts" />
+    <TypeScriptCompile Include="src\app\models\stats.ts" />
+    <TypeScriptCompile Include="src\app\models\units.ts" />
+    <TypeScriptCompile Include="src\app\models\user.ts" />
     <TypeScriptCompile Include="src\app\settings\settings.component.ts" />
     <TypeScriptCompile Include="src\app\stats\stats.component.ts" />
     <TypeScriptCompile Include="src\app\top-bar\top-bar.component.ts" />

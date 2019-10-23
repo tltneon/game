@@ -44,8 +44,8 @@
 		}
 	],
 	stats: [
-		[username:"Admin", basename: "Planet 1", baselevel: "0", wins: "1", loses: "0", score: "500000"],
-		[username:"notAdmin", basename: "Planet 2", baselevel: "0", wins: "0", loses: "0", score: "400000"],
-		[username:"alsonotAdmin", basename: "Planet 3", baselevel: "0", wins: "0", loses: "1", score: "400000"],
+		{username:"Admin", basename: "Planet 1", baselevel: "0", wins: "1", loses: "0", score: "500000"},
+		{username:"notAdmin", basename: "Planet 2", baselevel: "0", wins: "0", loses: "0", score: "400000"},
+		{username:"alsonotAdmin", basename: "Planet 3", baselevel: "0", wins: "0", loses: "1", score: "400000"},
 	]*/
 }

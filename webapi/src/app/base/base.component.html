@@ -1,68 +1,101 @@
-<p id="topbarinfo">resources [credits: {{userData?.credits}} | energy: {{userData?.energy}}]</p>
+<p id="topbarinfo">resources [credits: <span id="credits">{{userData?.credits}}</span> | energy: {{userData?.energy}}]</p>
 <div id="block">
-  <h4>Structures</h4>
-  <div id="items">
-    <div class="item">
-      <div class="image"><img class="energyComplex"/></div>
-      <div class="desc">
-        <div class="name">Takomak (level: 1)</div>
-        <div class="actions"> 
-          <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-          <div class="button" onclick="alert('destroyed')">destroy struct</div>
+    <h4>Structures</h4>
+    <div id="items">
+        <div class="item">
+            <div class="image"><img class="energyComplex" /></div>
+            <div class="desc">
+                <div class="name">Takomak (level: 1)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="image"><img class="aircraftsComplex"/></div>
-      <div class="desc">
-        <div class="name">Aicrafts (level: 1)</div>
-        <div class="actions"> 
-          <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-          <div class="button" onclick="alert('destroyed')">destroy struct</div>
+        <div class="item">
+            <div class="image"><img class="aircraftsComplex" /></div>
+            <div class="desc">
+                <div class="name">Aicrafts (level: 1)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="image"><img class="lifeComplex"/></div>
-      <div class="desc">
-        <div class="name">Structure name (level: 1)</div>
-        <div class="actions"> 
-          <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-          <div class="button" onclick="alert('destroyed')">destroy struct</div>
+        <div class="item">
+            <div class="image"><img class="lifeComplex" /></div>
+            <div class="desc">
+                <div class="name">Structure name (level: 1)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="image"><img class="resourceComplex"/></div>
-      <div class="desc">
-        <div class="name">Structure name (level: 1)</div>
-        <div class="actions"> 
-          <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-          <div class="button" onclick="alert('destroyed')">destroy struct</div>
+        <div class="item">
+            <div class="image"><img class="resourceComplex" /></div>
+            <div class="desc">
+                <div class="name">Structure name (level: 1)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="image"><img class="newStructure" /></div>
-      <div class="desc">
-        <div class="name">New structure</div>
-        <div class="actions"> 
-          <div class="button" onclick="alert('builded')">build struct</div>
+        <div class="item">
+            <div class="image"><img class="newStructure" /></div>
+            <div class="desc">
+                <div class="name">New structure</div>
+                <div class="actions">
+                    <div class="button" onclick="alert('builded')">build struct</div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <div id="baseinfo">
-      <h4>Base info</h4>
-      <div>Owner: {{userData?.name}}</div>
-      <div>Level: {{userData?.level}}</div>
-      <div class="separatist"></div>
-      <h4>Prodution</h4>
-      <div>Credits: 000/min.</div>
-      <div>Energy: 000/min.</div>
-      <div>Population: 000</div>
-      <div class="separatist"></div>
-      <h4>Actions</h4>
-      <div class="button" onclick="alert('upped')">Level up ^</div>
-  </div>
+    <h4>Units</h4>
+    <div id="items">
+        <div class="item">
+            <div class="image"><img class="droneUnit" /></div>
+            <div class="desc">
+                <div class="name">Drones (16 on base)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('added')">add+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy</div>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="image"><img class="jetUnit" /></div>
+            <div class="desc">
+                <div class="name">Jets (4 on base)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('added')">add+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy</div>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="image"><img class="lincorUnit" /></div>
+            <div class="desc">
+                <div class="name">Lincores (6 on base)</div>
+                <div class="actions">
+                    <div class="levelUpIcon button" onclick="alert('added')">add+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="baseinfo">
+        <h4>Base info</h4>
+        <div>Owner: {{userData?.name}}</div>
+        <div>Level: {{userData?.level}}</div>
+        <div class="separatist"></div>
+        <h4>Prodution</h4>
+        <div>Credits: 000/min.</div>
+        <div>Energy: 000/min.</div>
+        <div>Population: 000</div>
+        <div class="separatist"></div>
+        <h4>Actions</h4>
+        <div class="button" onclick="alert('upped')">Level up ^</div>
+    </div>
 </div>
