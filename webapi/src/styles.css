@@ -71,6 +71,11 @@ input {
     border: 1px solid #BDBDBD;*/
 }
 
+select {
+    background-color: #3f485c66;
+    border: 1px solid black;
+}
+
 label {
   font-size: 12px;
   font-weight: bold;
@@ -129,19 +134,4 @@ app-top-bar {
 app-top-bar h1 {
   color: white;
   margin: 0;
-}
-
-/* Checkout Cart, Shipping Prices */
-
-.cart-item, .shipping-item {
-  width: 100%;
-  min-width: 400px;
-  max-width: 450px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 16px 32px;
-  margin-bottom: 8px;
-  border-radius: 2px;
-  background-color: #EEEEEE;
 }

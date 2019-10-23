@@ -278,8 +278,8 @@
     <Content Include="src\app\battle\battle.component.html" />
     <Content Include="src\app\login\login.component.css" />
     <Content Include="src\app\login\login.component.html" />
-    <Content Include="src\app\product-list\product-list.component.css" />
-    <Content Include="src\app\product-list\product-list.component.html" />
+    <Content Include="src\app\mainpage\mainpage.component.css" />
+    <Content Include="src\app\mainpage\mainpage.component.html" />
     <Content Include="src\app\settings\settings.component.css" />
     <Content Include="src\app\settings\settings.component.html" />
     <Content Include="src\app\stats\stats.component.css" />
@@ -326,7 +326,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="tsconfig.json" />
-    <Content Include="src\assets\shipping.json" />
     <Content Include="Scripts\assets\shipping.json" />
     <Content Include="Scripts\main.js.map" />
     <Content Include="Scripts\polyfills.js.map" />
@@ -349,12 +348,13 @@
     <TypeScriptCompile Include="src\app\app.module.ts" />
     <TypeScriptCompile Include="src\app\base\base.component.ts" />
     <TypeScriptCompile Include="src\app\battle\battle.component.ts" />
+    <TypeScriptCompile Include="src\app\http.service.ts" />
     <TypeScriptCompile Include="src\app\login\login.component.ts" />
-    <TypeScriptCompile Include="src\app\product-list\product-list.component.ts" />
-    <TypeScriptCompile Include="src\app\products.ts" />
+    <TypeScriptCompile Include="src\app\mainpage\mainpage.component.ts" />
     <TypeScriptCompile Include="src\app\settings\settings.component.ts" />
     <TypeScriptCompile Include="src\app\stats\stats.component.ts" />
     <TypeScriptCompile Include="src\app\top-bar\top-bar.component.ts" />
+    <TypeScriptCompile Include="src\app\testdata.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />

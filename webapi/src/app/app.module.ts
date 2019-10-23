@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { ProductListComponent } from './product-list/product-list.component';
+import { MainPageComponent } from './mainpage/mainpage.component';
 import { BattleComponent } from './battle/battle.component';
 import { BaseComponent } from './base/base.component';
 import { StatsComponent } from './stats/stats.component';
@@ -17,8 +18,9 @@ import { LoginComponent } from './login/login.component';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+	HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: ProductListComponent },
+      { path: '', component: MainPageComponent },
       { path: 'login', component: LoginComponent },
       { path: 'base', component: BaseComponent },
       { path: 'battles', component: BattleComponent },
@@ -30,7 +32,7 @@ import { LoginComponent } from './login/login.component';
   declarations: [
     AppComponent,
     TopBarComponent,
-    ProductListComponent,
+    MainPageComponent,
     BattleComponent,
     BaseComponent,
     StatsComponent,
@@ -41,10 +43,3 @@ import { LoginComponent } from './login/login.component';
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
-
-
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

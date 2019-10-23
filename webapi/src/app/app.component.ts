@@ -1,15 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpService } from './http.service';
+import { UserJSON, BaseJSON, StructuresJSON, ResourcesJSON, BattlesJSON, StatsJSON } from './testdata';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: [ './app.component.css' ]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    /*template: `<div>
+                    <p>Имя пользователя: {{userData?.name}}</p>
+                    <p>Имя пользователя: {{userData?.level}}</p>
+               </div>`,*/
+    providers: [HttpService]
 })
-export class AppComponent  {}
-
-
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/
+export class AppComponent implements OnInit { 
+   
+    userData: UserJSON;
+    /*baseData: BaseJSON;
+    structData: StructuresJSON;
+    resData: ResourcesJSON;
+    battlesData: BattlesJSON;
+    statsData: StatsJSON;*/
+ 
+    constructor(private httpService: HttpService){}
+      
+    ngOnInit() {
+        this.httpService.getData().subscribe((data: UserJSON) => this.userData = data);
+    }
+}

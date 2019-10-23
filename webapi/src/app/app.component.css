@@ -2,9 +2,13 @@ p {
   font-family: Lato;
 }
 
-#background, html {background-color: black; height: 94%; width:100%; position: fixed; z-index: -1;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-  overflow: hidden;
+#background, html {
+    height: 94%;
+    width:100%;
+    position: fixed;
+    z-index: -1;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    overflow: hidden;
 }
 
 #stars {
