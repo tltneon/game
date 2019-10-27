@@ -6,8 +6,18 @@
             <div class="image"><img class="{{item.type}}" /></div>
             <div class="desc">
                 <div class="name">{{item.type}} (level: {{item.level}})</div>
+                <div class="task">Current task: 
+                    <span *ngIf="item.task.action; else unset">
+                        {{item.task.action}} {{item.task.endsin}}
+                    </span>
+                    
+                    <ng-template #unset>  
+                        None
+                    </ng-template>  
+                </div>
                 <div class="actions">
                     <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
+                    <div class="levelUpIcon button" onclick="alert('cleared')">Clear task</div>
                     <div class="button" onclick="alert('destroyed')">destroy struct</div>
                 </div>
             </div>
@@ -35,18 +45,31 @@
             </div>
         </div>
     </div>
-    <div id="baseinfo">
-        <h4>Base info</h4>
+</div>
+<div id="baseinfo">
+    <h4>Base info</h4>
         <div>Name: {{baseData[0]?.name}}</div>
         <div>Owner: {{baseData[0]?.owner}}</div>
         <div>Level: {{baseData[0]?.level}}</div>
-        <div class="separatist"></div>
-        <h4>Prodution</h4>
+        <div *ngIf="!baseData[0]?.isactive">Base is inactive</div>
+    <div class="separatist"></div>
+    <h4>Current task</h4>
+        <div [ngSwitch]="baseData[0]?.task.action">
+            <ng-template ngSwitchCase="build">Building: {{baseData[0]?.task.result}}</ng-template>
+            <ng-template ngSwitchCase="upgrade">Upgrading base</ng-template>
+            <ng-template ngSwitchCase="repair">Repairing base</ng-template>
+            <ng-template ngSwitchCase="create">Creating: {{baseData[0]?.task.result}}</ng-template>
+            <ng-template ngSwitchDefault="">None</ng-template>
+        </div>
+        <div *ngIf="baseData[0].task.action">Ends in: {{baseData[0]?.task.endsin}}</div>
+    <div class="separatist"></div>
+    <h4>Prodution</h4>
         <div>Credits: {{100*baseData[0]?.level}}/min.</div>
         <div>Energy: {{100*baseData[0]?.level}}/min.</div>
         <div>Population: {{4*baseData[0]?.level}}</div>
-        <div class="separatist"></div>
-        <h4>Actions</h4>
-        <div class="button" onclick="alert('upped')">Level up ^</div>
-    </div>
+    <div class="separatist"></div>
+    <h4>Actions</h4>
+    <div class="button" onclick="alert('upped')">Level up ^</div>
+    <div class="button" onclick="alert('upped')">Repair</div>
+    <div class="button" onclick="alert('cleared')">Clear task</div>
 </div>

@@ -13,6 +13,10 @@ import { StatsComponent } from './stats/stats.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth.guard';
+import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { AdminBasesComponent } from './admin/admin-bases/admin-bases.component';
+import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
 
 @NgModule({
   imports: [
@@ -26,7 +30,19 @@ import { LoginComponent } from './login/login.component';
         { path: 'battles', component: BattleComponent },
         { path: 'stats', component: StatsComponent },
         { path: 'settings', component: SettingsComponent },
-        { path: 'admin', component: AdminComponent },
+        { path: 'admin', component: AdminComponent,
+          children: [
+            {
+              path: '',
+              children: [
+                { path: '', component: AdminComponent },
+                { path: 'users', component: AdminUsersComponent, canActivate: [AuthGuard],  },
+                { path: 'bases', component: AdminBasesComponent, canActivate: [AuthGuard],  },
+                { path: 'settings', component: AdminSettingsComponent, canActivate: [AuthGuard],  }
+              ],
+            }
+          ]
+        },
        // { path: '**', redirectTo: '/' }
     ])
   ],
@@ -39,7 +55,10 @@ import { LoginComponent } from './login/login.component';
     StatsComponent,
     SettingsComponent,
     AdminComponent,
-    LoginComponent
+    LoginComponent,
+    AdminUsersComponent,
+    AdminBasesComponent,
+    AdminSettingsComponent
   ],
   bootstrap: [ AppComponent ]
 })

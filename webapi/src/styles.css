@@ -10,7 +10,7 @@
 
 body {
   margin: 0;
-  overflow: hidden;
+  background: #0e131a;
 }
 
 .container {
@@ -23,9 +23,9 @@ router-outlet + *  {
 }
 
 .separatist {
-    border: 1px solid #8a8a8a4a;
-    width: 100%;
-    margin: 5px 0 5px 0;
+  border: 1px solid #8a8a8a4a;
+  width: 100%;
+  margin: 5px 0 5px 0;
 }
 
 /* Text */

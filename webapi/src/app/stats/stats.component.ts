@@ -11,12 +11,24 @@ import { StatsJSON } from '../models/stats';
 export class StatsComponent implements OnInit {
 
   statsData: StatsJSON[];
-  count: number;
+  timeLeftMin: number = 5;
+  timeLeftSec: number = 0;
+  interval;
 
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
     //this.httpService.getData().subscribe(data => this.statsData = data);
+
+
+    this.interval = setInterval(() => {
+      this.timeLeftSec--;
+      if(this.timeLeftSec < 0) {
+        this.timeLeftMin--;
+        this.timeLeftSec = 59;
+      }
+    }, 1000)
+
     this.statsData = [
       {
         name: "test1",

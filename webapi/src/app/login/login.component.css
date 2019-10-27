@@ -1,0 +1,10 @@
+#login {
+  position: absolute;
+  text-align: center;
+  width: 20%;
+  left: 40%;
+}
+#login div:nth-child(2), #login div:nth-child(3) {
+  text-align: right;
+  line-height: 38px;
+}
