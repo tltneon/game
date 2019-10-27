@@ -5,5 +5,5 @@ export class BattlesJSON {
     from: string;
     to: string;
     arrival: number;
-	units: UnitsJSON;
+	units: UnitsJSON[];
 }

@@ -1,41 +1,11 @@
-<p id="topbarinfo">resources [credits: <span id="credits">{{userData?.credits}}</span> | energy: {{userData?.energy}}]</p>
+<p id="topbarinfo">Resources: | <span *ngFor="let res of baseData[0]?.resources" class="resource">{{res.type}}: {{res.count}} | </span></p>
 <div id="block">
     <h4>Structures</h4>
-    <div id="items">
-        <div class="item">
-            <div class="image"><img class="energyComplex" /></div>
+    <div id="structures" class="items" >
+        <div class="item" *ngFor="let item of baseData[0]?.structures">
+            <div class="image"><img class="{{item.type}}" /></div>
             <div class="desc">
-                <div class="name">Takomak (level: 1)</div>
-                <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="image"><img class="aircraftsComplex" /></div>
-            <div class="desc">
-                <div class="name">Aicrafts (level: 1)</div>
-                <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="image"><img class="lifeComplex" /></div>
-            <div class="desc">
-                <div class="name">Structure name (level: 1)</div>
-                <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="image"><img class="resourceComplex" /></div>
-            <div class="desc">
-                <div class="name">Structure name (level: 1)</div>
+                <div class="name">{{item.type}} (level: {{item.level}})</div>
                 <div class="actions">
                     <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
                     <div class="button" onclick="alert('destroyed')">destroy struct</div>
@@ -53,47 +23,28 @@
         </div>
     </div>
     <h4>Units</h4>
-    <div id="items">
-        <div class="item">
-            <div class="image"><img class="droneUnit" /></div>
+    <div id="units" id="items">
+        <div class="item" *ngFor="let item of baseData[0]?.units">
+            <div class="image"><img class="{{item.type}}" /></div>
             <div class="desc">
-                <div class="name">Drones (16 on base)</div>
+                <div class="name">{{item.type}} (on base: {{item.count}})</div>
                 <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('added')">add+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy</div>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="image"><img class="jetUnit" /></div>
-            <div class="desc">
-                <div class="name">Jets (4 on base)</div>
-                <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('added')">add+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy</div>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="image"><img class="lincorUnit" /></div>
-            <div class="desc">
-                <div class="name">Lincores (6 on base)</div>
-                <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('added')">add+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy</div>
+                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
+                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
                 </div>
             </div>
         </div>
     </div>
     <div id="baseinfo">
         <h4>Base info</h4>
-        <div>Owner: {{userData?.name}}</div>
-        <div>Level: {{userData?.level}}</div>
+        <div>Name: {{baseData[0]?.name}}</div>
+        <div>Owner: {{baseData[0]?.owner}}</div>
+        <div>Level: {{baseData[0]?.level}}</div>
         <div class="separatist"></div>
         <h4>Prodution</h4>
-        <div>Credits: 000/min.</div>
-        <div>Energy: 000/min.</div>
-        <div>Population: 000</div>
+        <div>Credits: {{100*baseData[0]?.level}}/min.</div>
+        <div>Energy: {{100*baseData[0]?.level}}/min.</div>
+        <div>Population: {{4*baseData[0]?.level}}</div>
         <div class="separatist"></div>
         <h4>Actions</h4>
         <div class="button" onclick="alert('upped')">Level up ^</div>

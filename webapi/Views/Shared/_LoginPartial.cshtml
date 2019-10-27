@@ -9,7 +9,7 @@
         <li>
             @Html.ActionLink("Здравствуйте " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
         </li>
-        <li><a href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">Выйти</a></li>
+        <li><a href="javascript:sessionStorage.removeItem('accessToken');document.querySelector('#logoutForm').submit();">Выйти</a></li>
     </ul>
     }
 }

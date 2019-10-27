@@ -4,5 +4,5 @@ export class StatsJSON {
     level: number;
     wins: number;
     loses: number;
-    score: string;
+    score: number;
 }

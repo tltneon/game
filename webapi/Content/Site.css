@@ -34,3 +34,17 @@ textarea {
         padding: 10px 15px;
     }
 }
+
+li {
+    display: inline;
+}
+
+.col-md-8 {
+    display: inline-grid;
+    width: 66%;
+}
+
+.col-md-4 {
+    display: inline-grid;
+    width: 33%;
+}

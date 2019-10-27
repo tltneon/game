@@ -10,23 +10,14 @@
             <th>Units</th>
             <th>Actions</th>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>Attacking base</td>
-            <td>Planet 1</td>
-            <td>Planet 2</td>
-            <td>12/20/2019</td>
-            <td><div>2 ships</div><div>and 4 another ships</div></td>
+        <tr *ngFor="let squad of battlesData">
+            <td>*</td>
+            <td>{{squad.action}}</td>
+            <td>{{squad.from}}</td>
+            <td>{{squad.to}}</td>
+            <td>{{squad.arrival}}</td>
+            <td><div *ngFor="let unit of squad.units">{{unit.type}} - {{unit.count}} units</div></td>
             <td><div class="button" onclick="alert('Your order sent to that squad')">Get them back!</div></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Returning home</td>
-            <td>Planet 3</td>
-            <td>Planet 1</td>
-            <td>12/20/2019</td>
-            <td><div>1 ship</div><div>and 1 another ship</div></td>
-            <td>()</td>
         </tr>
     </table>
     <div class="separatist"></div>

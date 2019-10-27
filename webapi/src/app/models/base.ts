@@ -4,8 +4,9 @@ import { UnitsJSON } from './units';
 
 export class BaseJSON {
     name: string;
+	owner: string;
     level: number;
-	structures: StructuresJSON;
-	resources: ResourcesJSON;
-	units: UnitsJSON;
+	structures: StructuresJSON[];
+	resources: ResourcesJSON[];
+	units: UnitsJSON[];
 }

@@ -18,15 +18,16 @@ import { LoginComponent } from './login/login.component';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-	HttpClientModule,
+    HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: MainPageComponent },
-      { path: 'login', component: LoginComponent },
-      { path: 'base', component: BaseComponent },
-      { path: 'battles', component: BattleComponent },
-      { path: 'stats', component: StatsComponent },
-      { path: 'settings', component: SettingsComponent },
-      { path: 'admin', component: AdminComponent },
+        { path: '', component: MainPageComponent, pathMatch: 'full' },
+        { path: 'login', component: LoginComponent },
+        { path: 'base', component: BaseComponent },
+        { path: 'battles', component: BattleComponent },
+        { path: 'stats', component: StatsComponent },
+        { path: 'settings', component: SettingsComponent },
+        { path: 'admin', component: AdminComponent },
+       // { path: '**', redirectTo: '/' }
     ])
   ],
   declarations: [

@@ -1,5 +1,4 @@
 export class ResourcesJSON {
-    energy: number;
-    credits: number;
-    population: number;
+    type: string;
+    count: number;
 }
