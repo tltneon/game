@@ -96,7 +96,7 @@ export class BaseComponent implements OnInit {
 
     updateProdution() {
         for(let i in this.baseData[0].resources){
-            this.baseData[0].resources[i].count+=Math.floor(Math.pow(100, Math.random()));
+            this.baseData[0].resources[i].count += Math.floor(Math.pow(100, Math.random()));
         }
     }
 }

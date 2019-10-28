@@ -268,6 +268,12 @@
     <Content Include="Scripts\runtime.js" />
     <Content Include="Scripts\styles.js" />
     <Content Include="Scripts\vendor.js" />
+    <Content Include="src\app\admin\admin-bases\admin-bases.component.css" />
+    <Content Include="src\app\admin\admin-bases\admin-bases.component.html" />
+    <Content Include="src\app\admin\admin-settings\admin-settings.component.css" />
+    <Content Include="src\app\admin\admin-settings\admin-settings.component.html" />
+    <Content Include="src\app\admin\admin-users\admin-users.component.css" />
+    <Content Include="src\app\admin\admin-users\admin-users.component.html" />
     <Content Include="src\app\admin\admin.component.css" />
     <Content Include="src\app\admin\admin.component.html" />
     <Content Include="src\app\app.component.css" />
@@ -286,6 +292,8 @@
     <Content Include="src\app\stats\stats.component.html" />
     <Content Include="src\app\top-bar\top-bar.component.css" />
     <Content Include="src\app\top-bar\top-bar.component.html" />
+    <Content Include="src\favicon.ico" />
+    <Content Include="src\index.html" />
     <Content Include="src\karma.conf.js" />
     <Content Include="src\styles.css" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -332,6 +340,8 @@
     <Content Include="Scripts\runtime.js.map" />
     <Content Include="Scripts\styles.js.map" />
     <Content Include="Scripts\vendor.js.map" />
+    <Content Include="src\tsconfig.app.json" />
+    <Content Include="src\tsconfig.spec.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -343,9 +353,15 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\app\admin\admin-bases\admin-bases.component.ts" />
+    <TypeScriptCompile Include="src\app\admin\admin-settings\admin-settings.component.ts" />
+    <TypeScriptCompile Include="src\app\admin\admin-users\admin-users.component.ts" />
     <TypeScriptCompile Include="src\app\admin\admin.component.ts" />
+    <TypeScriptCompile Include="src\app\app-routing.module.ts" />
+    <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\auth.guard.ts" />
     <TypeScriptCompile Include="src\app\base\base.component.ts" />
     <TypeScriptCompile Include="src\app\battle\battle.component.ts" />
     <TypeScriptCompile Include="src\app\http.service.ts" />
@@ -355,12 +371,14 @@
     <TypeScriptCompile Include="src\app\models\battles.ts" />
     <TypeScriptCompile Include="src\app\models\resources.ts" />
     <TypeScriptCompile Include="src\app\models\stats.ts" />
+    <TypeScriptCompile Include="src\app\models\structures.ts" />
+    <TypeScriptCompile Include="src\app\models\task.ts" />
     <TypeScriptCompile Include="src\app\models\units.ts" />
     <TypeScriptCompile Include="src\app\models\user.ts" />
     <TypeScriptCompile Include="src\app\settings\settings.component.ts" />
     <TypeScriptCompile Include="src\app\stats\stats.component.ts" />
-    <TypeScriptCompile Include="src\app\top-bar\top-bar.component.ts" />
     <TypeScriptCompile Include="src\app\testdata.ts" />
+    <TypeScriptCompile Include="src\app\top-bar\top-bar.component.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />

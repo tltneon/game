@@ -17,7 +17,8 @@
             <td>{{squad.to}}</td>
             <td>{{squad.arrival}}</td>
             <td><div *ngFor="let unit of squad.units">{{unit.type}} - {{unit.count}} units</div></td>
-            <td><div class="button" onclick="alert('Your order sent to that squad')">Get them back!</div></td>
+            <td><div *ngIf="squad.action=='attacking'" class="button" onclick="alert('Your order sent to that squad')">Get them back!</div>
+                <div *ngIf="squad.action=='returning'">Squad goes back to base</div></td>
         </tr>
     </table>
     <div class="separatist"></div>

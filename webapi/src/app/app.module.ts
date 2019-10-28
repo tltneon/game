@@ -43,7 +43,7 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
             }
           ]
         },
-       // { path: '**', redirectTo: '/' }
+        { path: '**', redirectTo: '/' }
     ])
   ],
   declarations: [

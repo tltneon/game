@@ -11,15 +11,14 @@ import { StatsJSON } from '../models/stats';
 export class StatsComponent implements OnInit {
 
   statsData: StatsJSON[];
-  timeLeftMin: number = 5;
-  timeLeftSec: number = 0;
+  timeLeftMin: number = 4;
+  timeLeftSec: number = 59;
   interval;
 
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
     //this.httpService.getData().subscribe(data => this.statsData = data);
-
 
     this.interval = setInterval(() => {
       this.timeLeftSec--;
@@ -38,63 +37,16 @@ export class StatsComponent implements OnInit {
         loses: 1,
         score: 2,
       },
-      {
-        name: "test2",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-      {
-        name: "test3",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-      {
-        name: "test4",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-      {
-        name: "test3",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-      {
-        name: "test4",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-      {
-        name: "test3",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-      {
-        name: "test4",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      }
     ];
+    for(let i = 0; i<29;i++)
+      this.statsData[this.statsData.length] = {
+        name: "username"+i,
+        basename: "basename"+i,
+        level: 1,
+        wins: 1,
+        loses: i,
+        score: 10-i,
+      };
   }
 
 }
