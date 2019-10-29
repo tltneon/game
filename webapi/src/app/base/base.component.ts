@@ -45,9 +45,9 @@ export class BaseComponent implements OnInit {
                         type: "aircraftsComplex",
                         level: 1,
                         task: {
-                            action: '',
-                            result: '',
-                            endsin: 0
+                            action: 'createUnit',
+                            result: 'lincorUnit',
+                            endsin: 774578585
                         }
                     },
                     {
@@ -73,7 +73,7 @@ export class BaseComponent implements OnInit {
                 units: [
                     {
                         type: "droneUnit",
-                        count: 3
+                        count: 0
                     },
                     {
                         type: "jetUnit",
@@ -91,7 +91,7 @@ export class BaseComponent implements OnInit {
                 }
             }
         ]
-        this.interval = setInterval(() => { this.updateProdution() }, 1000)
+        this.interval = setInterval(() => this.baseData[0].isactive ? this.updateProdution() : ()=>{}, 1000)
     }
 
     updateProdution() {
@@ -99,4 +99,65 @@ export class BaseComponent implements OnInit {
             this.baseData[0].resources[i].count += Math.floor(Math.pow(100, Math.random()));
         }
     }
+    private getStructID(structure):number{
+        return this.baseData[0].structures.findIndex((element) => element.type == structure.type);
+    }
+
+    upgradeStructure(structure){
+        this.baseData[0].structures[this.getStructID(structure)].level++;
+        this.setStructureTask(structure, 'upgrade', '', 123456789);
+    }
+    destroyStructure(structure){
+        this.baseData[0].structures.splice(this.getStructID(structure), 1);
+    }
+    setStructureTask(structure, task: string, result: string = '', finishTime = 12345678){
+        this.baseData[0].structures[this.getStructID(structure)].task = {
+            action: task,
+            result: result,
+            endsin: finishTime                
+        }
+    }
+    clearStructureTask(structure){
+        this.baseData[0].structures[this.getStructID(structure)].task = {
+            action: '',
+            result: '',
+            endsin: 0                
+        }
+    }
+
+    buildStructure(structureType: string){
+        this.setBaseTask('build', structureType, 1234567);
+        this.baseData[0].structures[this.baseData[0].structures.length] = {
+            type: structureType,
+            level: 1,
+            task: {
+                action: '',
+                result: '',
+                endsin: 0
+            }
+        }
+    }
+    upgradeBase(){
+        this.baseData[0].level++;
+        this.setBaseTask('upgrade', '', 12345678);
+    }
+    toggleBaseActiveness(){
+        this.baseData[0].isactive = !this.baseData[0].isactive;
+        this.setBaseTask(this.baseData[0].isactive ? 'repair' : '', '', 12345678);
+    }
+    setBaseTask(task: string, result: string, finishTime){
+        this.baseData[0].task = {
+            action: task,
+            result: result,
+            endsin: finishTime
+        }
+    }
+    clearBaseTask(){
+        this.baseData[0].task = {
+            action: '',
+            result: '',
+            endsin: 0
+        }
+    }
+
 }

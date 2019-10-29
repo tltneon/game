@@ -87,7 +87,7 @@ label {
 /* Button */
 .button, button {
   height: 75%;
-  margin: 10px;
+  margin: 2px;
   padding: 2px;
   display: inline-flex;
   align-items: center;

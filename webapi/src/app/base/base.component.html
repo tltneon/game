@@ -1,4 +1,4 @@
-<p id="topbarinfo">Resources: | <span *ngFor="let res of baseData[0]?.resources" class="resource">{{res.type}}: {{res.count}} | </span></p>
+<p id="topbarinfo">Resources: | <span *ngFor="let res of baseData[0]?.resources" class="resource">{{res.type}}: {{res.count}} | </span><i *ngIf="baseData[0]?.isactive" class="activeBase">ø</i></p>
 <div id="block">
     <h4>Structures</h4>
     <div id="structures" class="items" >
@@ -6,9 +6,9 @@
             <div class="image"><img class="{{item.type}}" /></div>
             <div class="desc">
                 <div class="name">{{item.type}} (level: {{item.level}})</div>
-                <div class="task">Current task: 
+                <div class="task">Task: 
                     <span *ngIf="item.task.action; else unset">
-                        {{item.task.action}} {{item.task.endsin}}
+                        {{item.task.action}} until {{item.task.endsin | date :'short'}}
                     </span>
                     
                     <ng-template #unset>  
@@ -16,9 +16,9 @@
                     </ng-template>  
                 </div>
                 <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-                    <div class="levelUpIcon button" onclick="alert('cleared')">Clear task</div>
-                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
+                    <div class="levelUpIcon button" (click)="upgradeStructure(item)">Upgrade</div>
+                    <div class="levelUpIcon button" (click)="clearStructureTask(item)">Clear task</div>
+                    <div class="button" (click)="destroyStructure(item)">Destroy structure</div>
                 </div>
             </div>
         </div>
@@ -26,8 +26,9 @@
             <div class="image"><img class="newStructure" /></div>
             <div class="desc">
                 <div class="name">New structure</div>
+                <div class="option">Type: </div>
                 <div class="actions">
-                    <div class="button" onclick="alert('builded')">build struct</div>
+                    <div class="button" (click)="buildStructure('newStructure')">Build structure</div>
                 </div>
             </div>
         </div>
@@ -38,10 +39,6 @@
             <div class="image"><img class="{{item.type}}" /></div>
             <div class="desc">
                 <div class="name">{{item.type}} (on base: {{item.count}})</div>
-                <div class="actions">
-                    <div class="levelUpIcon button" onclick="alert('upped')">level+</div>
-                    <div class="button" onclick="alert('destroyed')">destroy struct</div>
-                </div>
             </div>
         </div>
     </div>
@@ -61,7 +58,7 @@
             <ng-template ngSwitchCase="create">Creating: {{baseData[0]?.task.result}}</ng-template>
             <ng-template ngSwitchDefault="">None</ng-template>
         </div>
-        <div *ngIf="baseData[0].task.action">Ends in: {{baseData[0]?.task.endsin}}</div>
+        <div *ngIf="baseData[0].task.action">Ends in: {{baseData[0]?.task.endsin | date :'short'}}</div>
     <div class="separatist"></div>
     <h4>Prodution</h4>
         <div>Credits: {{450*baseData[0]?.level}}/min.</div>
@@ -69,7 +66,7 @@
         <div>Population: {{10*baseData[0]?.level}}</div>
     <div class="separatist"></div>
     <h4>Actions</h4>
-    <div class="button" onclick="alert('upped')">Level up ^</div>
-    <div class="button" onclick="alert('upped')">Repair</div>
-    <div class="button" onclick="alert('cleared')">Clear task</div>
+    <div class="button" (click)="upgradeBase()">Level up ^</div>
+    <div class="button" (click)="toggleBaseActiveness()">Repair</div>
+    <div class="button" (click)="clearBaseTask()">Clear task</div>
 </div>

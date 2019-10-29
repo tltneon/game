@@ -212,8 +212,6 @@ namespace webapi.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-
-            System.Diagnostics.Debug.WriteLine("i ve got some shit");
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);

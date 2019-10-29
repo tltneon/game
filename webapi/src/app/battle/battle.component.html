@@ -5,6 +5,7 @@
             <th>Squad #</th>
             <th>Mission</th>
             <th>From</th>
+            <th>Departured</th>
             <th>To</th>
             <th>Arrival at</th>
             <th>Units</th>
@@ -14,20 +15,25 @@
             <td>*</td>
             <td>{{squad.action}}</td>
             <td>{{squad.from}}</td>
+            <td>{{squad.departure | date :'short'}}</td>
             <td>{{squad.to}}</td>
-            <td>{{squad.arrival}}</td>
+            <td>{{squad.arrival | date :'short'}}</td>
             <td><div *ngFor="let unit of squad.units">{{unit.type}} - {{unit.count}} units</div></td>
-            <td><div *ngIf="squad.action=='attacking'" class="button" onclick="alert('Your order sent to that squad')">Get them back!</div>
+            <td><div *ngIf="squad.action=='attacking'" class="button" (click)="returnSquad(squad)" onclick="alert('Your order sent to that squad');">Get them back!</div>
                 <div *ngIf="squad.action=='returning'">Squad goes back to base</div></td>
         </tr>
     </table>
     <div class="separatist"></div>
     <div>
         <h5>Send new squad</h5>
-        <div>Select destination: <select><option>Planet 2</option><option>Planet 3</option><option>Planet 4</option></select></div>
-        <div>Estimation time travel: 000s</div>
+        <div>Select destination:
+            <select id='target' (change)="recalculateTime()">
+                <option *ngFor="let base of basesData" [value]="base.name">{{base.owner}} ({{base.name}})</option>
+            </select>
+        </div>
+        <div>Estimation time travel: {{estiamatedTime}}s</div>
         <div>
             Select units in squad: <div><input type="number" /></div>
-            <div class="button" onclick="alert('sent')">Send</div>
+            <div class="button" (click)="sendSquad()">Send</div>
         </div>
     </div>

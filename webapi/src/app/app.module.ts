@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
@@ -23,6 +23,7 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     RouterModule.forRoot([
         { path: '', component: MainPageComponent, pathMatch: 'full' },
         { path: 'login', component: LoginComponent },

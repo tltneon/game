@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { HttpService } from '../http.service';
 import { BattlesJSON } from '../models/battles';
+import { BaseJSON } from '../models/base';
 
 @Component({
   selector: 'app-battle',
@@ -11,15 +13,20 @@ import { BattlesJSON } from '../models/battles';
 export class BattleComponent implements OnInit {
 
   battlesData: BattlesJSON[];
+  basesData: BaseJSON[];
+  estiamatedTime: number = 0;
+  form;
 
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
     this.battlesData = [
       {
+        key: "23rdf",
         action: "attacking",
-        from: "planet 1",
-        to: "planet 2",
+        from: "Planet 1",
+        to: "Planet 2",
+        departure: 123456612,
         arrival: 123456712,
         units: [
           {
@@ -37,9 +44,11 @@ export class BattleComponent implements OnInit {
         ],
       },
       {
+        key: "fe3df",
         action: "returning",
-        from: "planet 3",
-        to: "planet 1",
+        from: "Planet 3",
+        to: "Planet 1",
+        departure: 1234566144,
         arrival: 1234567144,
         units: [
           {
@@ -53,6 +62,75 @@ export class BattleComponent implements OnInit {
         ],
       }
     ];
+    this.basesData = [
+      {
+        name: "Planet 2",
+        owner: "Test",
+        level: 1,
+        isactive: true,
+        structures: [],
+        resources: [],
+        units: [],
+        task: {action:'',result:'',endsin:0},
+      },
+      {
+        name: "Planet 3",
+        owner: "Test2",
+        level: 1,
+        isactive: true,
+        structures: [],
+        resources: [],
+        units: [],
+        task: {action:'',result:'',endsin:0},
+      }
+    ];
   }
 
+  recalculateTime(){
+    this.estiamatedTime++;
+  }
+  returnSquad(squad){
+    let index = this.battlesData.findIndex((element) => element.key == squad.key);
+    this.battlesData[index].action ="returning";
+    let destination = this.battlesData[index].from;
+    this.battlesData[index].from = this.battlesData[index].to;
+    this.battlesData[index].to = destination;
+    this.battlesData[index].arrival += this.battlesData[index].arrival - this.battlesData[index].departure;
+  }
+  sendSquad(){
+    this.battlesData[this.battlesData.length] = {
+      key: "fh6hrtf"+Math.random(),
+      action: "attacking",
+      from: "Planet 1",
+      to: "Planet "+Math.floor(Math.random()*10),
+      departure: Math.floor(Math.random()*100000000000),
+      arrival: Math.floor(Math.random()*1000000000000),
+      units: [
+        {
+          type: "droneUnit",
+          count: Math.floor(Math.random()*10)
+        },
+        {
+          type: "jetUnit",
+          count: Math.floor(Math.random()*10)
+        },
+      ]
+    };
+    //console.log(this.form.get('first').setValue('some value'));
+  }
+}
+
+export class SimpleFormGroup {
+  form = new FormGroup({
+    first: new FormControl('Nancy'),
+    last: new FormControl('Drew'),
+  });
+
+  get first(): any { return this.form.get('first'); }
+
+  onSubmit(): void {
+    console.log(this.form.value);  // {first: 'Nancy', last: 'Drew'}
+  }
+
+  setValue() { this.form.setValue({first: 'Carson', last: 'Drew'}); }
 }

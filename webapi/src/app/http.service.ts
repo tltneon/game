@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
   
 @Injectable()
 export class HttpService {
@@ -7,13 +7,15 @@ export class HttpService {
   
     constructor(private http: HttpClient){ }
       
-    getData(url: string){
-        return this.http.get(this.rootUrl + url);
+    public getData(url: string) {
+        return this.http.get(this.rootUrl + url, { withCredentials: true });
     }      
-    sendData(url: string, body: object){
+    sendData(url: string, body: object) {
         return this.http.post(this.rootUrl + url, body);
     }
-    testRequest(){
-        return this.http.get('http://localhost/testdata.json');
+    
+    testRequest(url:string = 'http://localhost/testdata.json'){
+        let httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', }), responseType: 'text' as 'json' };
+        return this.http.get(url, httpOptions);
     }
 }

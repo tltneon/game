@@ -10,7 +10,7 @@ import { StatsJSON } from '../models/stats';
 })
 export class StatsComponent implements OnInit {
 
-  statsData: StatsJSON[];
+  statsData: StatsJSON[] = [];
   timeLeftMin: number = 4;
   timeLeftSec: number = 59;
   interval;
@@ -27,17 +27,6 @@ export class StatsComponent implements OnInit {
         this.timeLeftSec = 59;
       }
     }, 1000)
-
-    this.statsData = [
-      {
-        name: "test1",
-        basename: "testbase",
-        level: 1,
-        wins: 1,
-        loses: 1,
-        score: 2,
-      },
-    ];
     for(let i = 0; i<29;i++)
       this.statsData[this.statsData.length] = {
         name: "username"+i,
