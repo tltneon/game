@@ -5,7 +5,7 @@
   ],
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./Scripts/libs",
+    "outDir": "./dist/app",
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",

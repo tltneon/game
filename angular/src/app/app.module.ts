@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
@@ -13,7 +13,6 @@ import { StatsComponent } from './stats/stats.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './auth.guard';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminBasesComponent } from './admin/admin-bases/admin-bases.component';
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
@@ -21,31 +20,10 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
 @NgModule({
   imports: [
     BrowserModule,
+    AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpClientJsonpModule,
-    RouterModule.forRoot([
-        { path: '', component: MainPageComponent, pathMatch: 'full' },
-        { path: 'login', component: LoginComponent },
-        { path: 'base', component: BaseComponent },
-        { path: 'battles', component: BattleComponent },
-        { path: 'stats', component: StatsComponent },
-        { path: 'settings', component: SettingsComponent },
-        { path: 'admin', component: AdminComponent,
-          children: [
-            {
-              path: '',
-              children: [
-                { path: '', component: AdminComponent },
-                { path: 'users', component: AdminUsersComponent, },
-                { path: 'bases', component: AdminBasesComponent, },
-                { path: 'settings', component: AdminSettingsComponent, canActivate: [AuthGuard], }
-              ],
-            }
-          ]
-        },
-        { path: '**', redirectTo: '/' }
-    ])
+    HttpClientJsonpModule
   ],
   declarations: [
     AppComponent,
