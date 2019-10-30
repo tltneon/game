@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapi", "webapi\webapi.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapi.Tests", "webapi.Tests\webapi.Tests.csproj", "{9CD4FE96-DAA8-4931-ACC5-1D81436A48E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "logicLayer", "logicLayer\logicLayer.csproj", "{28014FDC-6023-4CA5-8FB5-A8B3B6EF9B8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "logicLayer", "logicLayer\logicLayer.csproj", "{28014FDC-6023-4CA5-8FB5-A8B3B6EF9B8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

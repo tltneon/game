@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit {
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
-    this.httpService.testRequest('http://localhost:16462/Test/Get').subscribe(responce => this.userData = JSON.parse(responce));
+    this.httpService.testRequest('http://localhost:16462/Test/Get').subscribe((responce:string) => this.userData = JSON.parse(responce));
     //this.datas = JSON.parse(this.datas);
     //this.datas = this.httpService.getData("Test/Get");
     //console.log(this.datas);

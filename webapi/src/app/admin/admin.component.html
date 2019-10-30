@@ -1,18 +1,11 @@
 <div class="onethirdcolumn">
-  <div><a [routerLink]="['users']" class="button fancy-button">Users</a></div>
+  <div>Categories</div>
+  <div><a [routerLink]="['users']" class="button">Users</a></div>
+  <div><a [routerLink]="['bases']" class="button">Bases</a></div>
+  <div><a [routerLink]="['settings']" class="button">Settings</a></div>
+</div>
+<div class="twothirdcolumn">
+  <app-admin-users></app-admin-users>
   <div>Userlist</div>
-  <div></div>
   <div>Userdetails</div>
-  <div></div>
-</div>
-<div class="onethirdcolumn">
-  <div><a [routerLink]="['bases']" class="button fancy-button">Bases</a></div>
-  <div>baselist</div>
-  <div></div>
-  <div>basedetails</div>
-  <div></div>
-</div>
-<div class="onethirdcolumn">
-  <div><a [routerLink]="['settings']" class="button fancy-button">Settings</a></div>
-  <div></div>
 </div>
