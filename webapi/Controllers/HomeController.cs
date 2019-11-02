@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using System.Threading.Tasks;
 
 using System.Net;
@@ -11,67 +10,49 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
 using System.Web.Http.Cors;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
+using System.Web.Http;
 
 namespace webapi.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : ApiController
     {
-        public ActionResult Index()
+        public IHttpActionResult Index()
         {
             return View();
         }
-    }
 
-    [EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*", SupportsCredentials = true)]
-    public class TestController : Controller
-    {
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult> TestConnect()
+        private IHttpActionResult View()
         {
-            System.Diagnostics.Debug.WriteLine("i ve got some shit");
-            return null;
+            throw new NotImplementedException();
         }
+    }
+    //[EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*", SupportsCredentials = true)]
+    public class TestController : ApiController
+    {
         public string Get()
         {
             System.Diagnostics.Debug.WriteLine("i send some shit");
             return new JavaScriptSerializer().Serialize( new { username = "Odmen", password = "2891ueij1230"});
         }
-        public HttpResponseMessage Post()
+        public async Task Post([FromBody] string str)
         {
-            System.Diagnostics.Debug.WriteLine("i ve got some shit");
-            return new HttpResponseMessage()
-            {
-                Content = new StringContent("POST: Test message")
-            };
+            System.Diagnostics.Debug.WriteLine("i've got some shit for you");
+            System.Diagnostics.Debug.WriteLine(str);
+            object t = new JavaScriptSerializer().Deserialize<object>(str);
+            System.Diagnostics.Debug.WriteLine(t.ToString());
+            return;
         }
-        /*[HttpPost]
-        [AllowAnonymous]
-        public string Post()
+
+        [Route("Test/Post4")]
+        [HttpPost]
+        public string Post4(HttpRequestMessage context)
         {
-            string data = Request.ToString();
-            System.Diagnostics.Debug.WriteLine("i ve got some shit");
-            return data;
-        }*/
-        /*public Task<HttpResponseMessage> ExecuteAsync(HttpControllerContext context,
-                                                    CancellationToken cancellationToken)
-        {
-            return Task.Run(() =>
-            {
-                IHttpRouteData rd = context.RouteData;
-                string output = "Неверный запрос";
-                if (rd.Values.ContainsKey("id"))
-                {
-                    int sum;
-                    if (int.TryParse((string)rd.Values["id"], out sum) && sum > 0)
-                    {
-                        double result = 1.3 * sum;
-                        output = string.Format("За {0} евро вы получите {1} долларов", sum, result);
-                    }
-                }
-                return context.Request.CreateResponse(HttpStatusCode.OK, output);
-            });
-        }*/
+            System.Diagnostics.Debug.WriteLine("i ve got some shit4");
+            var contentResult = context.Content.ReadAsStringAsync();
+            string result = contentResult.Result;
+            return result;
+        }
     }
 }

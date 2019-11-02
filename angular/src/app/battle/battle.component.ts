@@ -16,6 +16,7 @@ export class BattleComponent implements OnInit {
   basesData: BaseJSON[];
   estiamatedTime: number = 0;
   form;
+  destination;
 
   constructor(private httpService: HttpService) { }
 
@@ -87,7 +88,7 @@ export class BattleComponent implements OnInit {
   }
 
   recalculateTime(){
-    this.estiamatedTime++;
+    this.estiamatedTime = new Date(Date.now()).getSeconds();
   }
   returnSquad(squad){
     let index = this.battlesData.findIndex((element) => element.key == squad.key);
@@ -98,11 +99,12 @@ export class BattleComponent implements OnInit {
     this.battlesData[index].arrival += this.battlesData[index].arrival - this.battlesData[index].departure;
   }
   sendSquad(){
+    console.log();
     this.battlesData[this.battlesData.length] = {
       key: "fh6hrtf"+Math.random(),
       action: "attacking",
       from: "Planet 1",
-      to: "Planet "+Math.floor(Math.random()*10),
+      to: this.destination,
       departure: Math.floor(Math.random()*100000000000),
       arrival: Math.floor(Math.random()*1000000000000),
       units: [

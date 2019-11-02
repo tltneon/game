@@ -27,13 +27,13 @@
     <div>
         <h5>Send new squad</h5>
         <div>Select destination:
-            <select id='target' (change)="recalculateTime()">
+            <select (change)="recalculateTime()" #destination.value="ngModel" name="destination" [(ngModel)]="destination">
                 <option *ngFor="let base of basesData" [value]="base.name">{{base.owner}} ({{base.name}})</option>
             </select>
         </div>
         <div>Estimation time travel: {{estiamatedTime}}s</div>
         <div>
             Select units in squad: <div><input type="number" /></div>
-            <div class="button" (click)="sendSquad()">Send</div>
+            <div class="button" (click)="sendSquad(destination)">Send</div>
         </div>
     </div>

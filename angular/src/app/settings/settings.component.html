@@ -12,10 +12,10 @@
         </tr>
         <tr>
             <td>New password</td>
-            <td><input id="userpass" value="{{userData.password}}" /></td>
+            <td><input #password.value="ngModel" value="{{userData.password}}" name="password" [(ngModel)]="password" /></td>
         </tr>
         <tr>
-            <td><div class="button" onclick="alert('saved')">Save</div></td>
+            <td><div class="button" (click)="setValue(password)">Save</div></td>
             <td></td>
         </tr>
     </table>

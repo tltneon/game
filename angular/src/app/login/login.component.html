@@ -2,7 +2,9 @@
 
 <div id="login">
   <div>r u rly authed?</div>
-  <div>Login <input type="text" /></div>
-  <div>pass <input type="password" /></div>
-  <button onclick="alert('okay')">proof it</button>
+  <div>Login <input #login.value="ngModel" value="{{userData?.username}}" name="login" [(ngModel)]="login" /></div>
+  <div>pass <input #password.value="ngModel" value="{{userData?.password}}" name="password" [(ngModel)]="password" type="password" /></div>
+  <a [routerLink]="['../base']" class="button">no proof</a>
+  <p (click)="makeGet(password, login)" class="button">sendget</p>
+  <p (click)="makePost(password, login)" class="button">sendpost</p>
 </div>

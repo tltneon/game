@@ -7,15 +7,12 @@ export class HttpService {
   
     constructor(private http: HttpClient){ }
       
-    public getData(url: string) {
-        return this.http.get(this.rootUrl + url, { withCredentials: true });
+    getData(url: string, httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', }), responseType: 'text' as 'json' }) {
+        console.log("get", this.rootUrl + url);
+        return this.http.get(this.rootUrl + url, httpOptions);
     }      
-    sendData(url: string, body: object) {
-        return this.http.post(this.rootUrl + url, body);
-    }
-    
-    testRequest(url:string = 'http://localhost/testdata.json'){
-        let httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', }), responseType: 'text' as 'json' };
-        return this.http.get(url, httpOptions);
+    sendData(url: string, body: any, httpOptions = {}) {
+        console.log("post", this.rootUrl + url, body );
+        return this.http.post(this.rootUrl + url, body, httpOptions);
     }
 }

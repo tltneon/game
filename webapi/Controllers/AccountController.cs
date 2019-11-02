@@ -69,6 +69,7 @@ namespace webapi.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            System.Diagnostics.Debug.WriteLine("i ve got some shit6 get");
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -77,9 +78,10 @@ namespace webapi.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            System.Diagnostics.Debug.WriteLine("i ve got some shit6 post");
             if (!ModelState.IsValid)
             {
                 return View(model);
