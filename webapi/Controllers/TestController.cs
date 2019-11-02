@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Script.Serialization;
 
 namespace webapi.Controllers
 {
@@ -20,13 +21,18 @@ namespace webapi.Controllers
                     HttpStatusCode.BadRequest,
                     "Invalid input");
             }
-            System.Diagnostics.Debug.WriteLine(message.username);
-            return Request.CreateResponse(HttpStatusCode.Created);
+            System.Diagnostics.Debug.WriteLine(message.username, message.password);
+            return Request.CreateResponse(HttpStatusCode.OK, "authed");
+        }
+        public string Get()
+        {
+            System.Diagnostics.Debug.WriteLine("i send some shit");
+            return new JavaScriptSerializer().Serialize(new { username = "Odmen", password = "2891ueij1230" });
         }
     }
-
     public class ChatMessage
     {
         public string username { get; set; }
+        public string password { get; set; }
     }
 }

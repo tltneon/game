@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { UserJSON } from '../models/user';
+import { AuthGuard } from '../auth.guard';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,10 +12,11 @@ import { UserJSON } from '../models/user';
 })
 export class LoginComponent implements OnInit {
   userData: UserJSON;
-  password: string = "api/message";
-  login:string = "fpj34o0fi34jfi4fi";
+  password: string;
+  login:string;
+  error:string = "r u rly authed?";
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
     //, error => console.error(error));
@@ -21,11 +24,9 @@ export class LoginComponent implements OnInit {
 
   makeGet(password, login){
     this.httpService.getData(login).subscribe((responce:string) => console.log(responce));
-    console.log();
   }
   makePost(password, login){
-    this.httpService.sendData(password, {"username": login}).subscribe((responce:string) => console.log(responce));
-    console.log();
+    this.httpService.sendData("api/message", {"username": login, "password": password}).subscribe((responce) => responce == "authed" ? this.router.navigate(['base']) : function(){console.log(responce); this.error = "wrong answer";});
   }
 
 }
