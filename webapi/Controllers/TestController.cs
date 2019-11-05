@@ -26,7 +26,15 @@ namespace webapi.Controllers
         }
         public string Get()
         {
-            System.Diagnostics.Debug.WriteLine("i send some shit");
+            System.Diagnostics.Debug.WriteLine("GET REQUEST: i send some shit");
+
+            System.Diagnostics.Debug.WriteLine("connecting to wcf...");
+            Service1Client client = new Service1Client();
+
+            System.Diagnostics.Debug.WriteLine(client.GetData(6));
+
+            client.Close();
+
             return new JavaScriptSerializer().Serialize(new { username = "Odmen", password = "2891ueij1230" });
         }
     }
