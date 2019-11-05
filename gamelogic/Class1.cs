@@ -6,12 +6,12 @@ using System.Threading.Tasks;*/
 
 namespace gamelogic
 {
-    public class Class1
+    public class TestLogic
     {
-        public int UpgradeBase(int ID) {
+        public static string UpgradeBase(int ID) {
             //getbasebyid()
             //setdata()
-            return 1;            
+            return "gamelogicsayswhaturgay";            
         }
         public string Print(string str) {
             System.Diagnostics.Debug.WriteLine("debug functions");
