@@ -73,7 +73,9 @@ public interface IService1
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     string GetData(int value);
-    
+    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IService1/SendData", ReplyAction = "http://tempuri.org/IService1/GetDataResponse")]
+    string SendData(string username, string password);
+
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     System.Threading.Tasks.Task<string> GetDataAsync(int value);
     
@@ -117,7 +119,12 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
             base(binding, remoteAddress)
     {
     }
-    
+
+    public string SendData(string username, string password)
+    {
+        return base.Channel.SendData(username, password);
+    }
+
     public string GetData(int value)
     {
         return base.Channel.GetData(value);

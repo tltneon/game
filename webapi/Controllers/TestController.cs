@@ -22,6 +22,10 @@ namespace webapi.Controllers
                     "Invalid input");
             }
             System.Diagnostics.Debug.WriteLine(message.username, message.password);
+            System.Diagnostics.Debug.WriteLine("connecting to wcf...");
+            Service1Client client = new Service1Client();
+            System.Diagnostics.Debug.WriteLine(client.SendData(message.username, message.password));
+            client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, "authed");
         }
         public string Get()
@@ -32,7 +36,7 @@ namespace webapi.Controllers
             Service1Client client = new Service1Client();
 
             System.Diagnostics.Debug.WriteLine(client.GetData(6));
-
+                        
             client.Close();
 
             return new JavaScriptSerializer().Serialize(new { username = "Odmen", password = "2891ueij1230" });

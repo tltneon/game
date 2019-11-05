@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
 
     //console.log(this.input.nativeElement.value);
-    this.httpService.getData('Test/Get').subscribe((responce:string) => this.userData = JSON.parse(responce));
+    this.httpService.getData('api/Message').subscribe((responce:string) => this.userData = JSON.parse(responce));
     //, error => console.error(error));
   }
 
