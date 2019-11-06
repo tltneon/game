@@ -22,7 +22,7 @@ namespace webapi.Controllers
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
         }
-        public string Get()
+        /*public string Get()
         {
             System.Diagnostics.Debug.WriteLine("connecting to wcf...");
             Service1Client client = new Service1Client();
@@ -34,14 +34,15 @@ namespace webapi.Controllers
             System.Diagnostics.Debug.WriteLine("i send some shit");
 
             return new JavaScriptSerializer().Serialize(new { username = "Odmen", password = "2891ueij1230" });
+        }*/
+        public WcfService.AuthData Get()
+        {
+            Service1Client client = new Service1Client();
+            WcfService.AuthData data = client.GetDummyUserData();
+            client.Close();
+            return data;
         }
-}
-    public class AuthData
-    {
-        public string username { get; set; }
-        public string password { get; set; }
     }
-
     class AuthDataUtils
     {
         public static bool Check(WcfService.AuthData message) { // прочекаем входные данные на вшивость
@@ -59,6 +60,16 @@ namespace webapi.Controllers
         {
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+    }
+    public class StatisticController : ApiController
+    {
+        public int Get()
+        {
+            Service1Client client = new Service1Client();
+            int level = client.UpgradeBase(1);
+            client.Close();
+            return level;
         }
     }
     public class UpgradeController : ApiController

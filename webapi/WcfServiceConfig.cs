@@ -146,6 +146,12 @@ public interface IService1
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
     System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data);
     
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDummyUserData", ReplyAction="http://tempuri.org/IService1/GetDummyUserDataResponse")]
+    WcfService.AuthData GetDummyUserData();
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDummyUserData", ReplyAction="http://tempuri.org/IService1/GetDummyUserDataResponse")]
+    System.Threading.Tasks.Task<WcfService.AuthData> GetDummyUserDataAsync();
+    
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
     WcfService.CompositeType GetDataUsingDataContract(WcfService.CompositeType composite);
     
@@ -225,6 +231,16 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     public System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data)
     {
         return base.Channel.SendAuthDataAsync(data);
+    }
+    
+    public WcfService.AuthData GetDummyUserData()
+    {
+        return base.Channel.GetDummyUserData();
+    }
+    
+    public System.Threading.Tasks.Task<WcfService.AuthData> GetDummyUserDataAsync()
+    {
+        return base.Channel.GetDummyUserDataAsync();
     }
     
     public WcfService.CompositeType GetDataUsingDataContract(WcfService.CompositeType composite)

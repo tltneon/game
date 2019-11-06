@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using gamelogic;
 
 namespace WcfService
@@ -23,13 +25,16 @@ namespace WcfService
             bool test = false;
             try
             {
-                test = TestLogic.CreateUser(data.username, data.password);
+                test = TestLogic.AuthClient(Mapper.Map<EditUserViewModel, User>(model));
             }
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("damn err");
             }
             return string.Format("Registering user {0} with pass {1}. Result:" + test, data.username, data.password);
+        }
+        public AuthData GetDummyUserData() { 
+            return new AuthData { username = "testuser", password = "testpass" };
         }
         public string GetData(int value)
         {

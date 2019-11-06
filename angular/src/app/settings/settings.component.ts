@@ -19,21 +19,10 @@ export class SettingsComponent implements OnInit {
   constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-    function qweq(qw){
-      console.log("123", JSON.parse(qw));
-      this.userData = JSON.parse(qw);
-    }
-
-    this.httpService.getRequest('api/Test').subscribe(responce => qweq(responce));
-    console.log(this.password);
-    this.httpService.getRequest('api/Test').subscribe((responce) => function(){
-      console.log('test', responce);
-      //this.userData = JSON.parse(responce);
-    }, error => console.error(error));
+    this.httpService.getRequest('api/auth/GetDummyUserData').subscribe((responce:UserJSON) => this.userData = responce);
   }
 
   setValue(password){
-    this.password = password;
   }
 
   logout(){

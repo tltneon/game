@@ -1,4 +1,6 @@
-﻿namespace gamelogic
+﻿using gamelogic.Models;
+
+namespace gamelogic
 {
     public class TestLogic
     {
@@ -36,12 +38,20 @@
             DB = GetContext();
             return DB.Accounts.Find(username);
         }
+        public static string AuthClient(AuthData data) {
+            string token = "yourein";
+            Account find = FindUser(data.username);
+            if (find == null) CreateUser(data.username, data.password);
+            else if(data.password == find.Password) token = find.Token;
+            else token = "wrongpass";
+            return token;
+        }
         public static bool CreateUser(string username, string password)
         {
             DB = GetContext();
             bool result = false;
             try {
-                Account user = new Account { Username = username, Password = password, Role = 0 };
+                Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=49rh23489rh+salt" };
                 DB.Accounts.Add(user);
                 DB.SaveChanges();
                 int newIdentityValue = user.UserID;

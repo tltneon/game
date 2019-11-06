@@ -7,7 +7,7 @@ export class HttpService {
   
     constructor(private http: HttpClient){ }
       
-    getRequest(url: string, httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', }), responseType: 'text' as 'json' }) {
+    getRequest(url: string, httpOptions = {}) {
         console.log("get", this.rootUrl + url);
         return this.http.get(this.rootUrl + url, httpOptions);
     }      

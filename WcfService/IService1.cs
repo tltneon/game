@@ -20,6 +20,9 @@ namespace WcfService
         string SendAuthData(AuthData data);
 
         [OperationContract]
+        AuthData GetDummyUserData();
+
+        [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
         // TODO: Добавьте здесь операции служб
