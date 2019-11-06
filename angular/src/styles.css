@@ -134,6 +134,11 @@ app-top-bar {
 app-top-bar h1 {
   color: white;
   margin: 0;
+  overflow-wrap: break-word;
+  width: 22px;
+  line-height: 12px;
+  text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px crimson, 0 0 35px crimson, 0 0 40px crimson, 0 0 50px crimson, 0 0 75px crimson;
+  /*alternate::: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px #1714ed, 0 0 35px #2114ed, 0 0 40px #2b14ed, 0 0 50px #2b14ed, 0 0 75px #3514ed*/
 }
 
 

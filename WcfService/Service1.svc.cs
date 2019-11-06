@@ -18,6 +18,19 @@ namespace WcfService
             }
             return string.Format("Registering user {0} with pass {1}. Result:" + test, username, password);
         }
+        public string SendAuthData(AuthData data)
+        {
+            bool test = false;
+            try
+            {
+                test = TestLogic.CreateUser(data.username, data.password);
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("damn err");
+            }
+            return string.Format("Registering user {0} with pass {1}. Result:" + test, data.username, data.password);
+        }
         public string GetData(int value)
         {
             bool test = false;

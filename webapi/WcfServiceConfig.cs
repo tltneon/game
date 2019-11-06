@@ -15,6 +15,57 @@ namespace WcfService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AuthData", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    public partial class AuthData : object, System.Runtime.Serialization.IExtensibleDataObject
+    {
+        
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private string passwordField;
+        
+        private string usernameField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return this.extensionDataField;
+            }
+            set
+            {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string password
+        {
+            get
+            {
+                return this.passwordField;
+            }
+            set
+            {
+                this.passwordField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string username
+        {
+            get
+            {
+                return this.usernameField;
+            }
+            set
+            {
+                this.usernameField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CompositeType", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
     public partial class CompositeType : object, System.Runtime.Serialization.IExtensibleDataObject
     {
@@ -73,13 +124,27 @@ public interface IService1
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     string GetData(int value);
-    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IService1/UpgradeBase", ReplyAction = "http://tempuri.org/IService1/UpgradeBaseResponse")]
-    int UpgradeBase(int value);
-    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IService1/SendData", ReplyAction = "http://tempuri.org/IService1/GetDataResponse")]
-    string SendData(string username, string password);
-
+    
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     System.Threading.Tasks.Task<string> GetDataAsync(int value);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/UpgradeBase", ReplyAction="http://tempuri.org/IService1/UpgradeBaseResponse")]
+    int UpgradeBase(int value);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/UpgradeBase", ReplyAction="http://tempuri.org/IService1/UpgradeBaseResponse")]
+    System.Threading.Tasks.Task<int> UpgradeBaseAsync(int value);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendData", ReplyAction="http://tempuri.org/IService1/SendDataResponse")]
+    string SendData(string username, string password);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendData", ReplyAction="http://tempuri.org/IService1/SendDataResponse")]
+    System.Threading.Tasks.Task<string> SendDataAsync(string username, string password);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
+    string SendAuthData(WcfService.AuthData data);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
+    System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
     WcfService.CompositeType GetDataUsingDataContract(WcfService.CompositeType composite);
@@ -121,24 +186,45 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
             base(binding, remoteAddress)
     {
     }
-
-    public string SendData(string username, string password)
-    {
-        return base.Channel.SendData(username, password);
-    }
-
+    
     public string GetData(int value)
     {
         return base.Channel.GetData(value);
     }
+    
+    public System.Threading.Tasks.Task<string> GetDataAsync(int value)
+    {
+        return base.Channel.GetDataAsync(value);
+    }
+    
     public int UpgradeBase(int value)
     {
         return base.Channel.UpgradeBase(value);
     }
-
-    public System.Threading.Tasks.Task<string> GetDataAsync(int value)
+    
+    public System.Threading.Tasks.Task<int> UpgradeBaseAsync(int value)
     {
-        return base.Channel.GetDataAsync(value);
+        return base.Channel.UpgradeBaseAsync(value);
+    }
+    
+    public string SendData(string username, string password)
+    {
+        return base.Channel.SendData(username, password);
+    }
+    
+    public System.Threading.Tasks.Task<string> SendDataAsync(string username, string password)
+    {
+        return base.Channel.SendDataAsync(username, password);
+    }
+    
+    public string SendAuthData(WcfService.AuthData data)
+    {
+        return base.Channel.SendAuthData(data);
+    }
+    
+    public System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data)
+    {
+        return base.Channel.SendAuthDataAsync(data);
     }
     
     public WcfService.CompositeType GetDataUsingDataContract(WcfService.CompositeType composite)

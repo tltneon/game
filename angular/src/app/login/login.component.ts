@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
-import { UserJSON } from '../models/user';
 import { Router } from '@angular/router';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
@@ -11,7 +10,6 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
   providers: [HttpService]
 })
 export class LoginComponent implements OnInit {
-  userData: UserJSON;
   password: string;
   login:string;
   error:string = "r u rly authed?";
@@ -24,21 +22,23 @@ export class LoginComponent implements OnInit {
   auth(password, login){
     function updateErrorMessage(baseclass, str){
       console.log(str);
-      baseclass.error = typeof(str) == "string" ? str : str.name;
+      baseclass.error = typeof(str) == "string" ? str : str.name + " ("+str.error.message+")";
       document.body.querySelector("#auth").innerHTML = "Authorize";
       document.body.querySelector("#processing").classList.remove("active");
+    }
+    function proceedAuth(router, responce){
+      Cookie.set('token', responce);
+      router.navigate(['/']);
     }
 
     this.error = ". . .";
     document.body.querySelector("#auth").innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active");
-    this.httpService.postRequest("api/message", {"username": login, "password": password}).subscribe(
+    this.httpService.postRequest("api/auth/post", {"username": login, "password": password}).subscribe(
       (responce:string) => responce == "notauthed" 
       ? updateErrorMessage(this, "Wrong Password")
-      : function(){
-        Cookie.set('token', "fakecock");
-        this.router.navigate(['/'])
-    }, error => updateErrorMessage(this, error));
+      : proceedAuth(this.router, responce)
+      , error => updateErrorMessage(this, error));
   }
   fakeauth(){
     Cookie.set('token', "fakecock");

@@ -1,33 +1,29 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 
 namespace webapi.Controllers
 {
-    public class MessageController : ApiController
+    public class AuthController : ApiController
     {
-        public HttpResponseMessage Post([FromBody]ChatMessage message)
+        public HttpResponseMessage Post(WcfService.AuthData message)
         {
             System.Diagnostics.Debug.WriteLine("как же я заманался с этим постом");
-            if (message == null || !ModelState.IsValid || message.username.Length < 3 || message.password.Length < 3)
-            {
-                return Request.CreateErrorResponse(
+            if(AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest,
-                    "Invalid input");
-            }
+                    "Invalid input => urfag");
             System.Diagnostics.Debug.WriteLine("GOT THIS: ", message.username, message.password);
-            System.Diagnostics.Debug.WriteLine(message.password, " >== BASE64 ==> ", BASE64.Base64Encode(message.password));
+            System.Diagnostics.Debug.WriteLine(message.password, " >== BASE64 ==> ", AuthDataUtils.Base64Encode(message.password));
             System.Diagnostics.Debug.WriteLine("connecting to wcf...");
             Service1Client client = new Service1Client();
-            System.Diagnostics.Debug.WriteLine(client.SendData(message.username, BASE64.Base64Encode(message.password)));
+            string token = client.SendAuthData(message as WcfService.AuthData);
+            System.Diagnostics.Debug.WriteLine(token);
             client.Close();
-            return Request.CreateResponse(HttpStatusCode.OK, "authed");
+            return Request.CreateResponse(HttpStatusCode.OK, token);
         }
         public string Get()
         {
-
             System.Diagnostics.Debug.WriteLine("connecting to wcf...");
             Service1Client client = new Service1Client();
 
@@ -39,13 +35,21 @@ namespace webapi.Controllers
 
             return new JavaScriptSerializer().Serialize(new { username = "Odmen", password = "2891ueij1230" });
         }
-    }
-    public class ChatMessage
+}
+    public class AuthData
     {
         public string username { get; set; }
         public string password { get; set; }
     }
-    class BASE64 {
+
+    class AuthDataUtils
+    {
+        public static bool Check(WcfService.AuthData message) { // прочекаем входные данные на вшивость
+            if (message == null) return true;
+            if (message.username == null || message.password == null) return true;
+            if (message.username.Length < 3 || message.password.Length < 3) return true;
+            return false;
+        }
         public static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
@@ -59,7 +63,7 @@ namespace webapi.Controllers
     }
     public class UpgradeController : ApiController
     {
-        public string Get()
+        public int Get()
         {
             int baseid = 3;
             System.Diagnostics.Debug.WriteLine("GET REQUEST: ", baseid);
@@ -75,7 +79,7 @@ namespace webapi.Controllers
 
             System.Diagnostics.Debug.WriteLine("i send some shit"+ level);
 
-            return ""+level;
+            return level;
         }
     }
 }

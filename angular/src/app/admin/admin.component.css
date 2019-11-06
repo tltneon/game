@@ -1,3 +1,19 @@
 .onethirdcolumn {display: inline-block; height: calc(100vh - 68px); width: 32vw; vertical-align: top;}
 .twothirdcolumn {display: inline-block; height: calc(100vh - 68px); width: 64vw; vertical-align: top;}
 .onethirdcolumn {border-left: 3px solid #01010461; border-right: 3px solid #01010461;}
+.abutton, .atitle {
+    text-align: center;
+    padding: 1em;
+    background-color: #0000004a;
+    border: 1px solid #00000059;
+}
+.abutton a {
+    display: block;
+    color: white;
+    border-bottom: 1px dotted white;
+}
+.abutton:hover {
+    text-align: center;
+    padding: 1em;
+    background-color:#00000099;
+}

@@ -17,6 +17,9 @@ namespace WcfService
         string SendData(string username, string password);
 
         [OperationContract]
+        string SendAuthData(AuthData data);
+
+        [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
         // TODO: Добавьте здесь операции служб
@@ -43,5 +46,13 @@ namespace WcfService
             get { return stringValue; }
             set { stringValue = value; }
         }
+    }
+    [DataContract]
+    public class AuthData
+    {
+        [DataMember]
+        public string username { get; set; }
+        [DataMember]
+        public string password { get; set; }
     }
 }
