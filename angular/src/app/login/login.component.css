@@ -8,3 +8,17 @@
   text-align: right;
   line-height: 38px;
 }
+
+p#processing {
+  position: absolute;
+  margin-left: 10px;
+  line-height: 18px;
+  font-size: 24px;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  color: #719dde7a;
+  padding: 0px 3px 3px 1px;
+  margin: -2px 0px 0px 10px;
+  animation-name: shekel;
+  animation-duration: 1s;
+}

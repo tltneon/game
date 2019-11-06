@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using gamelogic;
 
 namespace entityframework
@@ -13,32 +14,26 @@ namespace entityframework
             {
             OneMore:
                 Console.Clear();
-                Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n2 - fill database with dummy data\n3 - truncate databases\n4 - make new user");
+                Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n2 - fill database with dummy data\n3 - truncate databases\n4 - make new user\n5 - find user by name");
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.Clear();
                 
                 switch (key.KeyChar)
                 {
                     case '2':
-                        db.Users.Add(new User { ID = 0, Name = "Admin", Password = "123456", Role = 1, Wins = 0, Loses = 0 });
-                        db.Users.Add(new User { ID = 1, Name = "User", Password = "123", Role = 0, Wins = 0, Loses = 0 });
-                        db.Bases.Add(new Base { Name = "AdminBase", Owner = 0, Credits = 100, Energy = 100, CoordX = 1, CoordY = 1, Level = 0 });
-                        db.Bases.Add(new Base { Name = "UserBase", Owner = 1, Credits = 100, Energy = 100, CoordX = 4, CoordY = 2, Level = 0 });
+                        db.Accounts.Add(new Account { UserID = 0, Username = "Admin", Password = "123456", Role = 1 });
+                        db.Accounts.Add(new Account { UserID = 1, Username = "User", Password = "123", Role = 0 });
+                        db.Players.Add(new Player { UserID = 0, Username = "Admin" });
+                        db.Players.Add(new Player { UserID = 0, Username = "Admin" });
+                        db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 0, CoordX = 1, CoordY = 1, Level = 0 });
+                        db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 1, CoordX = 4, CoordY = 2, Level = 0 });
                         db.SaveChanges();
                         Console.WriteLine("TABLES FILLED");
                         break;
 
                     case '3':
                         Console.WriteLine("Executing...");
-                        /*var comps = db.Database.SqlQuery<User>("SELECT * FROM Users");
-                        foreach (var company in comps)
-                            Console.WriteLine(company.Name);*/
-                        db.Database.ExecuteSqlCommand("TRUNCATE TABLE Users");
-                        db.Database.ExecuteSqlCommand("TRUNCATE TABLE Bases");
-                        db.Database.ExecuteSqlCommand("TRUNCATE TABLE Buildings");
-                        db.Database.ExecuteSqlCommand("TRUNCATE TABLE Squads");
-                        RecreateDatabase("SELECT 1+1");
-                        //db.Database.Delete();
+                        db.Database.Delete();
                         Console.WriteLine("DONE");
                         break;
 
@@ -51,20 +46,34 @@ namespace entityframework
                         Console.WriteLine(TestLogic.CreateUser(usr, pas));
                         break;
 
+                    case '5':
+                        Console.WriteLine("Find user by name: ");
+                        string username = Console.ReadLine();
+                        var us = db.Accounts.Where(o => o.Username == username);
+                        foreach (Account customer in us)
+                        {
+                            Console.WriteLine("Found: id{0}, {1}, Password {2}, Role {3} ", customer.UserID, customer.Username, customer.Password, customer.Role);
+                        }
+                        Console.WriteLine("DONE");
+                        break;
+
                     default:
                         Console.WriteLine("Opening connection to DB...");
 
-                        Console.WriteLine("USERS TABLE:");
-                        foreach (User u in db.Users) Console.WriteLine("{0}. {1} - {2}", u.ID, u.Name, u.Password);
+                        Console.WriteLine("ACCOUNTS TABLE:");
+                        foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}", u.UserID, u.Username, u.Password);
+
+                        Console.WriteLine("PLAYERS TABLE:");
+                        foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Username);
 
                         Console.WriteLine("BASES TABLE:");
-                        foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} - {2}. Coords: {3}x{4}", u.ID, u.Name, u.Owner, u.CoordX, u.CoordY);
+                        foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} - {2}. Coords: {3}x{4}", u.BaseID, u.Basename, u.OwnerID, u.CoordX, u.CoordY);
 
                         Console.WriteLine("BUILDINGS TABLE:");
-                        foreach (Building u in db.Buildings) Console.WriteLine("{0}. {1} - {2}", u.ID, u.Type, u.Level);
+                        foreach (Building u in db.Buildings) Console.WriteLine("{0}. {1} - {2}", u.BaseID, u.Type, u.Level);
 
                         Console.WriteLine("SQUADS TABLE:");
-                        foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.ID, u.MoveFrom, u.MoveTo);
+                        foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.Key, u.MoveFrom, u.MoveTo);
 
                         Console.WriteLine("DONE");
                         break;
@@ -72,18 +81,6 @@ namespace entityframework
 
                 Console.WriteLine("Another command? '1' to yes.");
                 if (Console.ReadKey().KeyChar == '1') goto OneMore;
-            }
-        }
-        public static void RecreateDatabase(string schemaScript)
-        {
-            Entities db = new Entities();
-            new Entities().Database.Delete(); // Opens and disposes its own connection
-
-            using (db = new Entities()) // New connection
-            {
-                Database database = db.Database;
-                database.Create(); // Works!
-                database.ExecuteSqlCommand(schemaScript);
             }
         }
     }
@@ -95,3 +92,5 @@ namespace entityframework
     object value = descriptor.GetValue(user2);
     Console.WriteLine("{0}={1}", name, value);
 }*/
+
+//var saloane = _context.Saloane.Where(c => c.SomeProperty == "something").ToList();

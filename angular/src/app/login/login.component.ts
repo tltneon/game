@@ -28,5 +28,8 @@ export class LoginComponent implements OnInit {
   makePost(password, login){
     this.httpService.sendData("api/message", {"username": login, "password": password}).subscribe((responce) => responce == "authed" ? this.router.navigate(['base']) : function(){console.log(responce); this.error = "wrong answer";});
   }
+  auth(password, login){
+    this.httpService.sendData("api/message", {"username": login, "password": password}).subscribe((responce) => responce == "authed" ? this.router.navigate(['base']) : function(){console.log(responce); this.error = "wrong answer";});
+  }
 
 }

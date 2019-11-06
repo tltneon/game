@@ -31,6 +31,19 @@ namespace WcfService
             }
             return string.Format("Registering user {0} with pass {1}. Salt: {2}. Result:" + test, "noshit", "bull", value);
         }
+        public string UpgradeBase(int baseid)
+        {
+            bool test = false;
+            try
+            {
+                test = TestLogic.UpgradeBase(baseid);
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("damn err");
+            }
+            return string.Format("Upgraded base {0} at one level higher. Result:" + test, baseid);
+        }
 
         public CompositeType GetDataUsingDataContract(CompositeType composite)
         {

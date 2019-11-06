@@ -20,6 +20,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Description = OGame-like web game
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
