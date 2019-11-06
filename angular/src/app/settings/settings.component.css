@@ -1,7 +1,8 @@
-#settingstable {position: absolute; width: 50%; left: 25%;}
+#settingstable {position: absolute; width: 50%; left: 25%; padding-top: 10px;}
 #settingstable table {
     width: 100%;
 }
 #settingstable table td, #settingstable table tr {
     line-height: 32px;
 }
+.right {    text-align: right;}

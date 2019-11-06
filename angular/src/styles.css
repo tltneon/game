@@ -135,3 +135,8 @@ app-top-bar h1 {
   color: white;
   margin: 0;
 }
+
+
+@keyframes rotating-anim {
+  100% { transform: rotate(360deg);}
+}

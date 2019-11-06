@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpService } from '../http.service';
 import { UserJSON } from '../models/user';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -12,9 +14,9 @@ import { UserJSON } from '../models/user';
 
 export class SettingsComponent implements OnInit {
   userData: UserJSON;
-  password: string = '2341232';
+  password: string = '#password';
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
     function qweq(qw){
@@ -32,5 +34,10 @@ export class SettingsComponent implements OnInit {
 
   setValue(password){
     this.password = password;
+  }
+
+  logout(){
+    Cookie.delete('token');
+    this.router.navigate(['/login']);
   }
 }

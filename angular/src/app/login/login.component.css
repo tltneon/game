@@ -20,10 +20,6 @@ p#processing {
 }
 .active{
   display: block !important;
-  animation-name: shekel;
+  animation-name: rotating-anim;
   animation-duration: 0.05s;
-}
-
-@keyframes shekel {
-  100% { transform: rotate(360deg);}
 }

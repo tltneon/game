@@ -4,13 +4,9 @@
   "description": "First Angular 8 Project",
   "author": "Neon",
   "scripts": {
-    "install&run": "npm i && ng serve",
+    "install-n-run": "npm i && ng serve",
     "start": "ng serve",
-    "ng": "ng",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "build": "ng build"
   },
   "private": true,
   "dependencies": {

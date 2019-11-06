@@ -1,22 +1,27 @@
 <div id="settingstable">
-    <div id="logout"><a class="button" href="/Manage">Account management</a></div>
+    <div class="right">Actions: <a class="button" (click)="logout()">Logout</a></div>
     <div class="separatist"></div>
     <table>
         <tr>
-            <th>Name</th>
+            <th>Settings name</th>
             <th>Value</th>
         </tr>
         <tr>
-            <td>Username</td>
-            <td>{{userData?.username}}</td>
+            <td>Account name</td>
+            <td><input value="{{userData?.username}}" disabled /></td>
+        </tr>
+        <tr>
+            <td>Player name</td>
+            <td><input value="#playername" /></td>
         </tr>
         <tr>
             <td>New password</td>
             <td><input #password.value="ngModel" value="{{userData?.password}}" name="password" [(ngModel)]="password" /></td>
         </tr>
         <tr>
-            <td><div class="button" (click)="setValue(password)">Save</div></td>
             <td></td>
+            <td>
+                <div class="right"><a class="button" (click)="setValue(password)">Save</a></div></td>
         </tr>
     </table>
 </div>

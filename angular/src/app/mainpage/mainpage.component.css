@@ -1,10 +1,13 @@
-#login {
-    position: absolute;
-    text-align: center;
-    width: 20%;
-    left: 40%;
-}
-#login div:nth-child(2), #login div:nth-child(3) {
-    text-align: right;
-    line-height: 38px;
+h2 {
+    text-align: center;width: 98vw;position: absolute;
+    animation-timing-function: linear;
+    animation-name: welcomemessage;
+    animation-duration: 2s;
+    filter: opacity(0%);
+    animation-fill-mode: forwards;
+    font-size: 30px;
+  }
+
+@keyframes welcomemessage {
+  100% { filter: opacity(100%); margin-top: 30px;}
 }

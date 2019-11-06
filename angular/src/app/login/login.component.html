@@ -6,5 +6,5 @@
   <div>pass <input #password.value="ngModel" value="{{userData?.password}}" name="password" [(ngModel)]="password" type="password" /></div>
   <p (click)="auth(password, login)" class="button" id="auth">Authorize</p><p id="processing">x</p>
 </div>
-<p (click)="makeGet(password, login)" class="button">sendget</p>
-<p (click)="makePost(password, login)" class="button">sendpost</p>
+
+<p (click)="fakeauth()" class="button">Fake auth</p>

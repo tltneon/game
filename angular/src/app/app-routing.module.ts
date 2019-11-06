@@ -17,11 +17,11 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
   imports: [RouterModule.forRoot([
     { path: '', component: MainPageComponent, data: { title: 'csharpgame' }, pathMatch: 'full', canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    { path: 'base', component: BaseComponent },
-    { path: 'battles', component: BattleComponent },
-    { path: 'stats', component: StatsComponent },
-    { path: 'settings', component: SettingsComponent },
-    { path: 'admin', component: AdminComponent,
+    { path: 'base', component: BaseComponent, canActivate: [AuthGuard] },
+    { path: 'battles', component: BattleComponent, canActivate: [AuthGuard] },
+    { path: 'stats', component: StatsComponent, canActivate: [AuthGuard] },
+    { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+    { path: 'admin', component: AdminComponent, canActivate: [AuthGuard],
       children: [
         {
           path: '',

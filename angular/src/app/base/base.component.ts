@@ -63,11 +63,11 @@ export class BaseComponent implements OnInit {
                 resources: [
                     {
                         type: "credits",
-                        count: 1000
+                        count: 0
                     },
                     {
                         type: "energy",
-                        count: 1000
+                        count: 0
                     },
                 ],
                 units: [
