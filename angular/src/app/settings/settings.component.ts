@@ -17,10 +17,17 @@ export class SettingsComponent implements OnInit {
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    function qweq(qw){
+      console.log("123", JSON.parse(qw));
+      this.userData = JSON.parse(qw);
+    }
 
-    //console.log(this.input.nativeElement.value);
-    this.httpService.getData('api/Message').subscribe((responce:string) => this.userData = JSON.parse(responce));
-    //, error => console.error(error));
+    this.httpService.getRequest('api/Test').subscribe(responce => qweq(responce));
+    console.log(this.password);
+    this.httpService.getRequest('api/Test').subscribe((responce) => function(){
+      console.log('test', responce);
+      //this.userData = JSON.parse(responce);
+    }, error => console.error(error));
   }
 
   setValue(password){

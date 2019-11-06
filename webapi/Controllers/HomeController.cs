@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Web.Http.Controllers;
-using System.Web.Http.Routing;
-using System.Web.Http.Cors;
 using System.Web.Script.Serialization;
-using Newtonsoft.Json.Linq;
 using System.Web.Http;
 
 namespace webapi.Controllers
@@ -28,7 +19,6 @@ namespace webapi.Controllers
             throw new NotImplementedException();
         }
     }
-    //[EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*", SupportsCredentials = true)]
     public class TestController : ApiController
     {
         public string Get()

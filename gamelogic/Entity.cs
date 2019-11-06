@@ -28,7 +28,7 @@ namespace gamelogic
     {
         [Key]
         public int UserID { get; set; }
-        public string Username { get; set; }
+        public string Playername { get; set; }
         public int Wins { get; set; }
         public int Loses { get; set; }
     }

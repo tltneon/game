@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { UserJSON } from '../models/user';
-import { AuthGuard } from '../auth.guard';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,17 +18,11 @@ export class LoginComponent implements OnInit {
   constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-    //, error => console.error(error));
   }
 
-  makeGet(password, login){
-    this.httpService.getData(login).subscribe((responce:string) => console.log(responce));
-  }
-  makePost(password, login){
-    this.httpService.sendData("api/message", {"username": login, "password": password}).subscribe((responce) => responce == "authed" ? this.router.navigate(['base']) : function(){console.log(responce); this.error = "wrong answer";});
-  }
   auth(password, login){
-    this.httpService.sendData("api/message", {"username": login, "password": password}).subscribe((responce) => responce == "authed" ? this.router.navigate(['base']) : function(){console.log(responce); this.error = "wrong answer";});
+    document.body.querySelector("#auth").innerHTML = "Processing...";
+    document.body.querySelector("#processing").classList.toggle("active");
+    this.httpService.postRequest("api/message", {"username": login, "password": password}).subscribe((responce) => responce == "authed" ? this.router.navigate(['base']) : function(){console.log(responce); this.error = "wrong answer";});
   }
-
 }

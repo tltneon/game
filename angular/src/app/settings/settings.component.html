@@ -8,11 +8,11 @@
         </tr>
         <tr>
             <td>Username</td>
-            <td>{{userData.username}}</td>
+            <td>{{userData?.username}}</td>
         </tr>
         <tr>
             <td>New password</td>
-            <td><input #password.value="ngModel" value="{{userData.password}}" name="password" [(ngModel)]="password" /></td>
+            <td><input #password.value="ngModel" value="{{userData?.password}}" name="password" [(ngModel)]="password" /></td>
         </tr>
         <tr>
             <td><div class="button" (click)="setValue(password)">Save</div></td>

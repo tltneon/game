@@ -11,7 +11,7 @@ namespace WcfService
         string GetData(int value);
 
         [OperationContract]
-        string UpgradeBase(int value);
+        int UpgradeBase(int value);
 
         [OperationContract]
         string SendData(string username, string password);

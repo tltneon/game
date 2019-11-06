@@ -14,19 +14,19 @@ namespace entityframework
             {
             OneMore:
                 Console.Clear();
-                Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n2 - fill database with dummy data\n3 - truncate databases\n4 - make new user\n5 - find user by name");
+                Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n2 - fill database with dummy data\n3 - drop databases\n4 - make new user\n5 - find user by name");
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.Clear();
                 
                 switch (key.KeyChar)
                 {
                     case '2':
-                        db.Accounts.Add(new Account { UserID = 0, Username = "Admin", Password = "123456", Role = 1 });
-                        db.Accounts.Add(new Account { UserID = 1, Username = "User", Password = "123", Role = 0 });
-                        db.Players.Add(new Player { UserID = 0, Username = "Admin" });
-                        db.Players.Add(new Player { UserID = 0, Username = "Admin" });
-                        db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 0, CoordX = 1, CoordY = 1, Level = 0 });
-                        db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 1, CoordX = 4, CoordY = 2, Level = 0 });
+                        db.Accounts.Add(new Account { Username = "Admin", Password = "123456", Role = 1 });
+                        db.Accounts.Add(new Account { Username = "User", Password = "123", Role = 0 });
+                        db.Players.Add(new Player { Playername = "Admin" });
+                        db.Players.Add(new Player { Playername = "User" });
+                        db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0 });
+                        db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0 });
                         db.SaveChanges();
                         Console.WriteLine("TABLES FILLED");
                         break;
@@ -64,10 +64,10 @@ namespace entityframework
                         foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}", u.UserID, u.Username, u.Password);
 
                         Console.WriteLine("PLAYERS TABLE:");
-                        foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Username);
+                        foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Playername);
 
                         Console.WriteLine("BASES TABLE:");
-                        foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} - {2}. Coords: {3}x{4}", u.BaseID, u.Basename, u.OwnerID, u.CoordX, u.CoordY);
+                        foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} ({2} lvl) - {3}. Coords: {4}x{5}", u.BaseID, u.Basename, u.Level, u.OwnerID, u.CoordX, u.CoordY);
 
                         Console.WriteLine("BUILDINGS TABLE:");
                         foreach (Building u in db.Buildings) Console.WriteLine("{0}. {1} - {2}", u.BaseID, u.Type, u.Level);

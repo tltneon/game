@@ -14,7 +14,5 @@ export class MainPageComponent {
     constructor(private httpService: HttpService){ }
 
     ngOnInit() {
-        this.httpService.sendData("http://localhost:16462/Account/ForgotPassword", {});
-        //this.httpService.testRequest().subscribe(data => this.data = data, error => console.error(error));
     }
 }

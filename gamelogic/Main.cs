@@ -11,15 +11,15 @@
             if (DB == null) ConnectToDB();
             return DB;
         }
-        public static bool UpgradeBase(int baseid) {
+        public static int UpgradeBase(int baseid) {
             DB = GetContext();
-            bool result = false;
+            int result = 0;
             try
             {
                 var bas = DB.Bases.Find(baseid);
                 bas.Level++;
                 DB.SaveChanges();
-                result = true;
+                result = bas.Level;
             }
             catch
             {
@@ -45,7 +45,7 @@
                 DB.Accounts.Add(user);
                 DB.SaveChanges();
                 int newIdentityValue = user.UserID;
-                DB.Players.Add(new Player { UserID = newIdentityValue, Username = "Admin" });
+                DB.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
                 DB.Bases.Add(new Base { Basename = username+"Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0 });
                 DB.SaveChanges();
                 result = true;
