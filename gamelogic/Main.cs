@@ -1,4 +1,6 @@
 ﻿using gamelogic.Models;
+using System;
+using System.Linq;
 
 namespace gamelogic
 {
@@ -39,17 +41,21 @@ namespace gamelogic
             return DB.Accounts.Find(username);
         }
         public static string AuthClient(AuthData data) {
-            string token = "yourein";
-            Account find = FindUser(data.username);
-            if (find == null) CreateUser(data.username, data.password);
-            else if(data.password == find.Password) token = find.Token;
-            else token = "wrongpass";
+            var db = GetContext();
+            string token;
+            var us = db.Accounts.Where(o => o.Username == data.username);
+            if (us.Count() > 0)
+            {
+                if (us.First().Password == data.password) token = us.First().Token;
+                else token = "Error#Wrong Password";
+            }
+            else token = CreateUser(data.username, data.password);
             return token;
         }
-        public static bool CreateUser(string username, string password)
+        public static string CreateUser(string username, string password)
         {
             DB = GetContext();
-            bool result = false;
+            string token;
             try {
                 Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=49rh23489rh+salt" };
                 DB.Accounts.Add(user);
@@ -58,15 +64,12 @@ namespace gamelogic
                 DB.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
                 DB.Bases.Add(new Base { Basename = username+"Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0 });
                 DB.SaveChanges();
-                result = true;
+                token = user.Token;
             }
-            catch {
+            catch (Exception ex) {
+                token = "Error#Exception: "+ex.Message;
             }
-            return result;
-        }
-        public string Print(string str) {
-            System.Diagnostics.Debug.WriteLine("debug functions");
-            return str;
+            return token;
         }
     }
 }

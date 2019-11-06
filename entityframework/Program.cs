@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using gamelogic;
 
@@ -61,7 +60,7 @@ namespace entityframework
                         Console.WriteLine("Opening connection to DB...");
 
                         Console.WriteLine("ACCOUNTS TABLE:");
-                        foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}", u.UserID, u.Username, u.Password);
+                        foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}, Role {3}, Token={4}", u.UserID, u.Username, u.Password, u.Role, u.Token);
 
                         Console.WriteLine("PLAYERS TABLE:");
                         foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Playername);

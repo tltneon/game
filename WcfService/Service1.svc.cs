@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using AutoMapper;
 using gamelogic;
 
@@ -9,7 +8,7 @@ namespace WcfService
     {
         public string SendData(string username, string password)
         {
-            bool test = false;
+            string test = "";
             try
             {
                 test = TestLogic.CreateUser(username, password);
@@ -22,23 +21,31 @@ namespace WcfService
         }
         public string SendAuthData(AuthData data)
         {
-            bool test = false;
+            string test = "";
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<AuthData, gamelogic.Models.AuthData>();
+            });
             try
             {
-                test = TestLogic.AuthClient(Mapper.Map<EditUserViewModel, User>(model));
+                IMapper mapper = config.CreateMapper();
+                test = TestLogic.AuthClient(mapper.Map<AuthData, gamelogic.Models.AuthData>(data));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("damn err");
+                System.Diagnostics.Debug.WriteLine($"Исключение: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Метод: {ex.TargetSite}");
+                System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
             }
-            return string.Format("Registering user {0} with pass {1}. Result:" + test, data.username, data.password);
+            System.Diagnostics.Debug.WriteLine(string.Format("Registering user {0} with pass {1}. Result:" + test, data.username, data.password));
+            return test;
         }
         public AuthData GetDummyUserData() { 
             return new AuthData { username = "testuser", password = "testpass" };
         }
         public string GetData(int value)
         {
-            bool test = false;
+            string test ="";
             try
             {
                 test = TestLogic.CreateUser("noshit","bull");

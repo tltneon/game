@@ -10,7 +10,7 @@
 .abutton a {
     display: block;
     color: white;
-    border-bottom: 1px dotted white;
+    border-bottom: 1px dotted #ffffff42;
 }
 .abutton:hover {
     text-align: center;

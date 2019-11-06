@@ -144,7 +144,7 @@ export class BaseComponent implements OnInit {
         }
         //this.baseData[0].level++;
         this.setBaseTask('upgrade', '', 12345678);
-        this.httpService.getRequest("api/upgrade").subscribe((responce) => updateValue(responce, this));
+        this.httpService.getRequest("api/upgrade/get").subscribe((responce) => updateValue(responce, this));
     }
     toggleBaseActiveness(){
         this.baseData[0].isactive = !this.baseData[0].isactive;

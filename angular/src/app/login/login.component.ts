@@ -27,21 +27,22 @@ export class LoginComponent implements OnInit {
       document.body.querySelector("#processing").classList.remove("active");
     }
     function proceedAuth(router, responce){
+      console.log(responce, responce.slice(0,5));
       Cookie.set('token', responce);
       router.navigate(['/']);
     }
 
     this.error = ". . .";
-    document.body.querySelector("#auth").innerHTML = "Processing...";
+    document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active");
     this.httpService.postRequest("api/auth/post", {"username": login, "password": password}).subscribe(
-      (responce:string) => responce == "notauthed" 
-      ? updateErrorMessage(this, "Wrong Password")
+      (responce:string) => responce.slice(0,5) == "Error" 
+      ? updateErrorMessage(this, responce.replace('Error#',''))
       : proceedAuth(this.router, responce)
       , error => updateErrorMessage(this, error));
   }
   fakeauth(){
-    Cookie.set('token', "fakecock");
+    Cookie.set('token', 'fakecock');
     this.router.navigate(['/']);
   }
 }

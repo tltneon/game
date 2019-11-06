@@ -17,7 +17,7 @@ namespace webapi.Controllers
             System.Diagnostics.Debug.WriteLine(message.password, " >== BASE64 ==> ", AuthDataUtils.Base64Encode(message.password));
             System.Diagnostics.Debug.WriteLine("connecting to wcf...");
             Service1Client client = new Service1Client();
-            string token = client.SendAuthData(message as WcfService.AuthData);
+            string token = client.SendAuthData(message);
             System.Diagnostics.Debug.WriteLine(token);
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
