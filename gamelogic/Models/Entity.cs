@@ -65,6 +65,6 @@ namespace gamelogic
         public int StartTime { get; set; }
         public int MoveTo { get; set; }
         public int FinishTime { get; set; }
-        public string Units { get; set; }
+        public object Units { get; set; }
     }
 }

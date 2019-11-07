@@ -10,13 +10,13 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
     providers: [HttpService]
 })
 export class BaseComponent implements OnInit {
+    structures: string[] = ["lifeComplex", "energyComplex", "aircraftsComplex", "resourceComplex"];
     baseData: BaseJSON[];
     interval;
 
     constructor(private httpService: HttpService){ }
 
     ngOnInit() {
-        //this.httpService.getData('http://localhost/testdata.json').subscribe((data: UserJSON) => this.userData = data);
         this.baseData = [
             {
                 baseid: 1,
@@ -93,6 +93,7 @@ export class BaseComponent implements OnInit {
                 }
             }
         ]
+        this.httpService.postRequest("api/base/action", {baseid: this.baseData[0].baseid}, true).subscribe((responce:BaseJSON) => this.baseData[0] == responce ? console.log(responce) : console.log(responce));
         this.interval = setInterval(() => this.baseData[0].isactive ? this.updateProdution() : ()=>{}, 1000)
     }
 
@@ -163,5 +164,8 @@ export class BaseComponent implements OnInit {
             endsin: 0
         }
     }
-
+    loadOnlineData(){
+        this.httpService.postRequest("api/base/RetrieveBaseData", {baseid: this.baseData[0].baseid}, true).subscribe((responce) => console.log(responce));
+        this.httpService.postRequest("api/base/RetrieveBaseStructures", {baseid: this.baseData[0].baseid}, true).subscribe((responce) => console.log(responce));
+    }
 }

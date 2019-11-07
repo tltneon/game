@@ -8,12 +8,10 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 })
 export class TopBarComponent implements OnInit {
   menu = [];
-  error:string;
 
   constructor() { }
 
   ngOnInit() {
-    this.registerError();
     if(Cookie.get('token'))
       this.menu = [
       {name: "Base", routerLink: "base"},
@@ -22,13 +20,5 @@ export class TopBarComponent implements OnInit {
       {name: "Settings", routerLink: "settings"},
       {name: "Admin", routerLink: "admin"},
     ];
-  }
-  registerError(err:string = "errno"){
-    document.body.querySelector("#errorSign").classList.add("error");
-    this.error = err;
-  }
-  clear(){
-    document.body.querySelector("#errorSign").classList.remove("error");
-    this.error = "";
   }
 }

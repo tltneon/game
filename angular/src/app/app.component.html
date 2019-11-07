@@ -1,5 +1,13 @@
 <app-top-bar></app-top-bar>
 
+<div class="ceil" id="errorSign">
+  <div class="icon" (click)="clear()">⚠</div>
+  <div class="tooltip">
+    <div class="title cont">Some connection errors:</div>
+    <div class="body cont">{{this.error}}</div>
+  </div>
+</div>
+
 <div id='background'>
   <div id='stars'></div>
   <div id='stars2'></div>

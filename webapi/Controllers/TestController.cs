@@ -57,10 +57,17 @@ namespace webapi.Controllers
     }
     public class BaseController : ApiController
     {
-        public string Upgrade(WcfService.BaseAction msg)
+        public WcfService.BaseEntity RetrieveBaseData(WcfService.BaseAction msg)
         {
             Service1Client client = new Service1Client();
-            string result = client.UpgradeBase(msg);
+            WcfService.BaseEntity result = client.GetBaseInfo(msg);
+            client.Close();
+            return result;
+        }
+        public IEnumerable<WcfService.StructureEntity> RetrieveBaseStructures(WcfService.BaseAction msg)
+        {
+            Service1Client client = new Service1Client();
+            IEnumerable<WcfService.StructureEntity> result = client.GetBaseStructures(msg);
             client.Close();
             return result;
         }

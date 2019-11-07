@@ -12,9 +12,8 @@ export class HttpService {
         console.log("get", this.rootUrl + url);
         return this.http.get(this.rootUrl + url, httpOptions);
     }      
-    postRequest(url: string, body: any, addToken:boolean = false, httpOptions = {}) {
-        console.log(Cookie.get("Token"));
-        if(addToken) body.token = Cookie.get("Token");
+    postRequest(url: string, body: any, addToken = false, httpOptions = {}) {
+        if(addToken) body.token = Cookie.get("token");
         console.log("post", this.rootUrl + url, body );
         return this.http.post(this.rootUrl + url, body, httpOptions);
     }

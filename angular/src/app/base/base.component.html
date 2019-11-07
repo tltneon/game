@@ -26,9 +26,12 @@
             <div class="image"><img class="newStructure" /></div>
             <div class="desc">
                 <div class="name">New structure</div>
-                <div class="option">Type: </div>
+                <div class="option">Choose type: </div>
                 <div class="actions">
-                    <div class="button" (click)="buildStructure('newStructure')">Build structure</div>
+                    <select #destination.value="ngModel" name="destination" [(ngModel)]="destination">
+                        <option *ngFor="let base of structures" [value]="base">{{base}}</option>
+                    </select>
+                    <div class="button" (click)="buildStructure(destination)">Build structure</div>
                 </div>
             </div>
         </div>
@@ -71,3 +74,4 @@
     <div class="button" (click)="toggleBaseActiveness()">Repair</div>
     <div class="button" (click)="clearBaseTask()">Clear task</div>
 </div>
+<div class="" (click)="loadOnlineData()">loadOnlineData</div>

@@ -42,12 +42,11 @@ namespace WcfService
         public string BaseAction(BaseAction obj)
         {
             if (obj == null) return "nodatareceived";
+
             string result;
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<BaseAction, gamelogic.Models.BaseAction>();
-            });
-            IMapper mapper = config.CreateMapper();
-            gamelogic.Models.BaseAction mapobj = mapper.Map<BaseAction, gamelogic.Models.BaseAction>(obj);
+
+            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+
             System.Diagnostics.Debug.WriteLine($"дебаг: {mapobj.action} {mapobj.baseid} {mapobj.result} {mapobj.token}");
 
             if (!AccountManager.CheckToken(mapobj.token)) return "wrongtoken";
@@ -80,6 +79,36 @@ namespace WcfService
                 result = "err";
             }
             return result;
+        }
+        public BaseEntity GetBaseInfo(BaseAction obj)
+        {
+            if (obj == null) return null;
+
+            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+
+            System.Diagnostics.Debug.WriteLine($"дебаг: {mapobj.action} {mapobj.baseid} {mapobj.result} {mapobj.token}");
+
+            if (!AccountManager.CheckToken(mapobj.token)) return null;
+
+            var config2 = new MapperConfiguration(cfg => {
+                cfg.CreateMap<gamelogic.Base, BaseEntity>();
+            });
+            IMapper mapper2 = config2.CreateMapper();
+            return mapper2.Map<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(mapobj));
+        }
+        public IEnumerable<StructureEntity> GetBaseStructures(BaseAction obj)
+        {
+            if (obj == null) return null;
+
+            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+
+            if (!AccountManager.CheckToken(mapobj.token)) return null;
+
+            var config2 = new MapperConfiguration(cfg => {
+                cfg.CreateMap<gamelogic.Structure, StructureEntity>();
+            });
+            IMapper mapper2 = config2.CreateMapper();
+            return mapper2.Map< IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(mapobj));
         }
 
         //other
@@ -125,5 +154,16 @@ namespace WcfService
             }
             return composite;
         }
+    }
+    class Tools
+    {
+        public static gamelogic.Models.BaseAction BaseActionMapper(BaseAction obj) {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<BaseAction, gamelogic.Models.BaseAction>();
+            });
+            IMapper mapper = config.CreateMapper();
+            return mapper.Map<BaseAction, gamelogic.Models.BaseAction>(obj);
+        }
+        public void CheckCorrectInput() { return; }
     }
 }

@@ -56,7 +56,8 @@ namespace gamelogic
         }
         public static Account GetUserByToken(string token)
         {
-            return DbManager.GetContext().Accounts.Where(o => o.Token == token).FirstOrDefault();
+            var db = DbManager.GetContext();
+            return db.Accounts.Where(o => o.Token == token).FirstOrDefault();
         }
         public static bool CheckToken(string token)
         {
@@ -128,6 +129,17 @@ namespace gamelogic
             DbManager.GetContext().SaveChanges();
 
             return "success";
+        }
+
+        public static Base GetBaseInfo(BaseAction obj)
+        {
+            var db = DbManager.GetContext();
+            return db.Bases.Where(o => o.BaseID == obj.baseid).FirstOrDefault();
+        }
+        public static IEnumerable<Structure> GetBaseStructures(BaseAction obj)
+        {
+            var db = DbManager.GetContext();
+            return db.Structures.Where(o => o.BaseID == obj.baseid).AsEnumerable();
         }
     }
     public class TestLogic

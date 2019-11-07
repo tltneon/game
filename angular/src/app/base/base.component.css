@@ -3,10 +3,10 @@
 #baseinfo {top: calc(68px + 32px + 28px); position: fixed; right: 16px; border: 1px solid #5d5d5d; padding: 5px; background-color: #0608174d;}
 .item {display: inline-block; border: 1px dotted #222425; margin: 5px; padding: 5px; background-color: #0608174d;}
 .item:hover {border: 1px dotted #0b345d; transition-duration: 0.7s;}
-.item:hover img {filter: grayscale(0%); transition-duration: 0.7s;}
+.item:hover img {filter: grayscale(0%); filter: brightness(120%); transition-duration: 0.7s;}
 .item .name {text-align: center; font-family: cursive;}
 .item .task, .item .task *, .item .option {font-family: monospace;}
-.image > img {width:256px; height: 124px;background-repeat: no-repeat; background-size: cover; filter: grayscale(75%);outline: 3px solid #000000ba; outline-offset: -1px;}
+.image > img {width:256px; height: 124px; background-repeat: no-repeat; background-size: cover; filter: grayscale(75%); filter: brightness(100%);outline: 3px solid #000000ba; outline-offset: -1px;}
 .levelUpIcon {display: inline;padding-left: 2px;padding-right: 3px;}
 
 i {

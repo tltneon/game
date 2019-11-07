@@ -17,6 +17,10 @@ namespace WcfService
 
         [OperationContract]
         string BaseAction(BaseAction msg);
+        [OperationContract]
+        BaseEntity GetBaseInfo(BaseAction msg);
+        [OperationContract]
+        IEnumerable<StructureEntity> GetBaseStructures(BaseAction msg);
         // Тестовый код
         [OperationContract]
         string GetData(int value);
@@ -74,6 +78,30 @@ namespace WcfService
         public int Wins { get; set; }
         [DataMember]
         public int Loses { get; set; }
+    }
+    [DataContract]
+    public class BaseEntity
+    {
+        [DataMember]
+        public int BaseID { get; set; }
+        [DataMember]
+        public string Basename { get; set; }
+        [DataMember]
+        public int Level { get; set; }
+        [DataMember]
+        public bool IsActive { get; set; }
+        [DataMember]
+        public int OwnerID { get; set; }
+    }
+    [DataContract]
+    public class StructureEntity
+    {
+        [DataMember]
+        public int BaseID { get; set; }
+        [DataMember]
+        public string Type { get; set; }
+        [DataMember]
+        public int Level { get; set; }
     }
     [DataContract]
     public class BaseAction
