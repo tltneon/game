@@ -1,7 +1,7 @@
 {
   "name": "csharpgame",
-  "version": "0.0.1",
-  "description": "First Angular 8 Project",
+  "version": "0.1.14",
+  "description": "First Angular 8 Project: OGame-like RTS",
   "author": "Neon",
   "scripts": {
     "install-n-run": "npm i && ng serve",
