@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { BaseJSON } from '../models/base';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 @Component({
     selector: 'app-base',
@@ -144,7 +145,8 @@ export class BaseComponent implements OnInit {
         }
         //this.baseData[0].level++;
         this.setBaseTask('upgrade', '', 12345678);
-        this.httpService.getRequest("api/upgrade/get").subscribe((responce) => updateValue(responce, this));
+        this.httpService.postRequest("api/base/upgrade", {token: Cookie.get("token"), baseid: this.baseData[0].level}).subscribe((responce) => updateValue(responce, this));
+        //this.httpService.getRequest("api/upgrade/get").subscribe((responce) => updateValue(responce, this));
     }
     toggleBaseActiveness(){
         this.baseData[0].isactive = !this.baseData[0].isactive;

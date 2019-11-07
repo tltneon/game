@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit {
+  menu = [
+    {name: "Users", routerLink: "users"},
+    {name: "Bases", routerLink: "bases"},
+    {name: "Settings", routerLink: "settings"},
+  ];
 
   constructor() { }
 

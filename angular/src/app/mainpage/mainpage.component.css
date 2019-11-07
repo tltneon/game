@@ -7,6 +7,17 @@ h2 {
     animation-fill-mode: forwards;
     font-size: 30px;
   }
+  h3 {
+    text-align: center; width: 98vw;position: absolute;
+    animation-timing-function: linear;
+    animation-name: welcomemessage;
+    animation-delay: 1s;
+    animation-duration: 2s;
+    filter: opacity(0%);
+    animation-fill-mode: forwards;
+    font-size: 24px;
+    padding-top: 100px;
+  }
 
 @keyframes welcomemessage {
   100% { filter: opacity(100%); margin-top: 30px;}

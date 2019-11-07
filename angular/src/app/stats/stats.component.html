@@ -7,15 +7,14 @@
             <th>Base name</th>
             <th>Wins</th>
             <th>Loses</th>
-            <th>Resources</th>
         </tr>
+        <tr *ngIf="statsData.length == 0"><td colspan="5">Refreshing data... <i class="loading active">x</i></td></tr>
         <tr *ngFor="let stat of statsData">
             <td>*</td>
-            <td>{{stat.name}}</td>
+            <td>{{stat.playername}}</td>
             <td>{{stat.basename}} (level {{stat.level}})</td>
             <td>{{stat.wins}}</td>
             <td>{{stat.loses}}</td>
-            <td>{{stat.score}}</td>
         </tr>
     </table>
 </div>

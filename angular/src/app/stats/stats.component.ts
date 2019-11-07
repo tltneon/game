@@ -18,15 +18,26 @@ export class StatsComponent implements OnInit {
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
-    //this.httpService.getData().subscribe(data => this.statsData = data);
+    this.updateStats();
 
     this.interval = setInterval(() => {
       this.timeLeftSec--;
       if(this.timeLeftSec < 0) {
         this.timeLeftMin--;
         this.timeLeftSec = 59;
+        if(this.timeLeftSec < 0) {
+          this.timeLeftMin = 4;
+          this.updateStats();
+        }
       }
     }, 1000)
+  }
+  updateStats(){
+    this.httpService.getRequest('api/statistic/getUserList').subscribe(
+      (responce: StatsJSON[]) => this.statsData = responce,
+      error => console.log(error.message));
+  }
+  loadDummyData(){
     for(let i = 0; i<29;i++)
       this.statsData[this.statsData.length] = {
         name: "username"+i,
@@ -37,5 +48,4 @@ export class StatsComponent implements OnInit {
         score: 10-i,
       };
   }
-
 }

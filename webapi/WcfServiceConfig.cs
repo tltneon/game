@@ -72,15 +72,13 @@ namespace WcfService
         
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        private string baselevelField;
+        private int LosesField;
         
-        private string basenameField;
+        private string PlayernameField;
         
-        private string losesField;
+        private int UserIDField;
         
-        private string usernameField;
-        
-        private string winsField;
+        private int WinsField;
         
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData
         {
@@ -95,67 +93,54 @@ namespace WcfService
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string baselevel
+        public int Loses
         {
             get
             {
-                return this.baselevelField;
+                return this.LosesField;
             }
             set
             {
-                this.baselevelField = value;
+                this.LosesField = value;
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string basename
+        public string Playername
         {
             get
             {
-                return this.basenameField;
+                return this.PlayernameField;
             }
             set
             {
-                this.basenameField = value;
+                this.PlayernameField = value;
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string loses
+        public int UserID
         {
             get
             {
-                return this.losesField;
+                return this.UserIDField;
             }
             set
             {
-                this.losesField = value;
+                this.UserIDField = value;
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string username
+        public int Wins
         {
             get
             {
-                return this.usernameField;
+                return this.WinsField;
             }
             set
             {
-                this.usernameField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string wins
-        {
-            get
-            {
-                return this.winsField;
-            }
-            set
-            {
-                this.winsField = value;
+                this.WinsField = value;
             }
         }
     }

@@ -11,16 +11,16 @@ using webapi.Models;
 namespace webapi.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class Account2Controller : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        public Account2Controller()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public Account2Controller(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;

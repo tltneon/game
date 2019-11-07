@@ -48,6 +48,7 @@
         <div>Name: {{baseData[0]?.name}}</div>
         <div>Owner: {{baseData[0]?.owner}}</div>
         <div>Level: {{baseData[0]?.level}}</div>
+        <div>Defence multiplier: {{1.1 * baseData[0]?.level}}</div>
         <div *ngIf="!baseData[0]?.isactive">Base is inactive</div>
     <div class="separatist"></div>
     <h4>Current task</h4>

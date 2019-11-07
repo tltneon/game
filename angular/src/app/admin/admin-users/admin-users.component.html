@@ -1,11 +1,11 @@
 <div class="column">
     <div>Userlist</div>
     <div class="item" *ngFor="let item of data">
-        <div class="name">{{item.name}}</div>
+        <div class="name">{{item.playername}}</div>
     </div>
 </div>
 <div class="column">
     <div>Userdetails</div>
-    <div class="item">Name: 21312</div>
+    <div class="item">Name: {{data[0]?.playername}}</div>
     <div class="item">Base: Planet 22</div>
 </div>

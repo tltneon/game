@@ -16,7 +16,7 @@ namespace WcfService
             try
             {
                 IMapper mapper = config.CreateMapper();
-                test = TestLogic.AuthClient(mapper.Map<AuthData, gamelogic.Models.AuthData>(data));
+                test = AccountManager.AuthClient(mapper.Map<AuthData, gamelogic.Models.AuthData>(data));
             }
             catch (Exception ex)
             {
@@ -28,8 +28,13 @@ namespace WcfService
             System.Diagnostics.Debug.WriteLine(string.Format("Registering user {0} with pass {1}. Result:" + test, data.username, data.password));
             return test;
         }
-        public IEnumerable<StatEntity> GetUserList() {
-            return null;
+        public IEnumerable<StatEntity> GetUserList()
+        {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<gamelogic.Player, StatEntity>();
+            });
+            IMapper mapper = config.CreateMapper();
+            return mapper.Map< IEnumerable<gamelogic.Player>, IEnumerable< StatEntity >>(TestLogic.GetUserList());
         }
 
 
@@ -39,7 +44,7 @@ namespace WcfService
             string test = "";
             try
             {
-                test = TestLogic.CreateUser(username, password);
+                test = AccountManager.CreateUser(username, password);
             }
             catch (Exception)
             {
@@ -55,7 +60,7 @@ namespace WcfService
             string test ="";
             try
             {
-                test = TestLogic.CreateUser("noshit","bull");
+                test = AccountManager.CreateUser("noshit","bull");
             }
             catch (Exception)
             {

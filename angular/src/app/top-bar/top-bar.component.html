@@ -1,8 +1,14 @@
 <a [routerLink]="['/']">
-  <h1>C#G</h1>
+  <h1>C#Game</h1>
 </a>
-<a [routerLink]="['base']" class="button fancy-button" routerLinkActive="active">Base</a>
-<a [routerLink]="['battles']" class="button fancy-button" routerLinkActive="active">Battles</a>
-<a [routerLink]="['stats']" class="button fancy-button" routerLinkActive="active">Stats</a>
-<a [routerLink]="['settings']" class="button fancy-button" routerLinkActive="active">Settings</a>
-<a [routerLink]="['admin']" class="button fancy-button" routerLinkActive="active">Admin</a>
+<div class="ceil" id="errorSign">
+  <div class="icon" (click)="clear()">⚠</div>
+  <div class="tooltip">
+    <div class="title cont">Some connection errors:</div>
+    <div class="body cont">{{this.error}}</div>
+  </div>
+</div>
+
+<a *ngFor="let a of menu" class="button fancy-button" style="text-align: center;" routerLinkActive="active">
+  <a routerLink="{{a.routerLink}}" class="fancy-button" routerLinkActive="active">{{a.name}}</a>
+</a>

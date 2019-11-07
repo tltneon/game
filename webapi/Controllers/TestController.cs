@@ -5,9 +5,9 @@ using System.Web.Http;
 
 namespace webapi.Controllers
 {
-    public class AuthController : ApiController
+    public class AccountController : ApiController
     {
-        public HttpResponseMessage Post(WcfService.AuthData message)
+        public HttpResponseMessage Auth(WcfService.AuthData message)
         {
             System.Diagnostics.Debug.WriteLine("слава яйцам - всё работает отлично");
             if(AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
@@ -18,7 +18,7 @@ namespace webapi.Controllers
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
         }
-        public WcfService.AuthData Get()
+        public WcfService.AuthData GetDummyUserData()
         {
             Service1Client client = new Service1Client();
             WcfService.AuthData data = client.GetDummyUserData();
@@ -50,14 +50,22 @@ namespace webapi.Controllers
         public IEnumerable<WcfService.StatEntity> GetUserList()
         {
             Service1Client client = new Service1Client();
-            IEnumerable<WcfService.StatEntity> level = client.GetUserList();
+            IEnumerable<WcfService.StatEntity> entities = client.GetUserList();
             client.Close();
-            return level;
+            return entities;
         }
     }
-    public class UpgradeController : ApiController
+    public class BaseController : ApiController
     {
-        public int Get()
+        public string Upgrade(dynamic msg)
+        {
+            System.Diagnostics.Debug.WriteLine(msg.token, msg.baseid);
+            /*Service1Client client = new Service1Client();
+            int level = client.UpgradeBase(baseid);
+            client.Close();*/
+            return "something";
+        }
+        public int BuildStructure()
         {
             int baseid = 3;
             Service1Client client = new Service1Client();
@@ -65,5 +73,27 @@ namespace webapi.Controllers
             client.Close();
             return level;
         }
+        public int Repair()
+        {
+            int baseid = 3;
+            Service1Client client = new Service1Client();
+            int level = client.UpgradeBase(baseid);
+            client.Close();
+            return level;
+        }
+        public int MakeUnit()
+        {
+            int baseid = 3;
+            Service1Client client = new Service1Client();
+            int level = client.UpgradeBase(baseid);
+            client.Close();
+            return level;
+        }
+    }
+    public class StructureController : ApiController
+    {
+    }
+    public class SquadController : ApiController
+    {
     }
 }

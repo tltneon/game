@@ -5,4 +5,12 @@
         public string username { get; set; }
         public string password { get; set; }
     }
+    public class StatsData
+    {
+        public string username { get; set; }
+        public string wins { get; set; }
+        public string loses { get; set; }
+        public string basename { get; set; }
+        public string baselevel { get; set; }
+    }
 }

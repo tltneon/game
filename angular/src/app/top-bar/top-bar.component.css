@@ -1,1 +1,29 @@
 .fancy-button + .active {color: #ffffffd4;}
+
+
+.ceil {
+    display: none;
+    position: absolute;
+    top: 68px;
+    background-color: #ed143d2e; 
+  }
+  .ceil.error{
+    display: block;
+  }
+  .icon:hover + .tooltip {
+    display: flex;
+  }
+  .tooltip {
+    display: none;
+    position: absolute;
+    flex-wrap: wrap;
+    bottom: 0;
+    left: 100%;
+    max-width: 320px;
+    background-color: #561524bd;
+    font-size: x-small;
+    border: 1px solid black;
+  }
+  .cont {
+    width: 160px;
+  }

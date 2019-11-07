@@ -1,13 +1,15 @@
 ﻿using gamelogic.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace gamelogic
 {
-    public class TestLogic
+    public class DbManager
     {
         private static Entities DB = null;
-        public static void ConnectToDB() {
+        public static void ConnectToDB()
+        {
             DB = new Entities();
         }
         public static Entities GetContext()
@@ -15,27 +17,12 @@ namespace gamelogic
             if (DB == null) ConnectToDB();
             return DB;
         }
-        public static int UpgradeBase(int baseid) {
-            DB = GetContext();
-            int result = 0;
-            try
-            {
-                var bas = DB.Bases.Find(baseid);
-                bas.Level++;
-                DB.SaveChanges();
-                result = bas.Level;
-            }
-            catch
-            {
-            }
-            return result;
-        }
-        public static Account FindUser(string username) {
-            DB = GetContext();
-            return DB.Accounts.Find(username);
-        }
-        public static string AuthClient(AuthData data) {
-            var db = GetContext();
+    }
+    public class AccountManager
+    {
+        public static string AuthClient(AuthData data)
+        {
+            var db = DbManager.GetContext();
             string token;
             var us = db.Accounts.Where(o => o.Username == data.username);
             if (us.Count() > 0)
@@ -48,22 +35,46 @@ namespace gamelogic
         }
         public static string CreateUser(string username, string password)
         {
-            DB = GetContext();
+            var db = DbManager.GetContext();
             string token;
-            try {
+            try
+            {
                 Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=49rh23489rh+salt" };
-                DB.Accounts.Add(user);
-                DB.SaveChanges();
+                db.Accounts.Add(user);
+                db.SaveChanges();
                 int newIdentityValue = user.UserID;
-                DB.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
-                DB.Bases.Add(new Base { Basename = username+"Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0 });
-                DB.SaveChanges();
+                db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
+                db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0 });
+                db.SaveChanges();
                 token = user.Token;
             }
-            catch (Exception ex) {
-                token = "Error#Exception: "+ex.Message;
+            catch (Exception ex)
+            {
+                token = "Error#Exception: " + ex.Message;
             }
             return token;
+        }
+    }
+        public class TestLogic
+    {
+        public static int UpgradeBase(int baseid) {
+            var db = DbManager.GetContext();
+            int result = 0;
+            try
+            {
+                var bas = db.Bases.Find(baseid);
+                bas.Level++;
+                db.SaveChanges();
+                result = bas.Level;
+            }
+            catch
+            {
+            }
+            return result;
+        }
+        public static IEnumerable<Player> GetUserList() {
+            var db = DbManager.GetContext();
+            return db.Players.AsEnumerable();
         }
     }
 }

@@ -67,14 +67,12 @@ namespace WcfService
     public class StatEntity
     {
         [DataMember]
-        public string username { get; set; }
+        public int UserID { get; set; }
         [DataMember]
-        public string wins { get; set; }
+        public string Playername { get; set; }
         [DataMember]
-        public string loses { get; set; }
+        public int Wins { get; set; }
         [DataMember]
-        public string basename { get; set; }
-        [DataMember]
-        public string baselevel { get; set; }
+        public int Loses { get; set; }
     }
 }

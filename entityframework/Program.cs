@@ -8,8 +8,8 @@ namespace entityframework
     { 
         static void Main()
         {
-            TestLogic.ConnectToDB();
-            using (Entities db = TestLogic.GetContext())
+            DbManager.ConnectToDB();
+            using (Entities db = DbManager.GetContext())
             {
             OneMore:
                 Console.Clear();
@@ -42,7 +42,7 @@ namespace entityframework
                         Console.WriteLine("password:");
                         string pas = Console.ReadLine();
                         Console.WriteLine("doin' magic...");
-                        Console.WriteLine(TestLogic.CreateUser(usr, pas));
+                        Console.WriteLine(AccountManager.CreateUser(usr, pas));
                         break;
 
                     case '5':
