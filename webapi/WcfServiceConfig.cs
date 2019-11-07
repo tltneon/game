@@ -66,6 +66,102 @@ namespace WcfService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StatEntity", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    public partial class StatEntity : object, System.Runtime.Serialization.IExtensibleDataObject
+    {
+        
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private string baselevelField;
+        
+        private string basenameField;
+        
+        private string losesField;
+        
+        private string usernameField;
+        
+        private string winsField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return this.extensionDataField;
+            }
+            set
+            {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string baselevel
+        {
+            get
+            {
+                return this.baselevelField;
+            }
+            set
+            {
+                this.baselevelField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string basename
+        {
+            get
+            {
+                return this.basenameField;
+            }
+            set
+            {
+                this.basenameField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string loses
+        {
+            get
+            {
+                return this.losesField;
+            }
+            set
+            {
+                this.losesField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string username
+        {
+            get
+            {
+                return this.usernameField;
+            }
+            set
+            {
+                this.usernameField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string wins
+        {
+            get
+            {
+                return this.winsField;
+            }
+            set
+            {
+                this.winsField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CompositeType", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
     public partial class CompositeType : object, System.Runtime.Serialization.IExtensibleDataObject
     {
@@ -122,6 +218,18 @@ namespace WcfService
 public interface IService1
 {
     
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
+    string SendAuthData(WcfService.AuthData data);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
+    System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetUserList", ReplyAction="http://tempuri.org/IService1/GetUserListResponse")]
+    WcfService.StatEntity[] GetUserList();
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetUserList", ReplyAction="http://tempuri.org/IService1/GetUserListResponse")]
+    System.Threading.Tasks.Task<WcfService.StatEntity[]> GetUserListAsync();
+    
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     string GetData(int value);
     
@@ -139,12 +247,6 @@ public interface IService1
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendData", ReplyAction="http://tempuri.org/IService1/SendDataResponse")]
     System.Threading.Tasks.Task<string> SendDataAsync(string username, string password);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
-    string SendAuthData(WcfService.AuthData data);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
-    System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDummyUserData", ReplyAction="http://tempuri.org/IService1/GetDummyUserDataResponse")]
     WcfService.AuthData GetDummyUserData();
@@ -193,6 +295,26 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     {
     }
     
+    public string SendAuthData(WcfService.AuthData data)
+    {
+        return base.Channel.SendAuthData(data);
+    }
+    
+    public System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data)
+    {
+        return base.Channel.SendAuthDataAsync(data);
+    }
+    
+    public WcfService.StatEntity[] GetUserList()
+    {
+        return base.Channel.GetUserList();
+    }
+    
+    public System.Threading.Tasks.Task<WcfService.StatEntity[]> GetUserListAsync()
+    {
+        return base.Channel.GetUserListAsync();
+    }
+    
     public string GetData(int value)
     {
         return base.Channel.GetData(value);
@@ -221,16 +343,6 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     public System.Threading.Tasks.Task<string> SendDataAsync(string username, string password)
     {
         return base.Channel.SendDataAsync(username, password);
-    }
-    
-    public string SendAuthData(WcfService.AuthData data)
-    {
-        return base.Channel.SendAuthData(data);
-    }
-    
-    public System.Threading.Tasks.Task<string> SendAuthDataAsync(WcfService.AuthData data)
-    {
-        return base.Channel.SendAuthDataAsync(data);
     }
     
     public WcfService.AuthData GetDummyUserData()

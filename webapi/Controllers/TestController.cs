@@ -1,7 +1,7 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 
 namespace webapi.Controllers
 {
@@ -9,32 +9,15 @@ namespace webapi.Controllers
     {
         public HttpResponseMessage Post(WcfService.AuthData message)
         {
-            System.Diagnostics.Debug.WriteLine("как же я заманался с этим постом");
+            System.Diagnostics.Debug.WriteLine("слава яйцам - всё работает отлично");
             if(AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest,
                     "Invalid input => urfag");
-            System.Diagnostics.Debug.WriteLine("GOT THIS: ", message.username, message.password);
-            System.Diagnostics.Debug.WriteLine(message.password, " >== BASE64 ==> ", AuthDataUtils.Base64Encode(message.password));
-            System.Diagnostics.Debug.WriteLine("connecting to wcf...");
             Service1Client client = new Service1Client();
             string token = client.SendAuthData(message);
-            System.Diagnostics.Debug.WriteLine(token);
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
         }
-        /*public string Get()
-        {
-            System.Diagnostics.Debug.WriteLine("connecting to wcf...");
-            Service1Client client = new Service1Client();
-
-            System.Diagnostics.Debug.WriteLine(client.GetData(6));
-
-            client.Close();
-
-            System.Diagnostics.Debug.WriteLine("i send some shit");
-
-            return new JavaScriptSerializer().Serialize(new { username = "Odmen", password = "2891ueij1230" });
-        }*/
         public WcfService.AuthData Get()
         {
             Service1Client client = new Service1Client();
@@ -64,10 +47,10 @@ namespace webapi.Controllers
     }
     public class StatisticController : ApiController
     {
-        public int Get()
+        public IEnumerable<WcfService.StatEntity> GetUserList()
         {
             Service1Client client = new Service1Client();
-            int level = client.UpgradeBase(1);
+            IEnumerable<WcfService.StatEntity> level = client.GetUserList();
             client.Close();
             return level;
         }
@@ -77,19 +60,9 @@ namespace webapi.Controllers
         public int Get()
         {
             int baseid = 3;
-            System.Diagnostics.Debug.WriteLine("GET REQUEST: ", baseid);
-
-            System.Diagnostics.Debug.WriteLine("connecting to wcf...");
             Service1Client client = new Service1Client();
-
             int level = client.UpgradeBase(baseid);
-
-            System.Diagnostics.Debug.WriteLine(level);
-
             client.Close();
-
-            System.Diagnostics.Debug.WriteLine("i send some shit"+ level);
-
             return level;
         }
     }

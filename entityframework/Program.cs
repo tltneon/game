@@ -6,7 +6,7 @@ namespace entityframework
 {
     class Program
     { 
-        static void Main(string[] args)
+        static void Main()
         {
             TestLogic.ConnectToDB();
             using (Entities db = TestLogic.GetContext())

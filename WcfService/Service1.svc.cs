@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using gamelogic;
 
@@ -6,19 +7,6 @@ namespace WcfService
 {
     public class Service1 : IService1
     {
-        public string SendData(string username, string password)
-        {
-            string test = "";
-            try
-            {
-                test = TestLogic.CreateUser(username, password);
-            }
-            catch (Exception)
-            {
-                System.Diagnostics.Debug.WriteLine("damn err");
-            }
-            return string.Format("Registering user {0} with pass {1}. Result:" + test, username, password);
-        }
         public string SendAuthData(AuthData data)
         {
             string test = "";
@@ -39,6 +27,25 @@ namespace WcfService
             }
             System.Diagnostics.Debug.WriteLine(string.Format("Registering user {0} with pass {1}. Result:" + test, data.username, data.password));
             return test;
+        }
+        public IEnumerable<StatEntity> GetUserList() {
+            return null;
+        }
+
+
+
+        public string SendData(string username, string password)
+        {
+            string test = "";
+            try
+            {
+                test = TestLogic.CreateUser(username, password);
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("damn err");
+            }
+            return string.Format("Registering user {0} with pass {1}. Result:" + test, username, password);
         }
         public AuthData GetDummyUserData() { 
             return new AuthData { username = "testuser", password = "testpass" };

@@ -30,12 +30,6 @@ namespace gamelogic
             }
             return result;
         }
-        public static string debug() {
-            string output = "ACCOUNTS TABLE:\n";
-            using (Entities db = new Entities())
-                foreach (Account u in db.Accounts) output += u.Username + "\n";
-            return output;
-        }
         public static Account FindUser(string username) {
             DB = GetContext();
             return DB.Accounts.Find(username);

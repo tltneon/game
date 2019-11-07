@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 
 namespace WcfService
@@ -7,6 +8,13 @@ namespace WcfService
     [ServiceContract]
     public interface IService1
     {
+        // Рабочий код
+        [OperationContract]
+        string SendAuthData(AuthData data);
+
+        [OperationContract]
+        IEnumerable<StatEntity> GetUserList();
+        // Тестовый код
         [OperationContract]
         string GetData(int value);
 
@@ -15,9 +23,6 @@ namespace WcfService
 
         [OperationContract]
         string SendData(string username, string password);
-
-        [OperationContract]
-        string SendAuthData(AuthData data);
 
         [OperationContract]
         AuthData GetDummyUserData();
@@ -57,5 +62,19 @@ namespace WcfService
         public string username { get; set; }
         [DataMember]
         public string password { get; set; }
+    }
+    [DataContract]
+    public class StatEntity
+    {
+        [DataMember]
+        public string username { get; set; }
+        [DataMember]
+        public string wins { get; set; }
+        [DataMember]
+        public string loses { get; set; }
+        [DataMember]
+        public string basename { get; set; }
+        [DataMember]
+        public string baselevel { get; set; }
     }
 }

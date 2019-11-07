@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace webapi.Models
+﻿namespace webapi.Models
 {
     // Модели, возвращенные действиями MeController.
     public class GetViewModel
