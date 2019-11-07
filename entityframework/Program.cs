@@ -20,13 +20,20 @@ namespace entityframework
                 switch (key.KeyChar)
                 {
                     case '2':
-                        db.Accounts.Add(new Account { Username = "Admin", Password = "123456", Role = 1 });
-                        db.Accounts.Add(new Account { Username = "User", Password = "123", Role = 0 });
-                        db.Players.Add(new Player { Playername = "Admin" });
-                        db.Players.Add(new Player { Playername = "User" });
-                        db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0 });
-                        db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0 });
-                        db.SaveChanges();
+                        try
+                        {
+                            db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = "123456", Role = 1, Token = "fgio" });
+                            db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = "123", Role = 0, Token = "fl4o" });
+                            db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
+                            db.Players.Add(new Player { UserID = 2, Playername = "User" });
+                            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0 });
+                            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0 });
+                            db.SaveChanges();
+                        }
+                        catch
+                        {
+                            Console.WriteLine("\n[Warn] Who knows that just happen here.\n");
+                        }
                         Console.WriteLine("TABLES FILLED");
                         break;
 
@@ -59,20 +66,26 @@ namespace entityframework
                     default:
                         Console.WriteLine("Opening connection to DB...");
 
-                        Console.WriteLine("ACCOUNTS TABLE:");
-                        foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}, Role {3}, Token={4}", u.UserID, u.Username, u.Password, u.Role, u.Token);
+                        try
+                        {
+                            Console.WriteLine("ACCOUNTS TABLE:");
+                            foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}, Role {3}, Token={4}", u.UserID, u.Username, u.Password, u.Role, u.Token);
 
-                        Console.WriteLine("PLAYERS TABLE:");
-                        foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Playername);
+                            Console.WriteLine("PLAYERS TABLE:");
+                            foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Playername);
 
-                        Console.WriteLine("BASES TABLE:");
-                        foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} ({2} lvl) - {3}. Coords: {4}x{5}", u.BaseID, u.Basename, u.Level, u.OwnerID, u.CoordX, u.CoordY);
+                            Console.WriteLine("BASES TABLE:");
+                            foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} ({2} lvl) - {3}. Coords: {4}x{5}", u.BaseID, u.Basename, u.Level, u.OwnerID, u.CoordX, u.CoordY);
 
-                        Console.WriteLine("BUILDINGS TABLE:");
-                        foreach (Building u in db.Buildings) Console.WriteLine("{0}. {1} - {2}", u.BaseID, u.Type, u.Level);
+                            Console.WriteLine("STRUCTURES TABLE:");
+                            foreach (Structure u in db.Structures) Console.WriteLine("{0}. {1} - {2}", u.BaseID, u.Type, u.Level);
 
-                        Console.WriteLine("SQUADS TABLE:");
-                        foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.Key, u.MoveFrom, u.MoveTo);
+                            Console.WriteLine("SQUADS TABLE:");
+                            foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.Key, u.MoveFrom, u.MoveTo);
+                        }
+                        catch {
+                            Console.WriteLine("\n[Warn] Database models has changed. You need to drop datatables first.\n");
+                        }
 
                         Console.WriteLine("DONE");
                         break;

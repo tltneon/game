@@ -11,7 +11,7 @@ namespace gamelogic
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Base> Bases { get; set; }
-        public DbSet<Building> Buildings { get; set; }
+        public DbSet<Structure> Structures { get; set; }
         public DbSet<Squad> Squads { get; set; }
     }
     // Tables
@@ -47,7 +47,7 @@ namespace gamelogic
         public bool IsActive { get; set; }
         public string Units { get; set; }
     }
-    public class Building
+    public class Structure
     {
         [Key]
         public int BaseID { get; set; }

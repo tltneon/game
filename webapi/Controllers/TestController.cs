@@ -24,7 +24,7 @@ namespace webapi.Controllers
             WcfService.AuthData data = client.GetDummyUserData();
             client.Close();
             return data;
-        }
+        } 
     }
     class AuthDataUtils
     {
@@ -57,37 +57,19 @@ namespace webapi.Controllers
     }
     public class BaseController : ApiController
     {
-        public string Upgrade(dynamic msg)
+        public string Upgrade(WcfService.BaseAction msg)
         {
-            System.Diagnostics.Debug.WriteLine(msg.token, msg.baseid);
-            /*Service1Client client = new Service1Client();
-            int level = client.UpgradeBase(baseid);
-            client.Close();*/
-            return "something";
-        }
-        public int BuildStructure()
-        {
-            int baseid = 3;
             Service1Client client = new Service1Client();
-            int level = client.UpgradeBase(baseid);
+            string result = client.UpgradeBase(msg);
             client.Close();
-            return level;
+            return result;
         }
-        public int Repair()
+        public string Action(WcfService.BaseAction msg)
         {
-            int baseid = 3;
             Service1Client client = new Service1Client();
-            int level = client.UpgradeBase(baseid);
+            string result = client.BaseAction(msg);
             client.Close();
-            return level;
-        }
-        public int MakeUnit()
-        {
-            int baseid = 3;
-            Service1Client client = new Service1Client();
-            int level = client.UpgradeBase(baseid);
-            client.Close();
-            return level;
+            return result;
         }
     }
     public class StructureController : ApiController

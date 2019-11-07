@@ -147,6 +147,87 @@ namespace WcfService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseAction", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    public partial class BaseAction : object, System.Runtime.Serialization.IExtensibleDataObject
+    {
+        
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private string actionField;
+        
+        private int baseidField;
+        
+        private string resultField;
+        
+        private string tokenField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return this.extensionDataField;
+            }
+            set
+            {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string action
+        {
+            get
+            {
+                return this.actionField;
+            }
+            set
+            {
+                this.actionField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int baseid
+        {
+            get
+            {
+                return this.baseidField;
+            }
+            set
+            {
+                this.baseidField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string result
+        {
+            get
+            {
+                return this.resultField;
+            }
+            set
+            {
+                this.resultField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string token
+        {
+            get
+            {
+                return this.tokenField;
+            }
+            set
+            {
+                this.tokenField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CompositeType", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
     public partial class CompositeType : object, System.Runtime.Serialization.IExtensibleDataObject
     {
@@ -215,17 +296,23 @@ public interface IService1
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetUserList", ReplyAction="http://tempuri.org/IService1/GetUserListResponse")]
     System.Threading.Tasks.Task<WcfService.StatEntity[]> GetUserListAsync();
     
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/UpgradeBase", ReplyAction="http://tempuri.org/IService1/UpgradeBaseResponse")]
+    string UpgradeBase(WcfService.BaseAction msg);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/UpgradeBase", ReplyAction="http://tempuri.org/IService1/UpgradeBaseResponse")]
+    System.Threading.Tasks.Task<string> UpgradeBaseAsync(WcfService.BaseAction msg);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/BaseAction", ReplyAction="http://tempuri.org/IService1/BaseActionResponse")]
+    string BaseAction(WcfService.BaseAction msg);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/BaseAction", ReplyAction="http://tempuri.org/IService1/BaseActionResponse")]
+    System.Threading.Tasks.Task<string> BaseActionAsync(WcfService.BaseAction msg);
+    
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     string GetData(int value);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
     System.Threading.Tasks.Task<string> GetDataAsync(int value);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/UpgradeBase", ReplyAction="http://tempuri.org/IService1/UpgradeBaseResponse")]
-    int UpgradeBase(int value);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/UpgradeBase", ReplyAction="http://tempuri.org/IService1/UpgradeBaseResponse")]
-    System.Threading.Tasks.Task<int> UpgradeBaseAsync(int value);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendData", ReplyAction="http://tempuri.org/IService1/SendDataResponse")]
     string SendData(string username, string password);
@@ -300,6 +387,26 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
         return base.Channel.GetUserListAsync();
     }
     
+    public string UpgradeBase(WcfService.BaseAction msg)
+    {
+        return base.Channel.UpgradeBase(msg);
+    }
+    
+    public System.Threading.Tasks.Task<string> UpgradeBaseAsync(WcfService.BaseAction msg)
+    {
+        return base.Channel.UpgradeBaseAsync(msg);
+    }
+    
+    public string BaseAction(WcfService.BaseAction msg)
+    {
+        return base.Channel.BaseAction(msg);
+    }
+    
+    public System.Threading.Tasks.Task<string> BaseActionAsync(WcfService.BaseAction msg)
+    {
+        return base.Channel.BaseActionAsync(msg);
+    }
+    
     public string GetData(int value)
     {
         return base.Channel.GetData(value);
@@ -308,16 +415,6 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     public System.Threading.Tasks.Task<string> GetDataAsync(int value)
     {
         return base.Channel.GetDataAsync(value);
-    }
-    
-    public int UpgradeBase(int value)
-    {
-        return base.Channel.UpgradeBase(value);
-    }
-    
-    public System.Threading.Tasks.Task<int> UpgradeBaseAsync(int value)
-    {
-        return base.Channel.UpgradeBaseAsync(value);
     }
     
     public string SendData(string username, string password)

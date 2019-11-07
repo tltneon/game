@@ -5,6 +5,7 @@
   "author": "Neon",
   "scripts": {
     "install-n-run": "npm i && ng serve",
+    "install": "npm i",
     "start": "ng serve",
     "build": "ng build"
   },

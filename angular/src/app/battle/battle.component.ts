@@ -65,6 +65,7 @@ export class BattleComponent implements OnInit {
     ];
     this.basesData = [
       {
+        baseid: 0,
         name: "Planet 2",
         owner: "Test",
         level: 1,
@@ -75,6 +76,7 @@ export class BattleComponent implements OnInit {
         task: {action:'',result:'',endsin:0},
       },
       {
+        baseid: 0,
         name: "Planet 3",
         owner: "Test2",
         level: 1,

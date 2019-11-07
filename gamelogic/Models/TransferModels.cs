@@ -13,4 +13,10 @@
         public string basename { get; set; }
         public string baselevel { get; set; }
     }
+    public class BaseAction {
+        public int baseid { get; set; }
+        public string action { get; set; }
+        public string result { get; set; }
+        public string token { get; set; }
+    }
 }

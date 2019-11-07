@@ -4,6 +4,7 @@ import { UnitsJSON } from './units';
 import { TaskJSON } from './task';
 
 export class BaseJSON {
+	baseid: number;
     name: string;
 	owner: string;
 	level: number;

@@ -19,6 +19,7 @@ export class BaseComponent implements OnInit {
         //this.httpService.getData('http://localhost/testdata.json').subscribe((data: UserJSON) => this.userData = data);
         this.baseData = [
             {
+                baseid: 1,
                 name: "planet 1",
                 owner: "Admin",
                 level: 1,
@@ -137,20 +138,16 @@ export class BaseComponent implements OnInit {
                 endsin: 0
             }
         }
+        this.httpService.postRequest("api/base/action", {action: "build", result: "resourceComplex", baseid: this.baseData[0].baseid}, true).subscribe((responce) => responce == "success" ? console.log(responce) : console.log(responce));
     }
     upgradeBase(){
-        function updateValue(responce, w){
-            console.log(responce);
-            w.baseData[0].level = responce;
-        }
-        //this.baseData[0].level++;
         this.setBaseTask('upgrade', '', 12345678);
-        this.httpService.postRequest("api/base/upgrade", {token: Cookie.get("token"), baseid: this.baseData[0].level}).subscribe((responce) => updateValue(responce, this));
-        //this.httpService.getRequest("api/upgrade/get").subscribe((responce) => updateValue(responce, this));
+        this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData[0].baseid}, true).subscribe((responce) => responce == "success" ? this.baseData[0].level++ : console.log(responce));
     }
     toggleBaseActiveness(){
         this.baseData[0].isactive = !this.baseData[0].isactive;
         this.setBaseTask(this.baseData[0].isactive ? 'repair' : '', '', 12345678);
+        this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData[0].baseid}, true).subscribe((responce) => responce == "success" ? console.log(responce) : console.log(responce));
     }
     setBaseTask(task: string, result: string, finishTime){
         this.baseData[0].task = {

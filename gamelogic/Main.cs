@@ -24,10 +24,10 @@ namespace gamelogic
         {
             var db = DbManager.GetContext();
             string token;
-            var us = db.Accounts.Where(o => o.Username == data.username);
-            if (us.Count() > 0)
+            var us = db.Accounts.Where(o => o.Username == data.username).FirstOrDefault();
+            if (us != null)
             {
-                if (us.First().Password == data.password) token = us.First().Token;
+                if (us.Password == data.password) token = us.Token;
                 else token = "Error#Wrong Password";
             }
             else token = CreateUser(data.username, data.password);
@@ -39,7 +39,7 @@ namespace gamelogic
             string token;
             try
             {
-                Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=49rh23489rh+salt" };
+                Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=потом придумаю как шифровать токен для " + username };
                 db.Accounts.Add(user);
                 db.SaveChanges();
                 int newIdentityValue = user.UserID;
@@ -54,24 +54,84 @@ namespace gamelogic
             }
             return token;
         }
+        public static Account GetUserByToken(string token)
+        {
+            return DbManager.GetContext().Accounts.Where(o => o.Token == token).FirstOrDefault();
+        }
+        public static bool CheckToken(string token)
+        {
+            return GetUserByToken(token) != null;
+        }
     }
-        public class TestLogic
+    public class BaseManager
     {
-        public static int UpgradeBase(int baseid) {
+        private static Base GetBase(int baseid)
+        {
             var db = DbManager.GetContext();
-            int result = 0;
+            return db.Bases.Find(baseid);
+        }
+        private static bool IsOwner(int baseid, string token)
+        {
+            return GetBase(baseid).OwnerID == AccountManager.GetUserByToken(token).UserID;
+        }
+        // не прям топ минимизация кода, но пока норма;
+        public static string UpgradeBase(BaseAction obj)
+        {
+            Base curbase = GetBase(obj.baseid);
+            if (curbase == null) return "wrongbaseid";
+            if (IsOwner(obj.baseid, obj.token)) return "wrongbaseid";
+            string result;
             try
             {
-                var bas = db.Bases.Find(baseid);
-                bas.Level++;
-                db.SaveChanges();
-                result = bas.Level;
+                curbase.Level++;
+                DbManager.GetContext().SaveChanges();
+                result = "success";
             }
-            catch
+            catch (Exception ex)
             {
+                result = "Error#Exception: " + ex.Message;
             }
             return result;
         }
+        public static string MakeUnit(BaseAction obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string BuildStructure(BaseAction obj)
+        {
+            if (GetBase(obj.baseid) == null) return "wrongbaseid";
+            if (IsOwner(obj.baseid, obj.token)) return "wrongbaseid";
+            string result;
+            try
+            {
+                var db = DbManager.GetContext();
+                db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
+                db.SaveChanges();
+                result = "success";
+            }
+            catch (Exception ex)
+            {
+                result = "Error#Exception: " + ex.Message;
+            }
+
+            return result;
+        }
+
+        public static string RepairBase(BaseAction obj)
+        {
+            Base curbase = GetBase(obj.baseid);
+            if (curbase == null) return "wrongbaseid";
+            if (IsOwner(obj.baseid, obj.token)) return "wrongbaseid";
+
+            curbase.IsActive = !curbase.IsActive;
+            DbManager.GetContext().SaveChanges();
+
+            return "success";
+        }
+    }
+    public class TestLogic
+    {
         public static IEnumerable<Player> GetUserList() {
             var db = DbManager.GetContext();
             return db.Players.AsEnumerable();

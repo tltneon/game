@@ -14,13 +14,13 @@ namespace WcfService
 
         [OperationContract]
         IEnumerable<StatEntity> GetUserList();
+
+        [OperationContract]
+        string BaseAction(BaseAction msg);
         // Тестовый код
         [OperationContract]
         string GetData(int value);
-
-        [OperationContract]
-        int UpgradeBase(int value);
-
+        
         [OperationContract]
         string SendData(string username, string password);
 
@@ -74,5 +74,17 @@ namespace WcfService
         public int Wins { get; set; }
         [DataMember]
         public int Loses { get; set; }
+    }
+    [DataContract]
+    public class BaseAction
+    {
+        [DataMember]
+        public int baseid { get; set; }
+        [DataMember]
+        public string action { get; set; }
+        [DataMember]
+        public string result { get; set; }
+        [DataMember]
+        public string token { get; set; }
     }
 }
