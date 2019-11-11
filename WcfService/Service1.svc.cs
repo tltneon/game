@@ -11,13 +11,9 @@ namespace WcfService
         public string SendAuthData(AuthData data)
         {
             string result = "";
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<AuthData, gamelogic.Models.AuthData>();
-            });
             try
             {
-                IMapper mapper = config.CreateMapper();
-                result = AccountManager.AuthClient(mapper.Map<AuthData, gamelogic.Models.AuthData>(data));
+                result = AccountManager.AuthClient(Tools.SmartMapper<AuthData, gamelogic.Models.AuthData>(data));
             }
             catch (Exception ex)
             {
@@ -31,11 +27,7 @@ namespace WcfService
         }
         public IEnumerable<StatEntity> GetUserList()
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<gamelogic.Player, StatEntity>();
-            });
-            IMapper mapper = config.CreateMapper();
-            return mapper.Map< IEnumerable<gamelogic.Player>, IEnumerable< StatEntity >>(TestLogic.GetUserList());
+            return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(TestLogic.GetUserList());
         }
 
         // base section
@@ -46,7 +38,7 @@ namespace WcfService
 
             string result;
 
-            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+            gamelogic.Models.BaseAction mapobj = Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj);
 
             System.Diagnostics.Debug.WriteLine($"дебаг: {mapobj.action} {mapobj.baseid} {mapobj.result} {mapobj.token}");
             
@@ -87,36 +79,25 @@ namespace WcfService
             if (!AccountManager.CheckToken(obj.token)) return null;
 
             System.Diagnostics.Debug.WriteLine("Token passed");
-
-            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
-
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<gamelogic.Base, BaseEntity>();
-                cfg.CreateMap<gamelogic.Structure, StructureEntity>();
-            });
-            IMapper mapper = config.CreateMapper();
-            Account acc = AccountManager.GetAccountByToken(obj.token);
-            BaseEntity result = mapper.Map<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(acc));
-
             System.Diagnostics.Debug.WriteLine(string.Format($"{obj.result}, {obj.baseid}, {obj.action}, {obj.token}"));
-            result.Structures = mapper.Map<IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(BaseManager.GetBaseInfo(acc))); 
+
+            Account acc = AccountManager.GetAccountByToken(obj.token);
+
+            BaseEntity result = Tools.SmartMapper<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(acc));
+
+            result.Structures = Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(BaseManager.GetBaseInfo(acc))); 
             result.Resources = new object[0];// заглушки
             result.Units = new object[0];
+
             return result;
         }
         public IEnumerable<StructureEntity> GetBaseStructures(BaseAction obj)
         {
             if (obj == null) return null;
 
-            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+            if (!AccountManager.CheckToken(obj.token)) return null;
 
-            if (!AccountManager.CheckToken(mapobj.token)) return null;
-
-            var config2 = new MapperConfiguration(cfg => {
-                cfg.CreateMap<gamelogic.Structure, StructureEntity>();
-            });
-            IMapper mapper2 = config2.CreateMapper();
-            return mapper2.Map< IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(mapobj));
+            return Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj)));
         }
         public IEnumerable<Squad> GetSquads(SquadAction obj)
         {
@@ -139,7 +120,7 @@ namespace WcfService
 
             string result = null;
 
-            gamelogic.Models.SquadAction mapobj = Tools.SmartMapper<gamelogic.Models.SquadAction>(obj);
+            gamelogic.Models.SquadAction mapobj = Tools.SmartMapper<SquadAction, gamelogic.Models.SquadAction>(obj);
 
             if (!AccountManager.CheckToken(mapobj.token)) return "wrongtoken";
             try
@@ -175,20 +156,23 @@ namespace WcfService
     }
     class Tools
     {
-        public static gamelogic.Models.BaseAction BaseActionMapper(BaseAction obj) {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<BaseAction, gamelogic.Models.BaseAction>();
-            });
-            IMapper mapper = config.CreateMapper();
-            return mapper.Map<BaseAction, gamelogic.Models.BaseAction>(obj);
-        }
-        public static T SmartMapper<T>(dynamic obj) // тестовая мульти-маппер-функция
+        public static TDestination SmartMapper<TSource, TDestination>(TSource obj) // тестовая мульти-маппер-функция
         {
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<dynamic, T>();
+                cfg.CreateMap<TSource, TDestination>();
             });
+            System.Diagnostics.Debug.WriteLine("=> smart mapper - гордость поколений =>");
             IMapper mapper = config.CreateMapper();
-            return mapper.Map<dynamic, T>(obj);
+            return mapper.Map<TSource, TDestination>(obj); // огонь, это работает!
+        }
+        public static IEnumerable<TDestination> EnumSmartMapper<TSource, TDestination>(IEnumerable<TSource> obj) // а это младший брат тестовой мульти-маппер-функции
+        {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<TSource, TDestination>();
+            });
+            System.Diagnostics.Debug.WriteLine("=> smart mapper jr. - гордость поколений =>");
+            IMapper mapper = config.CreateMapper();
+            return mapper.Map<IEnumerable<TSource>, IEnumerable<TDestination>>(obj); // шикос, и эта теперь тоже работает
         }
     }
 }

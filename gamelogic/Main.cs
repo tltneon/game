@@ -150,7 +150,7 @@ namespace gamelogic
                 Base curbase = GetBase(obj.baseid);
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
                 {
-                    obj.result = obj.result == null ? "lifeComplex" : obj.result;
+                    obj.result = obj.result ?? "lifeComplex";
                     var db = DbManager.GetContext();
                     db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
                     db.SaveChanges();
