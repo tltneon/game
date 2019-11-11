@@ -9,7 +9,6 @@ import { HttpService } from '../http.service';
 })
 
 export class MainPageComponent {
-
     constructor(private httpService: HttpService){ }
 
     ngOnInit() {

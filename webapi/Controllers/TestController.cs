@@ -12,7 +12,7 @@ namespace webapi.Controllers
             System.Diagnostics.Debug.WriteLine("слава яйцам - всё работает отлично");
             if(AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest,
-                    "Invalid input => urfag");
+                    "Invalid input");
             Service1Client client = new Service1Client();
             string token = client.SendAuthData(message);
             client.Close();
@@ -51,13 +51,6 @@ namespace webapi.Controllers
             client.Close();
             return entities;
         }
-        public string DbStatus()
-        {
-            Service1Client client = new Service1Client();
-            string stat = client.DbStatus();
-            client.Close();
-            return stat;
-        }
     }
     public class BaseController : ApiController
     {
@@ -65,13 +58,6 @@ namespace webapi.Controllers
         {
             Service1Client client = new Service1Client();
             WcfService.BaseEntity result = client.GetBaseInfo(msg);
-            client.Close();
-            return result;
-        }
-        public IEnumerable<WcfService.StructureEntity> RetrieveBaseStructures(WcfService.BaseAction msg)
-        {
-            Service1Client client = new Service1Client();
-            IEnumerable<WcfService.StructureEntity> result = client.GetBaseStructures(msg);
             client.Close();
             return result;
         }

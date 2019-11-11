@@ -88,13 +88,19 @@ namespace WcfService
 
             System.Diagnostics.Debug.WriteLine("Token passed");
 
+            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<gamelogic.Base, BaseEntity>();
+                cfg.CreateMap<gamelogic.Structure, StructureEntity>();
             });
             IMapper mapper = config.CreateMapper();
-            BaseEntity result = mapper.Map<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(AccountManager.GetAccountByToken(obj.token)));
-            result.Structures = new object[0]; // заглушки
-            result.Resources = new object[0];
+            Account acc = AccountManager.GetAccountByToken(obj.token);
+            BaseEntity result = mapper.Map<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(acc));
+
+            System.Diagnostics.Debug.WriteLine(string.Format($"{obj.result}, {obj.baseid}, {obj.action}, {obj.token}"));
+            result.Structures = mapper.Map<IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(BaseManager.GetBaseInfo(acc))); 
+            result.Resources = new object[0];// заглушки
             result.Units = new object[0];
             return result;
         }

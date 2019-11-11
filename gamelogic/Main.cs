@@ -86,6 +86,7 @@ namespace gamelogic
         private static string CheckInput(BaseAction obj)
         {
             if (obj == null) return "wronginput";
+            if (GetBase(obj.baseid) == null) return "wrongbaseid";
             return "success";
         }
         // не прям топ минимизация кода, но пока норма;
@@ -101,9 +102,9 @@ namespace gamelogic
                     DbManager.GetContext().SaveChanges();
                     result = "success";
                 }
-            else
-                result = "notanowner";
-            }
+                else
+                    result = "notanowner";
+                }
             catch (Exception ex)
             {
                 result = "Error#Exception: " + ex.Message;
@@ -112,20 +113,53 @@ namespace gamelogic
         }
         public static string MakeUnit(BaseAction obj)
         {
-            throw new NotImplementedException();
+            if (CheckInput(obj) != "success") return CheckInput(obj);
+            string result;
+            try
+            {
+                Base curbase = GetBase(obj.baseid);
+                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
+                {
+                    var db = DbManager.GetContext();
+                    Squad sq = db.Squads.Where(o => o.Key == obj.baseid.ToString()).FirstOrDefault();
+                    if (sq == null)
+                        db.Squads.Add(new Squad { Key = obj.baseid.ToString(), OwnerID = AccountManager.GetAccountByToken(obj.token).UserID });
+
+                    db.SaveChanges();
+                    result = "success";
+                }
+                else
+                {
+                    result = "notanowner";
+                }
+            }
+            catch (Exception ex)
+            {
+                result = "Error#Exception: " + ex.Message;
+            }
+
+            return result;
         }
 
         public static string BuildStructure(BaseAction obj)
         {
-            if (GetBase(obj.baseid) == null) return "wrongbaseid";
-            if (IsOwner(obj.baseid, obj.token)) return "wrongbaseid";
+            if (CheckInput(obj) != "success") return CheckInput(obj);
             string result;
             try
             {
-                var db = DbManager.GetContext();
-                db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
-                db.SaveChanges();
-                result = "success";
+                Base curbase = GetBase(obj.baseid);
+                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
+                {
+                    obj.result = obj.result == null ? "lifeComplex" : obj.result;
+                    var db = DbManager.GetContext();
+                    db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
+                    db.SaveChanges();
+                    result = "success";
+                }
+                else 
+                {
+                    result = "notanowner";
+                }
             }
             catch (Exception ex)
             {
@@ -137,12 +171,26 @@ namespace gamelogic
 
         public static string RepairBase(BaseAction obj)
         {
-            Base curbase = GetBase(obj.baseid);
-            if (curbase == null) return "wrongbaseid";
-            if (IsOwner(obj.baseid, obj.token)) return "wrongbaseid";
-
-            curbase.IsActive = !curbase.IsActive;
-            DbManager.GetContext().SaveChanges();
+            if (CheckInput(obj) != "success") return CheckInput(obj);
+            string result;
+            try
+            {
+                Base curbase = GetBase(obj.baseid);
+                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID)
+                {
+                    curbase.IsActive = !curbase.IsActive;
+                    DbManager.GetContext().SaveChanges();
+                    result = "success";
+                }
+                else
+                {
+                    result = "notanowner";
+                }
+            }
+            catch (Exception ex)
+            {
+                result = "Error#Exception: " + ex.Message;
+            }
 
             return "success";
         }
@@ -151,6 +199,11 @@ namespace gamelogic
         {
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.BaseID == acc.UserID).FirstOrDefault();
+        }
+        public static IEnumerable<Structure> GetBaseStructures(Base obj)
+        {
+            var db = DbManager.GetContext();
+            return db.Structures.Where(o => o.BaseID == obj.BaseID).AsEnumerable();
         }
         public static IEnumerable<Structure> GetBaseStructures(BaseAction obj)
         {

@@ -25,7 +25,7 @@ export class BaseComponent implements OnInit {
 
     updateProdution() {
         for(let i in this.baseData.resources){
-            this.baseData.resources[i].count += Math.floor(Math.pow(100, Math.random()));
+            this.baseData.resources[i].count += this.baseData.level * 1;
         }
     }
     private getStructID(structure):number {
@@ -58,25 +58,28 @@ export class BaseComponent implements OnInit {
     }
 
     buildStructure(structureType: string){
-        this.setBaseTask('build', structureType, 1234567);
-        this.baseData.structures[this.baseData.structures.length] = {
-            type: structureType,
-            level: 1,
-            task: {
-                action: '',
-                result: '',
-                endsin: 0
-            }
+        function update(responce){
+            this.baseData.structures[this.baseData.structures.length] = {
+                type: structureType,
+                level: 1,
+                task: {
+                    action: '',
+                    result: '',
+                    endsin: 0
+                }
+            };
+            console.log(responce);
         }
-        this.httpService.postRequest("api/base/action", {action: "build", result: "resourceComplex", baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? console.log(responce) : console.log(responce));
+        this.setBaseTask('build', structureType, 1234567);
+        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? update(responce) : console.log(responce));
     }
     upgradeBase(){
         this.setBaseTask('upgrade', '', 12345678);
         this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? this.baseData.level++ : console.log(responce));
     }
     toggleBaseActiveness(){
-        this.baseData.isactive = !this.baseData.isactive;
-        this.setBaseTask(this.baseData.isactive ? 'repair' : '', '', 12345678);
+        this.baseData.isActive = !this.baseData.isActive;
+        this.setBaseTask(this.baseData.isActive ? 'repair' : '', '', 12345678);
         this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? console.log(responce) : console.log(responce));
     }
     setBaseTask(task: string, result: string, finishTime){
@@ -101,7 +104,7 @@ export class BaseComponent implements OnInit {
                 name: "planet 1",
                 owner: "Admin",
                 level: 1,
-                isactive: true,
+                isActive: true,
                 structures: [
                     {
                         type: "lifeComplex",
@@ -173,13 +176,16 @@ export class BaseComponent implements OnInit {
         }
     loadOnlineData(){
         function update(is, responce) {
-            is.baseData = responce;
-            console.log(is.baseData);
-            is.baseData.task = {};
-            is.isDataLoaded = true;
+            if(responce == null)
+                console.log("ошибке");
+            else
+            {
+                is.baseData = responce;
+                console.log(is.baseData);
+                is.baseData.task = {};
+                is.isDataLoaded = true;
+            }
         }
         this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe((responce) => update(this, responce));
-        //this.httpService.postRequest("api/base/RetrieveBaseStructures", {}, true).subscribe((responce) => console.log(responce));
-        //this.isDataLoaded = true;
     }
 }

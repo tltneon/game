@@ -16,3 +16,16 @@ export class AuthGuard implements CanActivate {
     return false;
   }
 }
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminGuard implements CanActivate {
+  constructor(private router: Router) {}
+
+  canActivate(
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot): boolean {
+    this.router.navigate(['/']);
+    return false;
+  }
+}

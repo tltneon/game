@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard, AdminGuard } from './auth.guard';
 
 import { MainPageComponent } from './mainpage/mainpage.component';
 import { BattleComponent } from './battle/battle.component';
@@ -21,7 +21,7 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
     { path: 'battles', component: BattleComponent, canActivate: [AuthGuard] },
     { path: 'stats', component: StatsComponent, canActivate: [AuthGuard] },
     { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
-    { path: 'admin', component: AdminComponent, canActivate: [AuthGuard],
+    { path: 'admin', component: AdminComponent, canActivate: [AdminGuard],
       children: [
         {
           path: '',

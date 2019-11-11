@@ -80,7 +80,7 @@ namespace WcfService
         [DataMember]
         public int OwnerID { get; set; }
         [DataMember]
-        public object[] Structures { get; set; }
+        public IEnumerable<StructureEntity> Structures { get; set; }
         [DataMember]
         public object[] Resources { get; set; }
         [DataMember]

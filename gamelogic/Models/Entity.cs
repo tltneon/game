@@ -48,8 +48,9 @@ namespace gamelogic
         public string Units { get; set; }
     }
     public class Structure
-    {
+    {  
         [Key]
+        public int ID { get; set; }
         public int BaseID { get; set; }
         public int Level { get; set; }
         public string Type { get; set; }
@@ -65,6 +66,6 @@ namespace gamelogic
         public int StartTime { get; set; }
         public int MoveTo { get; set; }
         public int FinishTime { get; set; }
-        public object Units { get; set; }
+        public object[] Units { get; set; }
     }
 }

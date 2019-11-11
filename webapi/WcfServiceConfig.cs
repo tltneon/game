@@ -253,7 +253,7 @@ namespace WcfService
         
         private object[] ResourcesField;
         
-        private object[] StructuresField;
+        private WcfService.StructureEntity[] StructuresField;
         
         private object[] UnitsField;
         
@@ -348,7 +348,7 @@ namespace WcfService
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public object[] Structures
+        public WcfService.StructureEntity[] Structures
         {
             get
             {

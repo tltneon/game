@@ -21,4 +21,5 @@ export class AppComponent implements OnInit {
       document.body.querySelector("#errorSign").classList.remove("error");
       this.error = "";
     }
+    onVoted(agreed: boolean) {console.log("shiiiet");}
 }

@@ -78,7 +78,7 @@ namespace entityframework
                             foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} ({2} lvl) - {3}. Coords: {4}x{5}", u.BaseID, u.Basename, u.Level, u.OwnerID, u.CoordX, u.CoordY);
 
                             Console.WriteLine("STRUCTURES TABLE:");
-                            foreach (Structure u in db.Structures) Console.WriteLine("{0}. {1} - {2}", u.BaseID, u.Type, u.Level);
+                            foreach (Structure u in db.Structures) Console.WriteLine("BaseID{0}. {1} - {2}", u.BaseID, u.Type, u.Level);
 
                             Console.WriteLine("SQUADS TABLE:");
                             foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.Key, u.MoveFrom, u.MoveTo);
