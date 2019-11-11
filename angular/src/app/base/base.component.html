@@ -32,7 +32,7 @@
                     <div class="option">Choose type: </div>
                     <div class="actions">
                         <select #destination.value="ngModel" name="destination" [(ngModel)]="destination">
-                            <option *ngFor="let str of structuresList" [value]="str">{{str}}</option>
+                            <option *ngFor="let str of allowToBuild()" [value]="str">{{str}}</option>
                         </select>
                         <div class="button" (click)="buildStructure(destination)">Build structure</div>
                     </div>

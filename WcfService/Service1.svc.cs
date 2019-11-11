@@ -7,7 +7,7 @@ namespace WcfService
 {
     public class Service1 : IService1
     {
-        // auth section
+        // auth-n-player section
         public string SendAuthData(AuthData data)
         {
             string result = "";
@@ -25,9 +25,9 @@ namespace WcfService
             System.Diagnostics.Debug.WriteLine(string.Format("Registering user {0} with pass {1}. Result:" + result, data.username, data.password));
             return result;
         }
-        public IEnumerable<StatEntity> GetUserList()
+        public IEnumerable<StatEntity> GetPlayerList()
         {
-            return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(TestLogic.GetUserList());
+            return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
         }
 
         // base section
@@ -99,44 +99,36 @@ namespace WcfService
 
             return Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj)));
         }
-        public IEnumerable<Squad> GetSquads(SquadAction obj)
+        // squad section
+        public IEnumerable<SquadEntity> GetSquads(SquadAction obj)
         {
-            /*if (obj == null) return null;
+            if (obj == null) return null;
+            
+            if (!AccountManager.CheckToken(obj.token)) return null;
 
-            gamelogic.Models.SquadAction mapobj = Tools.BaseActionMapper(obj);
-
-            if (!AccountManager.CheckToken(mapobj.token)) return null;
-
-            var config2 = new MapperConfiguration(cfg => {
-                cfg.CreateMap<gamelogic.Structure, StructureEntity>();
-            });
-            IMapper mapper2 = config2.CreateMapper();
-            return mapper2.Map<IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(mapobj));*/
-            return null;
+            return Tools.EnumSmartMapper<gamelogic.Squad, SquadEntity>(SquadManager.GetSquads());
         }
         public string SquadAction(SquadAction obj)
         {
             if (obj == null) return "nodatareceived";
+            if (!AccountManager.CheckToken(obj.token)) return "wrongtoken";
 
-            string result = null;
-
-            gamelogic.Models.SquadAction mapobj = Tools.SmartMapper<SquadAction, gamelogic.Models.SquadAction>(obj);
-
-            if (!AccountManager.CheckToken(mapobj.token)) return "wrongtoken";
+            string result;
             try
             {
-                /*switch (mapobj.action)
+                gamelogic.Models.SquadAction mapobj = Tools.SmartMapper<SquadAction, gamelogic.Models.SquadAction>(obj);
+                switch (obj.action)
                 {
                     case "attack":
-                        result = BaseManager.UpgradeBase(mapobj);
+                        result = SquadManager.SendAttackOrder(mapobj);
                         break;
                     case "return":
-                        result = BaseManager.RepairBase(mapobj);
+                        result = SquadManager.SendReturnOrder(mapobj);
                         break;
                     default:
                         result = "wrongaction";
                         break;
-                }*/
+                }
             }
             catch (Exception ex)
             {

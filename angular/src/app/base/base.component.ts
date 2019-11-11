@@ -24,6 +24,10 @@ export class BaseComponent implements OnInit {
         this.interval = setInterval(() => this.baseData.isactive ? this.updateProdution() : ()=>{}, 1000)
     }
 
+    allowToBuild() {
+        return this.structuresList.filter(element => this.baseData.structures.findIndex(o => o.type == element) == -1);
+    }
+
     updateProdution() {
         for(let i in this.baseData.resources){
             this.baseData.resources[i].count += this.baseData.level * 1;
@@ -59,7 +63,7 @@ export class BaseComponent implements OnInit {
     }
 
     canMakeUnits(){
-        return this.baseData.structures.findIndex(p => p.type == 'aircraftsComplex')+1;
+        return this.baseData.structures.findIndex(p => p.type == 'aircraftsComplex') + 1;
     }
     makeUnit(unitType: string){
         function update(it, responce){
@@ -111,6 +115,7 @@ export class BaseComponent implements OnInit {
             result: '',
             endsin: 0
         }
+        console.log(this.allowToBuild());
     }
     loadOnlineData(){
         function update(is, responce) {

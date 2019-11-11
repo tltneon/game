@@ -11,13 +11,19 @@ namespace WcfService
         string SendAuthData(AuthData data);
 
         [OperationContract]
-        IEnumerable<StatEntity> GetUserList();
+        IEnumerable<StatEntity> GetPlayerList();
 
         [OperationContract]
         string BaseAction(BaseAction msg);
 
         [OperationContract]
         BaseEntity GetBaseInfo(BaseAction msg);
+
+        [OperationContract]
+        IEnumerable<SquadEntity> GetSquads(SquadAction obj);
+
+        [OperationContract]
+        string SquadAction(SquadAction obj);
 
         [OperationContract]
         IEnumerable<StructureEntity> GetBaseStructures(BaseAction msg);
@@ -95,6 +101,24 @@ namespace WcfService
         public string Type { get; set; }
         [DataMember]
         public int Level { get; set; }
+    }
+    [DataContract]
+    public class SquadEntity
+    {
+        [DataMember]
+        public string Key { get; set; }
+        [DataMember]
+        public int OwnerID { get; set; }
+        [DataMember]
+        public int MoveFrom { get; set; }
+        [DataMember]
+        public int StartTime { get; set; }
+        [DataMember]
+        public int MoveTo { get; set; }
+        [DataMember]
+        public int FinishTime { get; set; }
+        [DataMember]
+        public object[] Units { get; set; }
     }
     [DataContract]
     public class BaseAction

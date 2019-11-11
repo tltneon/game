@@ -71,6 +71,11 @@ namespace gamelogic
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.OwnerID == userid).FirstOrDefault();
         }
+        public static IEnumerable<Player> GetPlayerList()
+        {
+            var db = DbManager.GetContext();
+            return db.Players.AsEnumerable();
+        }
     }
     public class BaseManager
     {
@@ -211,11 +216,14 @@ namespace gamelogic
             return db.Structures.Where(o => o.BaseID == obj.baseid).AsEnumerable();
         }
     }
-    public class TestLogic
+    public class SquadManager
     {
-        public static IEnumerable<Player> GetUserList() {
+        public static IEnumerable<Squad> GetSquads()
+        {
             var db = DbManager.GetContext();
-            return db.Players.AsEnumerable();
+            return db.Squads.AsEnumerable();
         }
+        public static string SendReturnOrder(SquadAction obj) { return "success"; }
+        public static string SendAttackOrder(SquadAction obj) { return "success"; }
     }
 }

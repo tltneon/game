@@ -44,10 +44,10 @@ namespace webapi.Controllers
     }
     public class StatisticController : ApiController
     {
-        public IEnumerable<WcfService.StatEntity> GetUserList()
+        public IEnumerable<WcfService.StatEntity> GetPlayerList()
         {
             Service1Client client = new Service1Client();
-            IEnumerable<WcfService.StatEntity> entities = client.GetUserList();
+            IEnumerable<WcfService.StatEntity> entities = client.GetPlayerList();
             client.Close();
             return entities;
         }
@@ -71,10 +71,10 @@ namespace webapi.Controllers
     }
     public class SquadController : ApiController
     {
-        /*public IEnumerable<> GetSquads(WcfService.SquadAction msg)
+        public IEnumerable<WcfService.SquadEntity> GetSquads(WcfService.SquadAction msg)
         {
             Service1Client client = new Service1Client();
-            string result = client.SquadAction(msg);
+            IEnumerable<WcfService.SquadEntity> result = client.GetSquads(msg);
             client.Close();
             return result;
         }
@@ -84,6 +84,6 @@ namespace webapi.Controllers
             string result = client.SquadAction(msg);
             client.Close();
             return result;
-        }*/
+        }
     }
 }
