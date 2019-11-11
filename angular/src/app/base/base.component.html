@@ -47,6 +47,21 @@
                     <div class="name">{{item.type}} (on base: {{item.count}})</div>
                 </div>
             </div>
+            <span *ngIf="canMakeUnits()">
+            <div class="item">
+                <div class="image"><img class="newStructure" /></div>
+                <div class="desc">
+                    <div class="name">New unit</div>
+                    <div class="option">Choose type: </div>
+                    <div class="actions">
+                        <select #unitInput.value="ngModel" name="unitInput" [(ngModel)]="unitInput">
+                            <option *ngFor="let str of unitsList" [value]="str">{{str}}</option>
+                        </select>
+                        <div class="button" (click)="makeUnit(unitInput)">Make unit</div>
+                    </div>
+                </div>
+            </div>
+            </span>
         </div>
     </div>
     <div id="baseinfo">
@@ -68,8 +83,8 @@
             <div *ngIf="baseData.task.action">Ends in: {{baseData?.task.endsin | date :'short'}}</div>
         <div class="separatist"></div>
         <h4>Prodution</h4>
-            <div>Credits: {{60*baseData?.level}}/min.</div>
-            <div>Energy: {{60*baseData?.level}}/min.</div>
+            <div>Credits: +{{60*baseData?.level}}/min.</div>
+            <div>Energy: +{{60*baseData?.level}}/min.</div>
             <div>Population: {{10*baseData?.level}}</div>
         <div class="separatist"></div>
         <h4>Actions</h4>

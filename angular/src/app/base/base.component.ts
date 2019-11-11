@@ -12,6 +12,7 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class BaseComponent implements OnInit {
     isDataLoaded:boolean = false;
     structuresList: string[] = ["lifeComplex", "energyComplex", "aircraftsComplex", "resourceComplex"];
+    unitsList: string[] = ["droneUnit", "jetUnit", "lincorUnit", "someGiantShitUnit"];
     baseData:any = {};
     interval;
 
@@ -57,9 +58,24 @@ export class BaseComponent implements OnInit {
         }
     }
 
+    canMakeUnits(){
+        return this.baseData.structures.findIndex(p => p.type == 'aircraftsComplex')+1;
+    }
+    makeUnit(unitType: string){
+        function update(it, responce){
+            let index = it.baseData.units.findIndex(p => p.type == responce);
+            if(index)
+                it.baseData.units[it.baseData.units.length] = {type: unitType, count: 1};
+            else
+                it.baseData.units[index].count++;
+            console.log(responce);
+        }
+        this.setBaseTask('makeunit', unitType, 1234567);
+        this.httpService.postRequest("api/base/action", {action: "makeunit", result: unitType, baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? update(this, responce) : console.log(responce));
+    }
     buildStructure(structureType: string){
-        function update(responce){
-            this.baseData.structures[this.baseData.structures.length] = {
+        function update(it, responce){
+            it.baseData.structures[it.baseData.structures.length] = {
                 type: structureType,
                 level: 1,
                 task: {
@@ -71,7 +87,7 @@ export class BaseComponent implements OnInit {
             console.log(responce);
         }
         this.setBaseTask('build', structureType, 1234567);
-        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? update(responce) : console.log(responce));
+        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? update(this, responce) : console.log(responce));
     }
     upgradeBase(){
         this.setBaseTask('upgrade', '', 12345678);
@@ -95,6 +111,20 @@ export class BaseComponent implements OnInit {
             result: '',
             endsin: 0
         }
+    }
+    loadOnlineData(){
+        function update(is, responce) {
+            if(responce == null)
+                console.log("ошибке");
+            else
+            {
+                is.baseData = responce;
+                console.log(is.baseData);
+                is.baseData.task = {};
+                is.isDataLoaded = true;
+            }
+        }
+        this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe((responce) => update(this, responce));
     }
     loadOfflineData(){
         this.isDataLoaded = true;
@@ -174,18 +204,4 @@ export class BaseComponent implements OnInit {
                 }
             }
         }
-    loadOnlineData(){
-        function update(is, responce) {
-            if(responce == null)
-                console.log("ошибке");
-            else
-            {
-                is.baseData = responce;
-                console.log(is.baseData);
-                is.baseData.task = {};
-                is.isDataLoaded = true;
-            }
-        }
-        this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe((responce) => update(this, responce));
-    }
 }
