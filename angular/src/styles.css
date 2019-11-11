@@ -71,19 +71,26 @@ a:hover {
 /* Input */
 
 input {
-    font-size: 14px;
-    border-radius: 4px;
-    background-color: #616f8a96;
-    padding: 4px;
-    border: 1px solid black;
-    /*padding: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #BDBDBD;*/
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #3f485c66;
+  padding: 4px;
+  border: 1px solid black;
+}
+
+*:disabled {
+  cursor: not-allowed;
 }
 
 select {
-    background-color: #3f485c66;
-    border: 1px solid black;
+  background-color: #3f485c66;
+  border: 1px solid black;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+option {
+  background-color: #0c111c;
 }
 
 label {
@@ -157,6 +164,7 @@ app-top-bar h1 {
   display: block !important;
   animation-name: rotating-anim;
   animation-duration: 0.05s;
+  cursor: progress;
 }
 
 @keyframes rotating-anim {

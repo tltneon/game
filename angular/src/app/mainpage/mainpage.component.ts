@@ -9,10 +9,10 @@ import { HttpService } from '../http.service';
 })
 
 export class MainPageComponent {
-    data;
 
     constructor(private httpService: HttpService){ }
 
     ngOnInit() {
+        //this.httpService.postRequest("api/statistic/dbstatus", {}).subscribe(res => console.log(res)); // requesting DB status
     }
 }

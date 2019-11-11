@@ -91,18 +91,9 @@ namespace entityframework
                         break;
                 }
 
-                Console.WriteLine("Another command? '1' to yes.");
+                Console.WriteLine("Another command? '1' to try something else.");
                 if (Console.ReadKey().KeyChar == '1') goto OneMore;
             }
         }
     }
 }
-
-/*foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(user2))
-{
-    string name = descriptor.Name;
-    object value = descriptor.GetValue(user2);
-    Console.WriteLine("{0}={1}", name, value);
-}*/
-
-//var saloane = _context.Saloane.Where(c => c.SomeProperty == "something").ToList();

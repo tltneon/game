@@ -44,7 +44,7 @@ namespace gamelogic
                 db.SaveChanges();
                 int newIdentityValue = user.UserID;
                 db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
-                db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0 });
+                db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
                 db.SaveChanges();
                 token = user.Token;
             }
@@ -54,14 +54,22 @@ namespace gamelogic
             }
             return token;
         }
-        public static Account GetUserByToken(string token)
+        public static Account GetAccountByToken(string token)
         {
             var db = DbManager.GetContext();
             return db.Accounts.Where(o => o.Token == token).FirstOrDefault();
         }
         public static bool CheckToken(string token)
         {
-            return GetUserByToken(token) != null;
+            return GetAccountByToken(token) != null;
+        }
+    }
+    public class PlayerManager
+    {
+        private static Base GetBaseByUserID(int userid)
+        {
+            var db = DbManager.GetContext();
+            return db.Bases.Where(o => o.OwnerID == userid).FirstOrDefault();
         }
     }
     public class BaseManager
@@ -69,24 +77,32 @@ namespace gamelogic
         private static Base GetBase(int baseid)
         {
             var db = DbManager.GetContext();
-            return db.Bases.Find(baseid);
+            return db.Bases.Where(o => o.BaseID == baseid).FirstOrDefault();
         }
         private static bool IsOwner(int baseid, string token)
         {
-            return GetBase(baseid).OwnerID == AccountManager.GetUserByToken(token).UserID;
+            return GetBase(baseid).OwnerID == AccountManager.GetAccountByToken(token).UserID;
+        }
+        private static string CheckInput(BaseAction obj)
+        {
+            if (obj == null) return "wronginput";
+            return "success";
         }
         // не прям топ минимизация кода, но пока норма;
         public static string UpgradeBase(BaseAction obj)
         {
-            Base curbase = GetBase(obj.baseid);
-            if (curbase == null) return "wrongbaseid";
-            if (IsOwner(obj.baseid, obj.token)) return "wrongbaseid";
+            if (CheckInput(obj) != "success") return CheckInput(obj);
             string result;
             try
             {
-                curbase.Level++;
-                DbManager.GetContext().SaveChanges();
-                result = "success";
+                Base curbase = GetBase(obj.baseid);
+                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID) {
+                    curbase.Level++;
+                    DbManager.GetContext().SaveChanges();
+                    result = "success";
+                }
+            else
+                result = "notanowner";
             }
             catch (Exception ex)
             {
@@ -131,10 +147,10 @@ namespace gamelogic
             return "success";
         }
 
-        public static Base GetBaseInfo(BaseAction obj)
+        public static Base GetBaseInfo(Account acc)
         {
             var db = DbManager.GetContext();
-            return db.Bases.Where(o => o.BaseID == obj.baseid).FirstOrDefault();
+            return db.Bases.Where(o => o.BaseID == acc.UserID).FirstOrDefault();
         }
         public static IEnumerable<Structure> GetBaseStructures(BaseAction obj)
         {

@@ -42,14 +42,14 @@ namespace WcfService
         public string BaseAction(BaseAction obj)
         {
             if (obj == null) return "nodatareceived";
+            if (!AccountManager.CheckToken(obj.token)) return "wrongtoken";
 
             string result;
 
             gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
 
             System.Diagnostics.Debug.WriteLine($"дебаг: {mapobj.action} {mapobj.baseid} {mapobj.result} {mapobj.token}");
-
-            if (!AccountManager.CheckToken(mapobj.token)) return "wrongtoken";
+            
             try
             {
                 switch (mapobj.action) {
@@ -84,17 +84,19 @@ namespace WcfService
         {
             if (obj == null) return null;
 
-            gamelogic.Models.BaseAction mapobj = Tools.BaseActionMapper(obj);
+            if (!AccountManager.CheckToken(obj.token)) return null;
 
-            System.Diagnostics.Debug.WriteLine($"дебаг: {mapobj.action} {mapobj.baseid} {mapobj.result} {mapobj.token}");
+            System.Diagnostics.Debug.WriteLine("Token passed");
 
-            if (!AccountManager.CheckToken(mapobj.token)) return null;
-
-            var config2 = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<gamelogic.Base, BaseEntity>();
             });
-            IMapper mapper2 = config2.CreateMapper();
-            return mapper2.Map<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(mapobj));
+            IMapper mapper = config.CreateMapper();
+            BaseEntity result = mapper.Map<gamelogic.Base, BaseEntity>(BaseManager.GetBaseInfo(AccountManager.GetAccountByToken(obj.token)));
+            result.Structures = new object[0]; // заглушки
+            result.Resources = new object[0];
+            result.Units = new object[0];
+            return result;
         }
         public IEnumerable<StructureEntity> GetBaseStructures(BaseAction obj)
         {
@@ -110,49 +112,59 @@ namespace WcfService
             IMapper mapper2 = config2.CreateMapper();
             return mapper2.Map< IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(mapobj));
         }
-
-        //other
-
-        public string SendData(string username, string password)
+        public IEnumerable<Squad> GetSquads(SquadAction obj)
         {
-            string test = "";
+            /*if (obj == null) return null;
+
+            gamelogic.Models.SquadAction mapobj = Tools.BaseActionMapper(obj);
+
+            if (!AccountManager.CheckToken(mapobj.token)) return null;
+
+            var config2 = new MapperConfiguration(cfg => {
+                cfg.CreateMap<gamelogic.Structure, StructureEntity>();
+            });
+            IMapper mapper2 = config2.CreateMapper();
+            return mapper2.Map<IEnumerable<gamelogic.Structure>, IEnumerable<StructureEntity>>(BaseManager.GetBaseStructures(mapobj));*/
+            return null;
+        }
+        public string SquadAction(SquadAction obj)
+        {
+            if (obj == null) return "nodatareceived";
+
+            string result = null;
+
+            gamelogic.Models.SquadAction mapobj = Tools.SmartMapper<gamelogic.Models.SquadAction>(obj);
+
+            if (!AccountManager.CheckToken(mapobj.token)) return "wrongtoken";
             try
             {
-                test = AccountManager.CreateUser(username, password);
+                /*switch (mapobj.action)
+                {
+                    case "attack":
+                        result = BaseManager.UpgradeBase(mapobj);
+                        break;
+                    case "return":
+                        result = BaseManager.RepairBase(mapobj);
+                        break;
+                    default:
+                        result = "wrongaction";
+                        break;
+                }*/
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("damn err");
+                System.Diagnostics.Debug.WriteLine($"Исключение: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Метод: {ex.TargetSite}");
+                System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
+                result = "err";
             }
-            return string.Format("Registering user {0} with pass {1}. Result:" + test, username, password);
+            return result;
         }
-        public AuthData GetDummyUserData() { 
-            return new AuthData { username = "testuser", password = "testpass" };
-        }
-        public string GetData(int value)
+        public string DbStatus()
         {
-            string test ="";
-            try
-            {
-                test = AccountManager.CreateUser("noshit","bull");
-            }
-            catch (Exception)
-            {
-                System.Diagnostics.Debug.WriteLine("damn err");
-            }
-            return string.Format("Registering user {0} with pass {1}. Salt: {2}. Result:" + test, "noshit", "bull", value);
-        }
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+            System.Diagnostics.Debug.WriteLine(gamelogic.DbManager.GetContext());
+            return "success request";
         }
     }
     class Tools
@@ -164,6 +176,13 @@ namespace WcfService
             IMapper mapper = config.CreateMapper();
             return mapper.Map<BaseAction, gamelogic.Models.BaseAction>(obj);
         }
-        public void CheckCorrectInput() { return; }
+        public static T SmartMapper<T>(dynamic obj) // тестовая мульти-маппер-функция
+        {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<dynamic, T>();
+            });
+            IMapper mapper = config.CreateMapper();
+            return mapper.Map<dynamic, T>(obj);
+        }
     }
 }

@@ -20,10 +20,7 @@ namespace webapi.Controllers
         }
         public WcfService.AuthData GetDummyUserData()
         {
-            Service1Client client = new Service1Client();
-            WcfService.AuthData data = client.GetDummyUserData();
-            client.Close();
-            return data;
+            return new WcfService.AuthData { username = "testuser", password = "testpass" };
         } 
     }
     class AuthDataUtils
@@ -54,6 +51,13 @@ namespace webapi.Controllers
             client.Close();
             return entities;
         }
+        public string DbStatus()
+        {
+            Service1Client client = new Service1Client();
+            string stat = client.DbStatus();
+            client.Close();
+            return stat;
+        }
     }
     public class BaseController : ApiController
     {
@@ -79,10 +83,21 @@ namespace webapi.Controllers
             return result;
         }
     }
-    public class StructureController : ApiController
-    {
-    }
     public class SquadController : ApiController
     {
+        /*public IEnumerable<> GetSquads(WcfService.SquadAction msg)
+        {
+            Service1Client client = new Service1Client();
+            string result = client.SquadAction(msg);
+            client.Close();
+            return result;
+        }
+        public string Action(WcfService.SquadAction msg)
+        {
+            Service1Client client = new Service1Client();
+            string result = client.SquadAction(msg);
+            client.Close();
+            return result;
+        }*/
     }
 }

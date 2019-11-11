@@ -1,77 +1,83 @@
-<p id="topbarinfo">Resources: | <span *ngFor="let res of baseData[0]?.resources" class="resource">{{res.type}}: {{res.count}} | </span><i *ngIf="baseData[0]?.isactive" class="activeBase">ø</i></p>
-<div id="block">
-    <h4>Structures</h4>
-    <div id="structures" class="items" >
-        <div class="item" *ngFor="let item of baseData[0]?.structures">
-            <div class="image"><img class="{{item.type}}" /></div>
-            <div class="desc">
-                <div class="name">{{item.type}} (level: {{item.level}})</div>
-                <div class="task">Task: 
-                    <span *ngIf="item.task.action; else unset">
-                        {{item.task.action}} until {{item.task.endsin | date :'short'}}
-                    </span>
-                    
-                    <ng-template #unset>  
-                        None
-                    </ng-template>  
+<div *ngIf="isDataLoaded; else unset2">
+    <p id="topbarinfo">Resources: | <span *ngFor="let res of baseData?.resources" class="resource">{{res.type}}: {{res.count}} | </span><i *ngIf="baseData?.isactive" class="activeBase">ø</i></p>
+    <div id="block">
+        <h4>Structures</h4>
+        <div id="structures" class="items" >
+            <div class="item" *ngFor="let item of baseData?.structures">
+                <div class="image"><img class="{{item.type}}" /></div>
+                <div class="desc">
+                    <div class="name">{{item.type}} (level: {{item.level}})</div>
+                    <div class="task">Task: 
+                        <span *ngIf="item.task.action; else unset">
+                            {{item.task.action}} until {{item.task.endsin | date :'short'}}
+                        </span>
+                        
+                        <ng-template #unset>  
+                            None
+                        </ng-template>  
+                    </div>
+                    <div class="actions">
+                        <div class="levelUpIcon button" (click)="upgradeStructure(item)">Upgrade</div>
+                        <div class="levelUpIcon button" (click)="clearStructureTask(item)">Clear task</div>
+                        <div class="button" (click)="destroyStructure(item)">Destroy structure</div>
+                    </div>
                 </div>
-                <div class="actions">
-                    <div class="levelUpIcon button" (click)="upgradeStructure(item)">Upgrade</div>
-                    <div class="levelUpIcon button" (click)="clearStructureTask(item)">Clear task</div>
-                    <div class="button" (click)="destroyStructure(item)">Destroy structure</div>
+            </div>
+            <div class="item">
+                <div class="image"><img class="newStructure" /></div>
+                <div class="desc">
+                    <div class="name">New structure</div>
+                    <div class="option">Choose type: </div>
+                    <div class="actions">
+                        <select #destination.value="ngModel" name="destination" [(ngModel)]="destination">
+                            <option *ngFor="let str of structuresList" [value]="str">{{str}}</option>
+                        </select>
+                        <div class="button" (click)="buildStructure(destination)">Build structure</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="item">
-            <div class="image"><img class="newStructure" /></div>
-            <div class="desc">
-                <div class="name">New structure</div>
-                <div class="option">Choose type: </div>
-                <div class="actions">
-                    <select #destination.value="ngModel" name="destination" [(ngModel)]="destination">
-                        <option *ngFor="let base of structures" [value]="base">{{base}}</option>
-                    </select>
-                    <div class="button" (click)="buildStructure(destination)">Build structure</div>
+        <h4>Units</h4>
+        <div id="units" id="items">
+            <div class="item" *ngFor="let item of baseData?.units">
+                <div class="image"><img class="{{item.type}}" /></div>
+                <div class="desc">
+                    <div class="name">{{item.type}} (on base: {{item.count}})</div>
                 </div>
             </div>
         </div>
     </div>
-    <h4>Units</h4>
-    <div id="units" id="items">
-        <div class="item" *ngFor="let item of baseData[0]?.units">
-            <div class="image"><img class="{{item.type}}" /></div>
-            <div class="desc">
-                <div class="name">{{item.type}} (on base: {{item.count}})</div>
+    <div id="baseinfo">
+        <h4>Base info</h4>
+            <div>Name: {{baseData?.basename}} | ID {{baseData?.baseID}}</div>
+            <div>Owner: You | ID {{baseData?.ownerID}}</div>
+            <div>Level: {{baseData?.level}}</div>
+            <div>Defence multiplier: {{1.1 * baseData?.level}}</div>
+            <div *ngIf="!baseData?.isactive">Base is inactive</div>
+        <div class="separatist"></div>
+        <h4>Current task</h4>
+            <div [ngSwitch]="baseData?.task.action">
+                <ng-template ngSwitchCase="build">Building: {{baseData?.task.result}}</ng-template>
+                <ng-template ngSwitchCase="upgrade">Upgrading base</ng-template>
+                <ng-template ngSwitchCase="repair">Repairing base</ng-template>
+                <ng-template ngSwitchCase="create">Creating: {{baseData?.task.result}}</ng-template>
+                <ng-template ngSwitchDefault="">None</ng-template>
             </div>
-        </div>
+            <div *ngIf="baseData.task.action">Ends in: {{baseData?.task.endsin | date :'short'}}</div>
+        <div class="separatist"></div>
+        <h4>Prodution</h4>
+            <div>Credits: {{450*baseData?.level}}/min.</div>
+            <div>Energy: {{450*baseData?.level}}/min.</div>
+            <div>Population: {{10*baseData?.level}}</div>
+        <div class="separatist"></div>
+        <h4>Actions</h4>
+        <div class="button" (click)="upgradeBase()">Level up ^</div>
+        <div class="button" (click)="toggleBaseActiveness()">Repair</div>
+        <div class="button" (click)="clearBaseTask()">Clear task</div>
     </div>
 </div>
-<div id="baseinfo">
-    <h4>Base info</h4>
-        <div>Name: {{baseData[0]?.name}}</div>
-        <div>Owner: {{baseData[0]?.owner}}</div>
-        <div>Level: {{baseData[0]?.level}}</div>
-        <div>Defence multiplier: {{1.1 * baseData[0]?.level}}</div>
-        <div *ngIf="!baseData[0]?.isactive">Base is inactive</div>
-    <div class="separatist"></div>
-    <h4>Current task</h4>
-        <div [ngSwitch]="baseData[0]?.task.action">
-            <ng-template ngSwitchCase="build">Building: {{baseData[0]?.task.result}}</ng-template>
-            <ng-template ngSwitchCase="upgrade">Upgrading base</ng-template>
-            <ng-template ngSwitchCase="repair">Repairing base</ng-template>
-            <ng-template ngSwitchCase="create">Creating: {{baseData[0]?.task.result}}</ng-template>
-            <ng-template ngSwitchDefault="">None</ng-template>
-        </div>
-        <div *ngIf="baseData[0].task.action">Ends in: {{baseData[0]?.task.endsin | date :'short'}}</div>
-    <div class="separatist"></div>
-    <h4>Prodution</h4>
-        <div>Credits: {{450*baseData[0]?.level}}/min.</div>
-        <div>Energy: {{450*baseData[0]?.level}}/min.</div>
-        <div>Population: {{10*baseData[0]?.level}}</div>
-    <div class="separatist"></div>
-    <h4>Actions</h4>
-    <div class="button" (click)="upgradeBase()">Level up ^</div>
-    <div class="button" (click)="toggleBaseActiveness()">Repair</div>
-    <div class="button" (click)="clearBaseTask()">Clear task</div>
-</div>
+<ng-template #unset2>  
+        <h4>We're just updating our data, commander... Please, be patient, everything will be soon...</h4>
+</ng-template>  
+<div class="" (click)="loadOfflineData()">loadOfflineData</div>
 <div class="" (click)="loadOnlineData()">loadOnlineData</div>

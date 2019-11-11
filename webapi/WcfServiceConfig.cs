@@ -229,6 +229,13 @@ namespace WcfService
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BaseEntity", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.AuthData))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StatEntity[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StatEntity))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseAction))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StructureEntity[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StructureEntity))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
     public partial class BaseEntity : object, System.Runtime.Serialization.IExtensibleDataObject
     {
         
@@ -243,6 +250,12 @@ namespace WcfService
         private int LevelField;
         
         private int OwnerIDField;
+        
+        private object[] ResourcesField;
+        
+        private object[] StructuresField;
+        
+        private object[] UnitsField;
         
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData
         {
@@ -320,6 +333,45 @@ namespace WcfService
                 this.OwnerIDField = value;
             }
         }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object[] Resources
+        {
+            get
+            {
+                return this.ResourcesField;
+            }
+            set
+            {
+                this.ResourcesField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object[] Structures
+        {
+            get
+            {
+                return this.StructuresField;
+            }
+            set
+            {
+                this.StructuresField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object[] Units
+        {
+            get
+            {
+                return this.UnitsField;
+            }
+            set
+            {
+                this.UnitsField = value;
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -387,57 +439,6 @@ namespace WcfService
             }
         }
     }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CompositeType", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
-    public partial class CompositeType : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-        
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        private bool BoolValueField;
-        
-        private string StringValueField;
-        
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool BoolValue
-        {
-            get
-            {
-                return this.BoolValueField;
-            }
-            set
-            {
-                this.BoolValueField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string StringValue
-        {
-            get
-            {
-                return this.StringValueField;
-            }
-            set
-            {
-                this.StringValueField = value;
-            }
-        }
-    }
 }
 
 
@@ -476,29 +477,11 @@ public interface IService1
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseStructures", ReplyAction="http://tempuri.org/IService1/GetBaseStructuresResponse")]
     System.Threading.Tasks.Task<WcfService.StructureEntity[]> GetBaseStructuresAsync(WcfService.BaseAction msg);
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
-    string GetData(int value);
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/DbStatus", ReplyAction="http://tempuri.org/IService1/DbStatusResponse")]
+    string DbStatus();
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
-    System.Threading.Tasks.Task<string> GetDataAsync(int value);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendData", ReplyAction="http://tempuri.org/IService1/SendDataResponse")]
-    string SendData(string username, string password);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendData", ReplyAction="http://tempuri.org/IService1/SendDataResponse")]
-    System.Threading.Tasks.Task<string> SendDataAsync(string username, string password);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDummyUserData", ReplyAction="http://tempuri.org/IService1/GetDummyUserDataResponse")]
-    WcfService.AuthData GetDummyUserData();
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDummyUserData", ReplyAction="http://tempuri.org/IService1/GetDummyUserDataResponse")]
-    System.Threading.Tasks.Task<WcfService.AuthData> GetDummyUserDataAsync();
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
-    WcfService.CompositeType GetDataUsingDataContract(WcfService.CompositeType composite);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
-    System.Threading.Tasks.Task<WcfService.CompositeType> GetDataUsingDataContractAsync(WcfService.CompositeType composite);
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/DbStatus", ReplyAction="http://tempuri.org/IService1/DbStatusResponse")]
+    System.Threading.Tasks.Task<string> DbStatusAsync();
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -585,43 +568,13 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
         return base.Channel.GetBaseStructuresAsync(msg);
     }
     
-    public string GetData(int value)
+    public string DbStatus()
     {
-        return base.Channel.GetData(value);
+        return base.Channel.DbStatus();
     }
     
-    public System.Threading.Tasks.Task<string> GetDataAsync(int value)
+    public System.Threading.Tasks.Task<string> DbStatusAsync()
     {
-        return base.Channel.GetDataAsync(value);
-    }
-    
-    public string SendData(string username, string password)
-    {
-        return base.Channel.SendData(username, password);
-    }
-    
-    public System.Threading.Tasks.Task<string> SendDataAsync(string username, string password)
-    {
-        return base.Channel.SendDataAsync(username, password);
-    }
-    
-    public WcfService.AuthData GetDummyUserData()
-    {
-        return base.Channel.GetDummyUserData();
-    }
-    
-    public System.Threading.Tasks.Task<WcfService.AuthData> GetDummyUserDataAsync()
-    {
-        return base.Channel.GetDummyUserDataAsync();
-    }
-    
-    public WcfService.CompositeType GetDataUsingDataContract(WcfService.CompositeType composite)
-    {
-        return base.Channel.GetDataUsingDataContract(composite);
-    }
-    
-    public System.Threading.Tasks.Task<WcfService.CompositeType> GetDataUsingDataContractAsync(WcfService.CompositeType composite)
-    {
-        return base.Channel.GetDataUsingDataContractAsync(composite);
+        return base.Channel.DbStatusAsync();
     }
 }

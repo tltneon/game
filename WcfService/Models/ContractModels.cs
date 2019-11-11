@@ -4,11 +4,9 @@ using System.ServiceModel;
 
 namespace WcfService
 {
-    // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени интерфейса "IService1" в коде и файле конфигурации.
     [ServiceContract]
     public interface IService1
     {
-        // Рабочий код
         [OperationContract]
         string SendAuthData(AuthData data);
 
@@ -17,28 +15,17 @@ namespace WcfService
 
         [OperationContract]
         string BaseAction(BaseAction msg);
+
         [OperationContract]
         BaseEntity GetBaseInfo(BaseAction msg);
+
         [OperationContract]
         IEnumerable<StructureEntity> GetBaseStructures(BaseAction msg);
-        // Тестовый код
-        [OperationContract]
-        string GetData(int value);
-        
-        [OperationContract]
-        string SendData(string username, string password);
 
         [OperationContract]
-        AuthData GetDummyUserData();
-
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
-
-        // TODO: Добавьте здесь операции служб
+        string DbStatus();
     }
 
-
-    // Используйте контракт данных, как показано в примере ниже, чтобы добавить составные типы к операциям служб.
     [DataContract]
     public class CompositeType
     {
@@ -92,6 +79,12 @@ namespace WcfService
         public bool IsActive { get; set; }
         [DataMember]
         public int OwnerID { get; set; }
+        [DataMember]
+        public object[] Structures { get; set; }
+        [DataMember]
+        public object[] Resources { get; set; }
+        [DataMember]
+        public object[] Units { get; set; }
     }
     [DataContract]
     public class StructureEntity
@@ -112,6 +105,18 @@ namespace WcfService
         public string action { get; set; }
         [DataMember]
         public string result { get; set; }
+        [DataMember]
+        public string token { get; set; }
+    }
+    [DataContract]
+    public class SquadAction
+    {
+        [DataMember]
+        public string key { get; set; }
+        [DataMember]
+        public string action { get; set; }
+        [DataMember]
+        public int to { get; set; }
         [DataMember]
         public string token { get; set; }
     }
