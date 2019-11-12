@@ -5,7 +5,7 @@ export class GameVars {
             desctiption: "John Doe",
             power: 10,
             cost: {
-                credit: 100,
+                credits: 100,
                 energy: 25
             }
         },
@@ -14,7 +14,7 @@ export class GameVars {
             desctiption: "John Doe",
             power: 110,
             cost: {
-                credit: 1000,
+                credits: 1000,
                 energy: 250
             }
         },
@@ -23,16 +23,16 @@ export class GameVars {
             desctiption: "John Doe",
             power: 1500,
             cost: {
-                credit: 10000,
+                credits: 10000,
                 energy: 2500
             }
         },
         someGiantShitUnit: {
             name: "Death Star",
             desctiption: "John Doe",
-            power: 1000000,
+            power: 200000,
             cost: {
-                credit: 1000000,
+                credits: 1000000,
                 energy: 250000
             }
         },
@@ -40,36 +40,32 @@ export class GameVars {
         lifeComplex: {
             name: "Living Complex",
             desctiption: "John Doe",
-            power: 1000000,
             cost: {
-                credit: 1000000,
+                credits: 1000000,
                 energy: 250000
             }
         },
         resourceComplex: {
             name: "Resource Complex",
             desctiption: "John Doe",
-            power: 1000000,
             cost: {
-                credit: 1000000,
+                credits: 1000000,
                 energy: 250000
             }
         },
         energyComplex: {
             name: "Takomak",
             desctiption: "John Doe",
-            power: 1000000,
             cost: {
-                credit: 1000000,
+                credits: 1000000,
                 energy: 250000
             }
         },
         aircraftsComplex: {
             name: "Aircrafts Factory",
             desctiption: "John Doe",
-            power: 1000000,
             cost: {
-                credit: 1000000,
+                credits: 1000000,
                 energy: 250000
             }
         },
@@ -78,6 +74,6 @@ export class GameVars {
     constructor(){}
 
     getInfo(item:string) {
-        return this.data[item];
+        return this.data[item] || {};
     }
 }

@@ -15,6 +15,11 @@ export class BaseComponent implements OnInit {
     baseData:any = {};
     interval;
 
+    requestedCreditsToUnit:number = 0;
+    requestedEnergyToUnit:number = 0;
+    requestedCreditsToStructure:number = 0;
+    requestedEnergyToStructure:number = 0;
+
     constructor(private httpService: HttpService, private gameVars: GameVars){
         this.baseData.structures = [];
         this.baseData.task = {};
@@ -30,6 +35,16 @@ export class BaseComponent implements OnInit {
     }
     defenceMultiplier():string {
         return (this.baseData.level * 1.1).toFixed(2);
+    }
+    updateInput(isStructureInput, unitInput){
+        if(isStructureInput){
+            this.requestedCreditsToStructure = this.gameVars.getInfo(unitInput).cost.credits;
+            this.requestedEnergyToStructure = this.gameVars.getInfo(unitInput).cost.credits;
+        }
+        else {
+            this.requestedCreditsToUnit = this.gameVars.getInfo(unitInput).cost.credits;
+            this.requestedEnergyToUnit = this.gameVars.getInfo(unitInput).cost.energy;
+        }
     }
 
     updateProdution() {
