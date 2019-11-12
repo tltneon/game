@@ -12,14 +12,7 @@
 p#processing {
   line-height: 27px;
   font-size: 27px;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
   color: #719dde7a;
   margin: -1em 0em 0em 8em;
   display: none;
-}
-.active{
-  display: block !important;
-  animation-name: rotating-anim;
-  animation-duration: 0.05s;
 }

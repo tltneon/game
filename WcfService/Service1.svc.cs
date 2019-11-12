@@ -96,6 +96,17 @@ namespace WcfService
             return Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(obj.baseid));
         }
         // squad section
+        public SquadEntity GetBaseSquad(SquadAction obj)
+        {
+            string result = Tools.CheckAuthedInput(obj);
+            if (result != "passed") return null;
+
+            Account acc = AccountManager.GetAccountByToken(obj.token);
+
+            gamelogic.Base curbase = BaseManager.GetBaseInfo(acc);
+
+            return Tools.SmartMapper<gamelogic.Squad, SquadEntity>(SquadManager.GetSquad("BASE" + curbase.BaseID.ToString()));
+        }
         public IEnumerable<SquadEntity> GetSquads(SquadAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);

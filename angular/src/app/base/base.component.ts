@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
-import { BaseJSON } from '../models/base';
-import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 @Component({
     selector: 'app-base',
@@ -19,9 +17,8 @@ export class BaseComponent implements OnInit {
     constructor(private httpService: HttpService){ }
 
     ngOnInit() {
-        //this.httpService.postRequest("api/base/action", {baseid: this.baseData.baseid}, true).subscribe((responce:BaseJSON) => this.baseData == responce ? console.log(responce) : console.log(responce));
         this.loadOnlineData();
-        this.interval = setInterval(() => this.baseData.isactive ? this.updateProdution() : ()=>{}, 1000)
+        this.interval = setInterval(() => this.baseData.isActive ? this.updateProdution() : ()=>{}, 1000)
     }
 
     allowToBuild() {

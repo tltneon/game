@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
       console.log(str);
       baseclass.error = typeof(str) == "string" ? str : str.name + " ("+str.error.message+")";
       document.body.querySelector("#auth").innerHTML = "Authorize";
-      document.body.querySelector("#processing").classList.remove("active");
+      document.body.querySelector("#processing").classList.remove("active", "progress");
     }
     function proceedAuth(router, responce){
       console.log(responce, responce.slice(0,5));
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
 
     this.error = ". . .";
     document.body.querySelector('#auth').innerHTML = "Processing...";
-    document.body.querySelector("#processing").classList.add("active");
+    document.body.querySelector("#processing").classList.add("active", "progress");
     this.httpService.postRequest("api/account/auth", {"username": login, "password": password}).subscribe(
       (responce:string) => responce.slice(0,5) == "Error" 
       ? updateErrorMessage(this, responce.replace('Error#',''))

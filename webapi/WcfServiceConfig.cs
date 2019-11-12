@@ -157,8 +157,8 @@ namespace WcfService
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseAction))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.WithToken))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadAction))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadEntity[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadEntity))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadEntity[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
     public partial class BaseEntity : object, System.Runtime.Serialization.IExtensibleDataObject
     {
@@ -687,6 +687,12 @@ public interface IService1
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseInfo", ReplyAction="http://tempuri.org/IService1/GetBaseInfoResponse")]
     System.Threading.Tasks.Task<WcfService.BaseEntity> GetBaseInfoAsync(WcfService.BaseAction msg);
     
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseSquad", ReplyAction="http://tempuri.org/IService1/GetBaseSquadResponse")]
+    WcfService.SquadEntity GetBaseSquad(WcfService.SquadAction obj);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseSquad", ReplyAction="http://tempuri.org/IService1/GetBaseSquadResponse")]
+    System.Threading.Tasks.Task<WcfService.SquadEntity> GetBaseSquadAsync(WcfService.SquadAction obj);
+    
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetSquads", ReplyAction="http://tempuri.org/IService1/GetSquadsResponse")]
     WcfService.SquadEntity[] GetSquads(WcfService.SquadAction obj);
     
@@ -798,6 +804,16 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     public System.Threading.Tasks.Task<WcfService.BaseEntity> GetBaseInfoAsync(WcfService.BaseAction msg)
     {
         return base.Channel.GetBaseInfoAsync(msg);
+    }
+    
+    public WcfService.SquadEntity GetBaseSquad(WcfService.SquadAction obj)
+    {
+        return base.Channel.GetBaseSquad(obj);
+    }
+    
+    public System.Threading.Tasks.Task<WcfService.SquadEntity> GetBaseSquadAsync(WcfService.SquadAction obj)
+    {
+        return base.Channel.GetBaseSquadAsync(obj);
     }
     
     public WcfService.SquadEntity[] GetSquads(WcfService.SquadAction obj)

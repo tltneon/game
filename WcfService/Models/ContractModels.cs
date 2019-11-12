@@ -26,6 +26,9 @@ namespace WcfService
         BaseEntity GetBaseInfo(BaseAction msg);
 
         [OperationContract]
+        SquadEntity GetBaseSquad(SquadAction obj);
+
+        [OperationContract]
         IEnumerable<SquadEntity> GetSquads(SquadAction obj);
 
         [OperationContract]

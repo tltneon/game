@@ -72,7 +72,7 @@ namespace entityframework
                             foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}, Role {3}, Token={4}", u.UserID, u.Username, u.Password, u.Role, u.Token);
 
                             Console.WriteLine("PLAYERS TABLE:");
-                            foreach (Player u in db.Players) Console.WriteLine("{0}. {1}", u.UserID, u.Playername);
+                            foreach (Player u in db.Players) Console.WriteLine("{0}. {1}: W{2}|L{3}", u.UserID, u.Playername, u.Wins, u.Loses);
 
                             Console.WriteLine("BASES TABLE:");
                             foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} ({2} lvl) - {3}. Coords: {4}x{5}", u.BaseID, u.Basename, u.Level, u.OwnerID, u.CoordX, u.CoordY);

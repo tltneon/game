@@ -1,4 +1,56 @@
 <div id="battletable">
+
+    <div style="width: 70%; margin-left: 15%; min-height: 200px;">
+        <h4>Send new squad</h4>
+        <div style="width: 25%;
+        display: inline-block;vertical-align: top;">
+            <div>Select units in squad:</div>
+            <br />
+            <div>Select destination:
+                <select (change)="recalculateTime()" #destination.value="ngModel" name="destination" [(ngModel)]="destination">
+                    <option *ngFor="let base of basesData" [value]="base.baseID">{{base.basename}} ({{base.baseID}})</option>
+                </select>
+            </div>
+            <div>Estimation time travel: {{estiamatedTime}}s</div>
+            <div class="button" (click)="sendSquad(destination)">Send</div>
+        </div>
+        <div style="width: 75%;
+        display: inline-block;vertical-align: top;">
+            <div class="item">
+                <div class="image"><img class="newStructure" /></div>
+                <div class="desc">
+                    <div class="name">Unit</div>
+                    <div class="option">Choose count: </div>
+                    <div class="actions">
+                        <input type="number" />
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="image"><img class="newStructure" /></div>
+                <div class="desc">
+                    <div class="name">Unit</div>
+                    <div class="option">Choose count: </div>
+                    <div class="actions">
+                        <input type="number" />
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="image"><img class="newStructure" /></div>
+                <div class="desc">
+                    <div class="name">Unit</div>
+                    <div class="option">Choose count: </div>
+                    <div class="actions">
+                        <input type="number" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="separatist"></div>
+
     <h4>Squads on missions</h4>
     <table>
         <tr>
@@ -20,20 +72,8 @@
             <td>{{squad.arrival | date :'short'}}</td>
             <td><div *ngFor="let unit of squad.units">{{unit.type}} - {{unit.count}} units</div></td>
             <td><div *ngIf="squad.action=='attacking'" class="button" (click)="returnSquad(squad)" onclick="alert('Your order sent to that squad');">Get them back!</div>
-                <div *ngIf="squad.action=='returning'">Squad goes back to base</div></td>
+                <div *ngIf="squad.action=='returning'">None</div></td>
         </tr>
     </table>
-    <div class="separatist"></div>
-    <div>
-        <h5>Send new squad</h5>
-        <div>Select destination:
-            <select (change)="recalculateTime()" #destination.value="ngModel" name="destination" [(ngModel)]="destination">
-                <option *ngFor="let base of basesData" [value]="base.baseID">{{base.basename}} ({{base.baseID}})</option>
-            </select>
-        </div>
-        <div>Estimation time travel: {{estiamatedTime}}s</div>
-        <div>
-            Select units in squad: <div><input type="number" /></div>
-            <div class="button" (click)="sendSquad(destination)">Send</div>
-        </div>
-    </div>
+
+</div>

@@ -8,7 +8,7 @@
             <th>Wins</th>
             <th>Loses</th>
         </tr>
-        <tr *ngIf="statsData.length == 0"><td colspan="5">Refreshing data... <i class="loading active">x</i></td></tr>
+        <tr *ngIf="statsData.length == 0"><td colspan="5">Refreshing data... <i class="progress active">x</i></td></tr>
         <tr *ngFor="let stat of statsData">
             <td>*</td>
             <td>{{stat.playername}}</td>

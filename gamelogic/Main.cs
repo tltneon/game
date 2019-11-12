@@ -157,7 +157,6 @@ namespace gamelogic
 
             return result;
         }
-
         public static string BuildStructure(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -185,7 +184,6 @@ namespace gamelogic
 
             return result;
         }
-
         public static string RepairBase(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -222,9 +220,30 @@ namespace gamelogic
             var db = DbManager.GetContext();
             return db.Structures.Where(o => o.BaseID == BaseID).AsEnumerable();
         }
+
+        public static Structure HasBaseStructure(Base curbase, string structure) 
+        {
+            var db = DbManager.GetContext();
+            return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault();
+        }
+        /*public static bool GetBaseResources(Base curbase)
+        {
+            var db = DbManager.GetContext();
+            return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault() != null;
+        }
+        public static bool SetBaseResources(Base curbase)
+        {
+            var db = DbManager.GetContext();
+            return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault() != null;
+        }*/
     }
     public class SquadManager
     {
+        public static Squad GetSquad(string key)
+        {
+            var db = DbManager.GetContext();
+            return db.Squads.Where(o => o.Key == key).FirstOrDefault();
+        }
         public static IEnumerable<Squad> GetSquads()
         {
             var db = DbManager.GetContext();
