@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace gamelogic
 {
-    public class DbManager
+    public static class DbManager
     {
         private static Entities DB = null;
         public static void ConnectToDB()
@@ -39,9 +39,11 @@ namespace gamelogic
             string token;
             try
             {
+                // пока без шифрации пароля
                 Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=потом придумаю как шифровать токен для " + username };
                 db.Accounts.Add(user);
                 db.SaveChanges();
+
                 int newIdentityValue = user.UserID;
                 db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
                 db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
@@ -66,7 +68,12 @@ namespace gamelogic
     }
     public class PlayerManager
     {
-        private static Base GetBaseByUserID(int userid)
+        public static Player GetPlayerByID(int userid)
+        {
+            var db = DbManager.GetContext();
+            return db.Players.Where(o => o.UserID == userid).FirstOrDefault();
+        }
+        public static Base GetBaseByUserID(int userid)
         {
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.OwnerID == userid).FirstOrDefault();
@@ -79,19 +86,24 @@ namespace gamelogic
     }
     public class BaseManager
     {
-        private static Base GetBase(int baseid)
+        public static IEnumerable<Base> GetBaseList()
+        {
+            var db = DbManager.GetContext();
+            return db.Bases.AsEnumerable();
+        }
+        public static Base GetBaseByID(int baseid)
         {
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.BaseID == baseid).FirstOrDefault();
         }
         private static bool IsOwner(int baseid, string token)
         {
-            return GetBase(baseid).OwnerID == AccountManager.GetAccountByToken(token).UserID;
+            return GetBaseByID(baseid).OwnerID == AccountManager.GetAccountByToken(token).UserID;
         }
         private static string CheckInput(BaseAction obj)
         {
             if (obj == null) return "wronginput";
-            if (GetBase(obj.baseid) == null) return "wrongbaseid";
+            if (GetBaseByID(obj.baseid) == null) return "wrongbaseid";
             return "success";
         }
         // не прям топ минимизация кода, но пока норма;
@@ -101,7 +113,7 @@ namespace gamelogic
             string result;
             try
             {
-                Base curbase = GetBase(obj.baseid);
+                Base curbase = GetBaseByID(obj.baseid);
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID) {
                     curbase.Level++;
                     DbManager.GetContext().SaveChanges();
@@ -122,7 +134,7 @@ namespace gamelogic
             string result;
             try
             {
-                Base curbase = GetBase(obj.baseid);
+                Base curbase = GetBaseByID(obj.baseid);
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
                 {
                     var db = DbManager.GetContext();
@@ -152,7 +164,7 @@ namespace gamelogic
             string result;
             try
             {
-                Base curbase = GetBase(obj.baseid);
+                Base curbase = GetBaseByID(obj.baseid);
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
                 {
                     obj.result = obj.result ?? "lifeComplex";
@@ -180,7 +192,7 @@ namespace gamelogic
             string result;
             try
             {
-                Base curbase = GetBase(obj.baseid);
+                Base curbase = GetBaseByID(obj.baseid);
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID)
                 {
                     curbase.IsActive = !curbase.IsActive;
@@ -197,7 +209,7 @@ namespace gamelogic
                 result = "Error#Exception: " + ex.Message;
             }
 
-            return "success";
+            return result;
         }
 
         public static Base GetBaseInfo(Account acc)
@@ -205,15 +217,10 @@ namespace gamelogic
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.BaseID == acc.UserID).FirstOrDefault();
         }
-        public static IEnumerable<Structure> GetBaseStructures(Base obj)
+        public static IEnumerable<Structure> GetBaseStructures(int BaseID)
         {
             var db = DbManager.GetContext();
-            return db.Structures.Where(o => o.BaseID == obj.BaseID).AsEnumerable();
-        }
-        public static IEnumerable<Structure> GetBaseStructures(BaseAction obj)
-        {
-            var db = DbManager.GetContext();
-            return db.Structures.Where(o => o.BaseID == obj.baseid).AsEnumerable();
+            return db.Structures.Where(o => o.BaseID == BaseID).AsEnumerable();
         }
     }
     public class SquadManager
@@ -224,6 +231,24 @@ namespace gamelogic
             return db.Squads.AsEnumerable();
         }
         public static string SendReturnOrder(SquadAction obj) { return "success"; }
-        public static string SendAttackOrder(SquadAction obj) { return "success"; }
+        public static string SendAttackOrder(SquadAction obj) {
+            ProceedActions.DoBattle(AccountManager.GetAccountByToken(obj.token).UserID, BaseManager.GetBaseByID(obj.to).OwnerID);
+            return "success";
+            /*var db = DbManager.GetContext();
+            Account player = AccountManager.GetAccountByToken(obj.token);
+            db.Squads.Add(new Squad { Key = obj.key, OwnerID = player.UserID, MoveTo = obj.to, MoveFrom = 1 });
+            db.SaveChanges();
+            return "success";*/
+        }
+    }
+    class ProceedActions {
+        public static void DoBattle(int attackerID, int victimID) {
+            var db = DbManager.GetContext();
+            Player attacker = PlayerManager.GetPlayerByID(attackerID);
+            Player victim = PlayerManager.GetPlayerByID(victimID);
+            attacker.Wins++;
+            victim.Loses++;
+            db.SaveChanges();
+        }
     }
 }

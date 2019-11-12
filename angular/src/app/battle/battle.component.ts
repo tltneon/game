@@ -87,12 +87,40 @@ export class BattleComponent implements OnInit {
         task: {action:'',result:'',endsin:0},
       }
     ];
+    this.loadData();
+  }
+
+  doAction(act:string, key:string, to:number){
+    function update(is, responce) {
+      if(responce == "success"){
+          console.log(responce);
+      }
+      else
+      {
+        console.log("ошибке");
+      }
+    }
+    this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}, true).subscribe((responce) => update(this, responce));
+  }
+  loadData(){
+      function update(is, responce) {
+          if(responce == null)
+            console.log("ошибке");
+          else
+          {
+            is.basesData = responce;
+            console.log(responce);
+          }
+      }
+      this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce) => update(this, responce));
+      //this.httpService.postRequest("api/squad/GetSquads", {}, true).subscribe((responce) => update(this, responce));
   }
 
   recalculateTime(){
     this.estiamatedTime = new Date(Date.now()).getSeconds();
   }
   returnSquad(squad){
+    this.doAction("return", squad.key, this.destination);
     let index = this.battlesData.findIndex((element) => element.key == squad.key);
     this.battlesData[index].action ="returning";
     let destination = this.battlesData[index].from;
@@ -101,8 +129,7 @@ export class BattleComponent implements OnInit {
     this.battlesData[index].arrival += this.battlesData[index].arrival - this.battlesData[index].departure;
   }
   sendSquad(){
-    console.log();
-    this.battlesData[this.battlesData.length] = {
+    /*this.battlesData[this.battlesData.length] = {
       key: "fh6hrtf"+Math.random(),
       action: "attacking",
       from: "Planet 1",
@@ -119,22 +146,7 @@ export class BattleComponent implements OnInit {
           count: Math.floor(Math.random()*10)
         },
       ]
-    };
-    //console.log(this.form.get('first').setValue('some value'));
+    };*/
+    this.doAction("attack", "fh6hrtf"+Math.random(), this.destination);
   }
-}
-
-export class SimpleFormGroup {
-  form = new FormGroup({
-    first: new FormControl('Nancy'),
-    last: new FormControl('Drew'),
-  });
-
-  get first(): any { return this.form.get('first'); }
-
-  onSubmit(): void {
-    console.log(this.form.value);  // {first: 'Nancy', last: 'Drew'}
-  }
-
-  setValue() { this.form.setValue({first: 'Carson', last: 'Drew'}); }
 }

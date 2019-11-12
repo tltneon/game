@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
   constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-    this.httpService.getRequest('api/account/getDummyUserData').subscribe(
+    this.httpService.getRequest('api/account/GetAccountData').subscribe(
       (responce:AccountJSON) => this.userData = responce,
       error => console.log(error));
   }

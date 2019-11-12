@@ -14,7 +14,13 @@ namespace WcfService
         IEnumerable<StatEntity> GetPlayerList();
 
         [OperationContract]
+        IEnumerable<BaseEntity> GetBaseList();
+
+        [OperationContract]
         string BaseAction(BaseAction msg);
+
+        [OperationContract]
+        IEnumerable<StructureEntity> GetBaseStructures(BaseAction msg);
 
         [OperationContract]
         BaseEntity GetBaseInfo(BaseAction msg);
@@ -26,10 +32,15 @@ namespace WcfService
         string SquadAction(SquadAction obj);
 
         [OperationContract]
-        IEnumerable<StructureEntity> GetBaseStructures(BaseAction msg);
-
-        [OperationContract]
         string DbStatus();
+    }
+
+    // дата контракты V
+    [DataContract]
+    public abstract class WithToken
+    {
+        [DataMember]
+        public string token { get; set; }
     }
 
     [DataContract]
@@ -121,7 +132,7 @@ namespace WcfService
         public object[] Units { get; set; }
     }
     [DataContract]
-    public class BaseAction
+    public class BaseAction : WithToken
     {
         [DataMember]
         public int baseid { get; set; }
@@ -129,11 +140,9 @@ namespace WcfService
         public string action { get; set; }
         [DataMember]
         public string result { get; set; }
-        [DataMember]
-        public string token { get; set; }
     }
     [DataContract]
-    public class SquadAction
+    public class SquadAction : WithToken
     {
         [DataMember]
         public string key { get; set; }
@@ -141,7 +150,5 @@ namespace WcfService
         public string action { get; set; }
         [DataMember]
         public int to { get; set; }
-        [DataMember]
-        public string token { get; set; }
     }
 }

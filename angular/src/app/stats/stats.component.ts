@@ -33,9 +33,10 @@ export class StatsComponent implements OnInit {
     }, 1000)
   }
   updateStats(){
-    this.httpService.getRequest('api/statistic/getUserList').subscribe(
+    this.httpService.getRequest('api/statistic/getPlayerList').subscribe(
       (responce: StatsJSON[]) => this.statsData = responce,
-      error => console.log(error.message));
+      error => console.log(error.message)
+    );
   }
   loadDummyData(){
     for(let i = 0; i<29;i++)

@@ -28,7 +28,7 @@
         <h5>Send new squad</h5>
         <div>Select destination:
             <select (change)="recalculateTime()" #destination.value="ngModel" name="destination" [(ngModel)]="destination">
-                <option *ngFor="let base of basesData" [value]="base.name">{{base.owner}} ({{base.name}})</option>
+                <option *ngFor="let base of basesData" [value]="base.baseID">{{base.basename}} ({{base.baseID}})</option>
             </select>
         </div>
         <div>Estimation time travel: {{estiamatedTime}}s</div>

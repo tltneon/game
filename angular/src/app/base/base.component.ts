@@ -115,7 +115,6 @@ export class BaseComponent implements OnInit {
             result: '',
             endsin: 0
         }
-        console.log(this.allowToBuild());
     }
     loadOnlineData(){
         function update(is, responce) {

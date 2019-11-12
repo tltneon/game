@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Web.Http;
 
 namespace webapi.Controllers
@@ -9,8 +10,7 @@ namespace webapi.Controllers
     {
         public HttpResponseMessage Auth(WcfService.AuthData message)
         {
-            System.Diagnostics.Debug.WriteLine("слава яйцам - всё работает отлично");
-            if(AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
+            if (AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest,
                     "Invalid input");
             Service1Client client = new Service1Client();
@@ -18,7 +18,7 @@ namespace webapi.Controllers
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
         }
-        public WcfService.AuthData GetDummyUserData()
+        public WcfService.AuthData GetAccountData()
         {
             return new WcfService.AuthData { username = "testuser", password = "testpass" };
         } 
@@ -29,6 +29,7 @@ namespace webapi.Controllers
             if (message == null) return true;
             if (message.username == null || message.password == null) return true;
             if (message.username.Length < 3 || message.password.Length < 3) return true;
+            //заявка на проверку регуляркой Regex.IsMatch(message.username, @"[^0-9a-zA-Z&+=\\\-&?*%:;#№@!)(]+") || Regex.IsMatch(message.password, @"[^0-9a-zA-Z&+=\\\-&?*%:;#№@!)(]+")
             return false;
         }
         public static string Base64Encode(string plainText)
@@ -54,6 +55,13 @@ namespace webapi.Controllers
     }
     public class BaseController : ApiController
     {
+        public IEnumerable<WcfService.BaseEntity> GetBaseList()
+        {
+            Service1Client client = new Service1Client();
+            IEnumerable<WcfService.BaseEntity> entities = client.GetBaseList();
+            client.Close();
+            return entities;
+        }
         public WcfService.BaseEntity RetrieveBaseData(WcfService.BaseAction msg)
         {
             Service1Client client = new Service1Client();
@@ -71,9 +79,11 @@ namespace webapi.Controllers
     }
     public class SquadController : ApiController
     {
-        public IEnumerable<WcfService.SquadEntity> GetSquads(WcfService.SquadAction msg)
+        public IEnumerable<WcfService.SquadEntity> GetSquads()
         {
+            System.Diagnostics.Debug.WriteLine("какого чёрта надо этой функции, чтобы работать?");
             Service1Client client = new Service1Client();
+            WcfService.SquadAction msg = null;
             IEnumerable<WcfService.SquadEntity> result = client.GetSquads(msg);
             client.Close();
             return result;
