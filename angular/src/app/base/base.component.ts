@@ -14,7 +14,10 @@ export class BaseComponent implements OnInit {
     baseData:any = {};
     interval;
 
-    constructor(private httpService: HttpService){ }
+    constructor(private httpService: HttpService){
+        this.baseData.structures = [];
+        this.baseData.task = {};
+    }
 
     ngOnInit() {
         this.loadOnlineData();
@@ -116,14 +119,17 @@ export class BaseComponent implements OnInit {
     loadOnlineData(){
         function update(is, responce) {
             if(responce == null)
+            {
                 console.log("ошибке");
+                is.loadOfflineData();
+            }
             else
             {
                 is.baseData = responce;
                 console.log(is.baseData);
                 is.baseData.task = {};
-                is.isDataLoaded = true;
             }
+            is.isDataLoaded = true;
         }
         this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe((responce) => update(this, responce));
     }

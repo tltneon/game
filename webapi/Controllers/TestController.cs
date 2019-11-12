@@ -2,19 +2,20 @@
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace webapi.Controllers
 {
     public class AccountController : ApiController
     {
-        public HttpResponseMessage Auth(WcfService.AuthData message)
+        public async Task<HttpResponseMessage> Auth(WcfService.AuthData message)
         {
             if (AuthDataUtils.Check(message) || !ModelState.IsValid) return Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest,
                     "Invalid input");
             Service1Client client = new Service1Client();
-            string token = client.SendAuthData(message);
+            string token = await client.SendAuthDataAsync(message);
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
         }
@@ -45,34 +46,34 @@ namespace webapi.Controllers
     }
     public class StatisticController : ApiController
     {
-        public IEnumerable<WcfService.StatEntity> GetPlayerList()
+        public async Task<IEnumerable<WcfService.StatEntity>> GetPlayerList()
         {
             Service1Client client = new Service1Client();
-            IEnumerable<WcfService.StatEntity> entities = client.GetPlayerList();
+            IEnumerable<WcfService.StatEntity> entities = await client.GetPlayerListAsync();
             client.Close();
             return entities;
         }
     }
     public class BaseController : ApiController
     {
-        public IEnumerable<WcfService.BaseEntity> GetBaseList()
+        public async Task<IEnumerable<WcfService.BaseEntity>> GetBaseList()
         {
             Service1Client client = new Service1Client();
-            IEnumerable<WcfService.BaseEntity> entities = client.GetBaseList();
+            IEnumerable<WcfService.BaseEntity> entities = await client.GetBaseListAsync();
             client.Close();
             return entities;
         }
-        public WcfService.BaseEntity RetrieveBaseData(WcfService.BaseAction msg)
+        public async Task<WcfService.BaseEntity> RetrieveBaseData(WcfService.BaseAction msg)
         {
             Service1Client client = new Service1Client();
-            WcfService.BaseEntity result = client.GetBaseInfo(msg);
+            WcfService.BaseEntity result = await client.GetBaseInfoAsync(msg);
             client.Close();
             return result;
         }
-        public string Action(WcfService.BaseAction msg)
+        public async Task<string> Action(WcfService.BaseAction msg)
         {
             Service1Client client = new Service1Client();
-            string result = client.BaseAction(msg);
+            string result = await client.BaseActionAsync(msg);
             client.Close();
             return result;
         }
@@ -88,10 +89,10 @@ namespace webapi.Controllers
             client.Close();
             return result;
         }
-        public string Action(WcfService.SquadAction msg)
+        public async Task<string> Action(WcfService.SquadAction msg)
         {
             Service1Client client = new Service1Client();
-            string result = client.SquadAction(msg);
+            string result = await client.SquadActionAsync(msg);
             client.Close();
             return result;
         }

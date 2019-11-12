@@ -13,6 +13,8 @@ namespace gamelogic
         public DbSet<Base> Bases { get; set; }
         public DbSet<Structure> Structures { get; set; }
         public DbSet<Squad> Squads { get; set; }
+        public DbSet<Unit> Units { get; set; }
+        public DbSet<Resource> Resources { get; set; }
     }
     // Tables
     public class Account
@@ -66,6 +68,15 @@ namespace gamelogic
         public int StartTime { get; set; }
         public int MoveTo { get; set; }
         public int FinishTime { get; set; }
-        public object[] Units { get; set; }
     }
+    public class Item
+    {
+        [Key]
+        public int ID { get; set; }
+        public string Instance { get; set; }
+        public string Type { get; set; }
+        public int Count { get; set; }
+    }
+    public class Unit : Item { }
+    public class Resource : Item { }
 }

@@ -28,6 +28,9 @@ namespace entityframework
                             db.Players.Add(new Player { UserID = 2, Playername = "User" });
                             db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0 });
                             db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0 });
+                            db.Resources.Add(new Resource { Instance = "bas1", Type = "credit", Count = 0 });
+                            db.Resources.Add(new Resource { Instance = "bas1", Type = "energy", Count = 0 });
+                            db.Units.Add(new Unit { Instance = "bas1", Type = "droneUnit", Count = 1 });
                             db.SaveChanges();
                         }
                         catch
@@ -82,6 +85,12 @@ namespace entityframework
 
                             Console.WriteLine("SQUADS TABLE:");
                             foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.Key, u.MoveFrom, u.MoveTo);
+
+                            Console.WriteLine("UNITS TABLE:");
+                            foreach (Unit u in db.Units) Console.WriteLine("{0}. {1} - {2}", u.Type, u.Instance, u.Count);
+
+                            Console.WriteLine("RESOURCES TABLE:");
+                            foreach (Resource u in db.Resources) Console.WriteLine("{0}. {1} - {2}", u.Type, u.Instance, u.Count);
                         }
                         catch {
                             Console.WriteLine("\n[Warn] Database models has changed. You need to drop datatables first.\n");

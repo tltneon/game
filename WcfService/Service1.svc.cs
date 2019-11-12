@@ -36,7 +36,7 @@ namespace WcfService
         }
         public string BaseAction(BaseAction obj)
         {
-            string result = Tools.CheckAuthedInput(obj.token);
+            string result = Tools.CheckAuthedInput(obj);
             if (result != "passed") return result;
 
             gamelogic.Models.BaseAction mapobj = Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj);
