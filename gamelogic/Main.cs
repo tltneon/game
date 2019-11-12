@@ -138,9 +138,13 @@ namespace gamelogic
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
                 {
                     var db = DbManager.GetContext();
-                    Squad sq = db.Squads.Where(o => o.Key == obj.baseid.ToString()).FirstOrDefault();
-                    if (sq == null)
-                        db.Squads.Add(new Squad { Key = obj.baseid.ToString(), OwnerID = AccountManager.GetAccountByToken(obj.token).UserID });
+
+                    Unit u = db.Units.Where(o => o.Instance == "bas" + obj.baseid.ToString() && o.Type == obj.result).FirstOrDefault();
+
+                    if (u == null)
+                        db.Units.Add(new Unit { Instance = "bas" + obj.baseid.ToString(), Type = obj.result, Count = 1 });
+                    else
+                        u.Count++;
 
                     db.SaveChanges();
                     result = "success";
@@ -226,12 +230,17 @@ namespace gamelogic
             var db = DbManager.GetContext();
             return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault();
         }
-        /*public static bool GetBaseResources(Base curbase)
+        public static IEnumerable<Resource> GetBaseResources(int BaseID)
         {
             var db = DbManager.GetContext();
-            return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault() != null;
+            return db.Resources.Where(o => o.Instance == "bas" + BaseID.ToString()).AsEnumerable();
         }
-        public static bool SetBaseResources(Base curbase)
+        public static IEnumerable<Unit> GetBaseUnits(int BaseID)
+        {
+            var db = DbManager.GetContext();
+            return db.Units.Where(o => o.Instance == "bas" + BaseID.ToString()).AsEnumerable();
+        }
+        /*public static bool SetBaseResources(Base curbase)
         {
             var db = DbManager.GetContext();
             return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault() != null;

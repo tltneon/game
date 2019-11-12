@@ -24,10 +24,7 @@ namespace WcfService
 
         [OperationContract]
         BaseEntity GetBaseInfo(BaseAction msg);
-
-        [OperationContract]
-        SquadEntity GetBaseSquad(SquadAction obj);
-
+        
         [OperationContract]
         IEnumerable<SquadEntity> GetSquads(SquadAction obj);
 
@@ -102,9 +99,9 @@ namespace WcfService
         [DataMember]
         public IEnumerable<StructureEntity> Structures { get; set; }
         [DataMember]
-        public object[] Resources { get; set; }
+        public IEnumerable<ResourcesData> Resources { get; set; }
         [DataMember]
-        public object[] Units { get; set; }
+        public IEnumerable<UnitsData> Units { get; set; }
     }
     [DataContract]
     public class StructureEntity
@@ -153,5 +150,19 @@ namespace WcfService
         public string action { get; set; }
         [DataMember]
         public int to { get; set; }
+    }
+    [DataContract]
+    public class ResourcesData
+    {
+        [DataMember]
+        public string instance { get; set; }
+        [DataMember]
+        public string type { get; set; }
+        [DataMember]
+        public int count { get; set; }
+    }
+    [DataContract]
+    public class UnitsData : ResourcesData
+    {
     }
 }

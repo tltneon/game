@@ -27,6 +27,9 @@ export class BaseComponent implements OnInit {
     allowToBuild() {
         return this.structuresList.filter(element => this.baseData.structures.findIndex(o => o.type == element) == -1);
     }
+    defenceMultiplier():string {
+        return (this.baseData.level * 1.1).toFixed(2);
+    }
 
     updateProdution() {
         for(let i in this.baseData.resources){

@@ -148,18 +148,6 @@ namespace WcfService
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BaseEntity", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.AuthData))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StatEntity[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StatEntity))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseEntity[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StructureEntity[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StructureEntity))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseAction))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.WithToken))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadAction))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadEntity))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadEntity[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
     public partial class BaseEntity : object, System.Runtime.Serialization.IExtensibleDataObject
     {
         
@@ -175,11 +163,11 @@ namespace WcfService
         
         private int OwnerIDField;
         
-        private object[] ResourcesField;
+        private WcfService.ResourcesData[] ResourcesField;
         
         private WcfService.StructureEntity[] StructuresField;
         
-        private object[] UnitsField;
+        private WcfService.UnitsData[] UnitsField;
         
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData
         {
@@ -259,7 +247,7 @@ namespace WcfService
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public object[] Resources
+        public WcfService.ResourcesData[] Resources
         {
             get
             {
@@ -285,7 +273,7 @@ namespace WcfService
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public object[] Units
+        public WcfService.UnitsData[] Units
         {
             get
             {
@@ -294,6 +282,73 @@ namespace WcfService
             set
             {
                 this.UnitsField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResourcesData", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.UnitsData))]
+    public partial class ResourcesData : object, System.Runtime.Serialization.IExtensibleDataObject
+    {
+        
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int countField;
+        
+        private string instanceField;
+        
+        private string typeField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return this.extensionDataField;
+            }
+            set
+            {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int count
+        {
+            get
+            {
+                return this.countField;
+            }
+            set
+            {
+                this.countField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string instance
+        {
+            get
+            {
+                return this.instanceField;
+            }
+            set
+            {
+                this.instanceField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string type
+        {
+            get
+            {
+                return this.typeField;
+            }
+            set
+            {
+                this.typeField = value;
             }
         }
     }
@@ -366,54 +421,9 @@ namespace WcfService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseAction", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
-    public partial class BaseAction : WcfService.WithToken
+    [System.Runtime.Serialization.DataContractAttribute(Name="UnitsData", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    public partial class UnitsData : WcfService.ResourcesData
     {
-        
-        private string actionField;
-        
-        private int baseidField;
-        
-        private string resultField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string action
-        {
-            get
-            {
-                return this.actionField;
-            }
-            set
-            {
-                this.actionField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int baseid
-        {
-            get
-            {
-                return this.baseidField;
-            }
-            set
-            {
-                this.baseidField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string result
-        {
-            get
-            {
-                return this.resultField;
-            }
-            set
-            {
-                this.resultField = value;
-            }
-        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -508,14 +518,70 @@ namespace WcfService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseAction", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    public partial class BaseAction : WcfService.WithToken
+    {
+        
+        private string actionField;
+        
+        private int baseidField;
+        
+        private string resultField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string action
+        {
+            get
+            {
+                return this.actionField;
+            }
+            set
+            {
+                this.actionField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int baseid
+        {
+            get
+            {
+                return this.baseidField;
+            }
+            set
+            {
+                this.baseidField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string result
+        {
+            get
+            {
+                return this.resultField;
+            }
+            set
+            {
+                this.resultField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SquadEntity", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.AuthData))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StatEntity[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StatEntity))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseEntity[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseEntity))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.ResourcesData[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.ResourcesData))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StructureEntity[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.StructureEntity))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.UnitsData[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.UnitsData))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.BaseAction))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.WithToken))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WcfService.SquadAction))]
@@ -687,12 +753,6 @@ public interface IService1
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseInfo", ReplyAction="http://tempuri.org/IService1/GetBaseInfoResponse")]
     System.Threading.Tasks.Task<WcfService.BaseEntity> GetBaseInfoAsync(WcfService.BaseAction msg);
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseSquad", ReplyAction="http://tempuri.org/IService1/GetBaseSquadResponse")]
-    WcfService.SquadEntity GetBaseSquad(WcfService.SquadAction obj);
-    
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseSquad", ReplyAction="http://tempuri.org/IService1/GetBaseSquadResponse")]
-    System.Threading.Tasks.Task<WcfService.SquadEntity> GetBaseSquadAsync(WcfService.SquadAction obj);
-    
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetSquads", ReplyAction="http://tempuri.org/IService1/GetSquadsResponse")]
     WcfService.SquadEntity[] GetSquads(WcfService.SquadAction obj);
     
@@ -804,16 +864,6 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     public System.Threading.Tasks.Task<WcfService.BaseEntity> GetBaseInfoAsync(WcfService.BaseAction msg)
     {
         return base.Channel.GetBaseInfoAsync(msg);
-    }
-    
-    public WcfService.SquadEntity GetBaseSquad(WcfService.SquadAction obj)
-    {
-        return base.Channel.GetBaseSquad(obj);
-    }
-    
-    public System.Threading.Tasks.Task<WcfService.SquadEntity> GetBaseSquadAsync(WcfService.SquadAction obj)
-    {
-        return base.Channel.GetBaseSquadAsync(obj);
     }
     
     public WcfService.SquadEntity[] GetSquads(WcfService.SquadAction obj)
