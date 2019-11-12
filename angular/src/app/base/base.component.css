@@ -4,7 +4,7 @@
 .item {display: inline-block; border: 1px dotted #222425; margin: 5px; padding: 5px; background-color: #0608174d;}
 .item:hover {border: 1px dotted #0b345d; transition-duration: 0.7s;}
 .item:hover img {filter: grayscale(0%) brightness(120%); transition-duration: 0.7s;}
-.item .name {text-align: center; font-family: cursive;}
+.item .name {text-align: center; font-family: cursive; position: absolute; margin-top: -1.7em; background-color: #00000085; width: 256px;}
 .item .task, .item .task *, .item .option {font-family: monospace;}
 .image > img {width:256px; height: 124px; background-repeat: no-repeat; background-size: cover; filter: grayscale(75%) brightness(100%); outline: 3px solid #000000ba; outline-offset: -1px;}
 .levelUpIcon {display: inline;padding-left: 2px;padding-right: 3px;}

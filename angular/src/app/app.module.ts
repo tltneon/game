@@ -16,8 +16,6 @@ import { LoginComponent } from './login/login.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminBasesComponent } from './admin/admin-bases/admin-bases.component';
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   imports: [
@@ -26,14 +24,7 @@ import { reducers, metaReducers } from './reducers';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpClientJsonpModule,
-    StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
-      }
-    })
+    HttpClientJsonpModule
   ],
   declarations: [
     AppComponent,

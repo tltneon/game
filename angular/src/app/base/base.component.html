@@ -17,9 +17,13 @@
         <h4>Structures</h4>
         <div id="structures" class="items" >
             <div class="item" *ngFor="let item of baseData?.structures">
-                <div class="image"><img class="{{item.type}}" /></div>
+                <div class="image">
+                    <img class="{{item.type}}" />
+                    <div class="name">{{gameVars.getInfo(item.type).name}}</div>
+                </div>
                 <div class="desc">
-                    <div class="name">{{item.type}} (level: {{item.level}})</div>
+                    <div class="cost">level: {{item.level}} => level {{item.level+1}}</div>
+                    <div class="cost">credits: {{gameVars.getInfo(item.type).cost.credit}} | energy: {{gameVars.getInfo(item.type).cost.energy}}</div>
                 <span *ngIf="false">
                     <div class="task">Task: 
                         <span *ngIf="item.task.action; else unset">
@@ -33,8 +37,8 @@
                 </span>
                     <div class="actions">
                         <div class="levelUpIcon button" (click)="upgradeStructure(item)">Upgrade</div>
-                        <div class="levelUpIcon button" (click)="clearStructureTask(item)">Clear task</div>
-                        <div class="button" (click)="destroyStructure(item)">Destroy structure</div>
+                        <!--<div class="levelUpIcon button" (click)="clearStructureTask(item)">Clear task</div>-->
+                        <div class="button" (click)="destroyStructure(item)">Destroy</div>
                     </div>
                 </div>
             </div>
@@ -57,9 +61,13 @@
         <h4>Units</h4>
         <div id="units" id="items">
             <div class="item" *ngFor="let item of baseData?.units">
-                <div class="image"><img class="{{item.type}}" /></div>
+                <div class="image">                    
+                    <img class="{{item.type}}" />
+                    <div class="name">{{gameVars.getInfo(item.type).name}}</div>
+                </div>
                 <div class="desc">
-                    <div class="name">{{item.type}} (on base: {{item.count}})</div>
+                    <div class="cost">On base: {{item.count}}</div>
+                    <div class="cost">Power: {{gameVars.getInfo(item.type).power}}</div>
                 </div>
             </div>
             <span *ngIf="canMakeUnits()">

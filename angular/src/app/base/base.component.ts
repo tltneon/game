@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
+import { GameVars } from '../gamevars';
 
 @Component({
     selector: 'app-base',
     templateUrl: './base.component.html',
     styleUrls: ['./base.component.css'],
-    providers: [HttpService]
+    providers: [HttpService, GameVars]
 })
 export class BaseComponent implements OnInit {
     isDataLoaded:boolean = false;
@@ -14,7 +15,7 @@ export class BaseComponent implements OnInit {
     baseData:any = {};
     interval;
 
-    constructor(private httpService: HttpService){
+    constructor(private httpService: HttpService, private gameVars: GameVars){
         this.baseData.structures = [];
         this.baseData.task = {};
     }
