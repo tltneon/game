@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using gamelogic;
 
@@ -91,9 +90,7 @@ namespace WcfService
         public BaseEntity GetBaseInfo(BaseAction obj)
         {
             if (Tools.CheckAuthedInput(obj) != "passed") return null;
-
             System.Diagnostics.Debug.WriteLine("Token passed");
-            System.Diagnostics.Debug.WriteLine(string.Format($"{obj.result}, {obj.baseid}, {obj.action}, {obj.token}"));
 
             Account acc = AccountManager.GetAccountByToken(obj.token);
 
@@ -178,11 +175,7 @@ namespace WcfService
         /* */
         public string DbStatus()
         {
-            var bases = BaseManager.GetBaseList().ToList();
-            foreach (Base bas in bases)
-            {
-                BaseManager.SetBaseResources(bas);
-            }
+            BaseManager.BaseGatherResources();
             System.Diagnostics.Debug.WriteLine("*doin' stuff*");
             return "что, опять?";
         }
@@ -224,12 +217,6 @@ namespace WcfService
             if (obj.token == null) return "notokenreceived";
             if (!AccountManager.CheckToken(obj.token)) return "wrongtoken";
             return "passed";
-        }
-        /* */
-        /* Реализует механизм логгирования */
-        /* */
-        public static void Log() 
-        {
         }
     }
 }

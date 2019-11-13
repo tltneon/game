@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 
 namespace gamelogic
@@ -33,7 +34,7 @@ namespace gamelogic
         public static string AuthClient(AuthData data)
         {
             var db = DbManager.GetContext();
-            var us = db.Accounts.Where(o => o.Username == data.username).FirstOrDefault();
+            var us = db.Accounts.FirstOrDefault(o => o.Username == data.username);
             if (us != null)
             {
                 if (us.Password == data.password) return us.Token;
@@ -67,7 +68,7 @@ namespace gamelogic
         public static Account GetAccountByToken(string token)
         {
             var db = DbManager.GetContext();
-            return db.Accounts.Where(o => o.Token == token).FirstOrDefault();
+            return db.Accounts.FirstOrDefault(o => o.Token == token);
         }
         /* Проверяет токен игрока */
         public static bool CheckToken(string token)
@@ -84,13 +85,13 @@ namespace gamelogic
         public static Player GetPlayerByID(int userid)
         {
             var db = DbManager.GetContext();
-            return db.Players.Where(o => o.UserID == userid).FirstOrDefault();
+            return db.Players.FirstOrDefault(o => o.UserID == userid);
         }
         /* Возвращает базу игрока по его ИД */
         public static Base GetBaseByUserID(int userid)
         {
             var db = DbManager.GetContext();
-            return db.Bases.Where(o => o.OwnerID == userid).FirstOrDefault();
+            return db.Bases.FirstOrDefault(o => o.OwnerID == userid);
         }
         /* Возвращает список игроков */
         public static IEnumerable<Player> GetPlayerList()
@@ -114,7 +115,7 @@ namespace gamelogic
         public static Base GetBaseByID(int baseid)
         {
             var db = DbManager.GetContext();
-            return db.Bases.Where(o => o.BaseID == baseid).FirstOrDefault();
+            return db.Bases.FirstOrDefault(o => o.BaseID == baseid);
         }
         /* Проверяет, является ли игрок владельцем базы */
         private static bool IsOwner(int baseid, string token)
@@ -162,7 +163,7 @@ namespace gamelogic
 
                     var db = DbManager.GetContext();
 
-                    Unit u = db.Units.Where(o => o.Instance == "bas" + obj.baseid.ToString() && o.Type == obj.result).FirstOrDefault();
+                    Unit u = db.Units.FirstOrDefault(o => o.Instance == "bas" + obj.baseid.ToString() && o.Type == obj.result);
 
                     if (u == null)
                         db.Units.Add(new Unit { Instance = "bas" + obj.baseid.ToString(), Type = obj.result, Count = 1 });
@@ -198,7 +199,7 @@ namespace gamelogic
 
                     var db = DbManager.GetContext();
 
-                    Resource resources = db.Resources.Where(o => o.Instance == "bas" + curbase.BaseID.ToString()).FirstOrDefault();
+                    Resource resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + curbase.BaseID.ToString());
                     resources.Credits -= 100;
                     resources.Energy -= 100;
 
@@ -283,7 +284,7 @@ namespace gamelogic
         public static Base GetBaseInfo(Account acc)
         {
             var db = DbManager.GetContext();
-            return db.Bases.Where(o => o.BaseID == acc.UserID).FirstOrDefault();
+            return db.Bases.FirstOrDefault(o => o.BaseID == acc.UserID);
         }
         /* Возвращает массив всех построек на базе */
         public static IEnumerable<Structure> GetBaseStructures(int BaseID)
@@ -295,13 +296,13 @@ namespace gamelogic
         public static Structure HasBaseStructure(Base curbase, string structure) 
         {
             var db = DbManager.GetContext();
-            return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault();
+            return db.Structures.FirstOrDefault(o => o.Type == structure && o.BaseID == curbase.BaseID);
         }
         /* Возвращает массив всех ресурсов на базе */
         public static Resource GetBaseResources(int BaseID)
         {
             var db = DbManager.GetContext();
-            return db.Resources.Where(o => o.Instance == "bas" + BaseID.ToString()).FirstOrDefault();
+            return db.Resources.FirstOrDefault(o => o.Instance == "bas" + BaseID.ToString());
         }
         /* Возвращает массив всех юнитов на базе */
         public static IEnumerable<Unit> GetBaseUnits(int BaseID)
@@ -315,26 +316,31 @@ namespace gamelogic
             var db = DbManager.GetContext();
             return db.Units.Where(o => o.Instance == "bas" + BaseID.ToString() && o.Count > 0).Sum(p => p.Count);
         }
-        /* Назначает ("добывает") указанной базе ресурсы исходя из наличия необходимых строений */
-        public static bool SetBaseResources(Base curbase)
+        /* Назначает ("добывает") всем базам ресурсы исходя из наличия необходимых строений */
+        public static bool BaseGatherResources()
         {
             // дичайший костылище
-            var db = DbManager.GetContext();
-            Resource resources = db.Resources.Where(o => o.Instance == "bas" + curbase.BaseID.ToString()).FirstOrDefault();
+            var DB = DbManager.GetContext();
+            var Bases = GetBaseList().ToList();
+            foreach (Base CurrentBase in Bases)
+            {
+                Resource Resources = DB.Resources.FirstOrDefault(o => o.Instance == "bas" + CurrentBase.BaseID.ToString());
 
-            Structure creditsStruct = HasBaseStructure(curbase, "resourceComplex");
-            if (creditsStruct != null) resources.Credits += 10 * creditsStruct.Level / 10;
-            System.Diagnostics.Debug.WriteLine(creditsStruct);
+                Structure creditsStruct = HasBaseStructure(CurrentBase, "resourceComplex");
+                if (creditsStruct != null) Resources.Credits += 10 * creditsStruct.Level / 10;
 
-            Structure energyStruct = HasBaseStructure(curbase, "energyComplex");
-            if (energyStruct != null) resources.Energy += 10 * energyStruct.Level / 10;
+                Structure energyStruct = HasBaseStructure(CurrentBase, "energyComplex");
+                if (energyStruct != null) Resources.Energy += 10 * energyStruct.Level / 10;
 
-            Structure neutrinoStruct = HasBaseStructure(curbase, "researchStation");
-            if (neutrinoStruct != null) resources.Neutrino += 0.000001 * neutrinoStruct.Level / 10;
+                Structure neutrinoStruct = HasBaseStructure(CurrentBase, "researchStation");
+                if (neutrinoStruct != null) Resources.Neutrino += 0.000001 * neutrinoStruct.Level / 10;
 
-            // базовое значение * уровень здания / 10 частей в минуте
+                // базовое значение * уровень здания / 10 частей в минуте
+            }
 
-            db.SaveChanges();
+            ProceedActions.Log("засейвил этот факт");
+
+            DB.SaveChanges();
 
             return true;
         }
@@ -348,7 +354,7 @@ namespace gamelogic
         public static Squad GetSquad(string key)
         {
             var db = DbManager.GetContext();
-            return db.Squads.Where(o => o.Key == key).FirstOrDefault();
+            return db.Squads.FirstOrDefault(o => o.Key == key);
         }
         /* Возвращает список всех отрядов */
         public static IEnumerable<Squad> GetSquads()
@@ -429,6 +435,24 @@ namespace gamelogic
             }
             db.SaveChanges();
             return result;
+        }
+        /* */
+        /* Реализует механизм логгирования */
+        /* */
+        public async static void Log(string text)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory;
+            DirectoryInfo dirInfo = new DirectoryInfo(dir);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+            using (FileStream fstream = new FileStream($"{dir}/../csharpgame.log", FileMode.OpenOrCreate))
+            {
+                byte[] array = System.Text.Encoding.Default.GetBytes(text);
+                fstream.Seek(0, SeekOrigin.End);
+                await fstream.WriteAsync(array, 0, array.Length);
+            }
         }
     }
 }
