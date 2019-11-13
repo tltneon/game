@@ -39,19 +39,22 @@ export class BaseComponent implements OnInit {
 
     ngOnInit() {
         this.loadOnlineData();
-        this.interval = setInterval(() => this.baseData.isActive ? this.updateProdution() : ()=>{}, 999)
+        this.interval = setInterval(() => this.baseData.isActive && this.updateProdution(), 999)
     }
-
+    // проверяет какие здания можно построить
     allowToBuild(): string[] {
         return this.structuresList.filter(element => this.baseData.structures.findIndex(o => o.type == element) == -1);
     }
+    // выводит число с точностью до второго знака
     formatNumber(num: number): string {
         num = num || 0;
         return num.toFixed(2);
     }
+    // высчитывает мультипликатор защиты базы
     defenceMultiplier(): string {
         return this.formatNumber(this.baseData.level * 0.16 + 1);
     }
+    // обновляет данные формы покупки юнитов и строений
     updateInput(isStructureInput: boolean, unitInput: string, count: number = 1): void {
         if(isStructureInput) {
             this.requestedCreditsToStructure = this.gameVars.getInfo(unitInput).credits;
@@ -62,11 +65,13 @@ export class BaseComponent implements OnInit {
             this.requestedEnergyToUnit = this.gameVars.getInfo(unitInput).energy * count;
         }
     }
+    // вычитает ресурсы
     reduceCounters(credits: number = 0, energy: number = 0, neutrino: number = 0): void {
         this.baseData.resources.credits -= credits;
         this.baseData.resources.energy -= energy;
         this.baseData.resources.neutrino -= neutrino;
     }
+    // пересчитывает размер начисляемых ресурсов
     recalculateProduction(): void {
         this.baseData.structures.forEach(element => {
             this.resourceProduction.credits += this.gameVars.getInfo(element.type).baseCreditsProduction * element.level || 0;
@@ -78,19 +83,20 @@ export class BaseComponent implements OnInit {
         this.resourceProduction.energy /= 60;
         this.resourceProduction.neutrino /= 60;
     }
-
+    // обновляет индикатор с ресурсами (бар в верхней части экрана)
     updateProdution(): void {
         this.baseData.resources.credits += this.resourceProduction.credits;
         this.baseData.resources.energy += this.resourceProduction.energy;
         this.baseData.resources.neutrino += this.resourceProduction.neutrino;
     }
+    // грузит оффлайновые данные
     private getStructID(structure: any): number {
         if(this.baseData.structures)
             return this.baseData.structures.findIndex((element) => element.type == structure.type);
         else
             return null;
     }
-
+    // улучшает постройку
     upgradeStructure(structure: any): void {
         console.log(typeof(structure));
         this.setStructureTask(structure, 'upgrade', '', 123456789);
@@ -101,27 +107,23 @@ export class BaseComponent implements OnInit {
                 : console.log(responce),
             error => console.log(error));
     }
+    // убивает строение (только UI)
     destroyStructure(structure: object): void {
         this.baseData.structures.splice(this.getStructID(structure), 1);
     }
-    setStructureTask(structure: object, task: string, result: string = '', finishTime: number = 12345678):void {
+    // назначает таску строения
+    setStructureTask(structure: object, task: string, result: string = '', finishTime: number = 0):void {
         this.baseData.structures[this.getStructID(structure)].task = {
             action: task,
             result: result,
             endsin: finishTime                
         }
     }
-    clearStructureTask(structure: object): void {
-        this.baseData.structures[this.getStructID(structure)].task = {
-            action: '',
-            result: '',
-            endsin: 0                
-        }
-    }
-
+    // проверяет, построен ли строительный комплекс
     canMakeUnits():boolean {
         return this.baseData.structures.findIndex(p => p.type == 'aircraftsComplex') + 1;
     }
+    // создаёт юнит
     makeUnit(unitType: string): void {
         this.setBaseTask('makeunit', unitType, 1234567);
         this.httpService.postRequest("api/base/action", {action: "makeunit", result: unitType, baseid: this.baseData.baseID}, true).subscribe(
@@ -139,6 +141,7 @@ export class BaseComponent implements OnInit {
             },
             error => console.log(error));
     }
+    // создаёт постройку
     buildStructure(structureType: string): void {
         this.setBaseTask('build', structureType, 1234567);
         this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe(
@@ -160,6 +163,7 @@ export class BaseComponent implements OnInit {
         },
         error => console.log(error));
     }
+    // улучшает базу
     upgradeBase(): void {
         this.setBaseTask('upgrade', '', 12345678);
         this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}, true).subscribe(
@@ -168,6 +172,7 @@ export class BaseComponent implements OnInit {
                 : console.log(responce),
             error => console.log(error));
     }
+    // переключает активность базы ака ремонтирует
     toggleBaseActiveness(): void {
         this.setBaseTask(this.baseData.isActive ? 'repair' : '', '', 12345678);
         this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}, true).subscribe(
@@ -176,6 +181,7 @@ export class BaseComponent implements OnInit {
                 : console.log(responce),
             error => console.log(error));
     }
+    // назначает таску базе
     setBaseTask(task: string, result: string, finishTime: number): void {
         this.baseData.task = {
             action: task,
@@ -183,6 +189,7 @@ export class BaseComponent implements OnInit {
             endsin: finishTime
         }
     }
+    // грузит онлайновые данные
     loadOnlineData(): void {
         this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe(
             (responce) => {
@@ -202,6 +209,7 @@ export class BaseComponent implements OnInit {
             },
             error => console.log(error));
     }
+    // грузит оффлайновые данные
     loadOfflineData(): void {
         this.isDataLoaded = true;
         this.baseData = {

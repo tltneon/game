@@ -6,21 +6,30 @@ using System.Linq;
 
 namespace gamelogic
 {
+    /* */
+    /* Класс менеджера БД управляет соединением и возвращает контекст */
+    /* */
     public static class DbManager
     {
         private static Entities DB = null;
+        /* Управляет подключением к БД */
         public static void ConnectToDB()
         {
             DB = new Entities();
         }
+        /* Возвращает контекст */
         public static Entities GetContext()
         {
             if (DB == null) ConnectToDB();
             return DB;
         }
     }
+    /* */
+    /* Класс менеджера аккаунтов управляет авторизацией, регистрацией и прочим взаимодействием с аккаунтами */
+    /* */
     public class AccountManager
     {
+        /* Управляет авторизацией пользователя */
         public static string AuthClient(AuthData data)
         {
             var db = DbManager.GetContext();
@@ -32,6 +41,7 @@ namespace gamelogic
             }
             else return CreateUser(data.username, data.password);
         }
+        /* Управляет созданием аккаунта */
         public static string CreateUser(string username, string password)
         {
             var db = DbManager.GetContext();
@@ -53,57 +63,72 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
+        /* Возвращает аккаунт по его токену */
         public static Account GetAccountByToken(string token)
         {
             var db = DbManager.GetContext();
             return db.Accounts.Where(o => o.Token == token).FirstOrDefault();
         }
+        /* Проверяет токен игрока */
         public static bool CheckToken(string token)
         {
             return GetAccountByToken(token) != null;
         }
     }
+    /* */
+    /* Класс менеджера игроков возвращает данные о игроках ("игрок" - персонаж, создаваемый для аккаунта) */
+    /* */
     public class PlayerManager
     {
+        /* Возвращает игрока по его ИД */
         public static Player GetPlayerByID(int userid)
         {
             var db = DbManager.GetContext();
             return db.Players.Where(o => o.UserID == userid).FirstOrDefault();
         }
+        /* Возвращает базу игрока по его ИД */
         public static Base GetBaseByUserID(int userid)
         {
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.OwnerID == userid).FirstOrDefault();
         }
+        /* Возвращает список игроков */
         public static IEnumerable<Player> GetPlayerList()
         {
             var db = DbManager.GetContext();
             return db.Players.AsEnumerable();
         }
     }
+    /* */
+    /* Класс менеджера баз принимает и возвращает все сведения о базах игроков */
+    /* */
     public class BaseManager
     {
+        /* Возвращает список баз */
         public static IEnumerable<Base> GetBaseList()
         {
             var db = DbManager.GetContext();
             return db.Bases.AsEnumerable();
         }
+        /* Возвращает данные о базе по ИД */
         public static Base GetBaseByID(int baseid)
         {
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.BaseID == baseid).FirstOrDefault();
         }
+        /* Проверяет, является ли игрок владельцем базы */
         private static bool IsOwner(int baseid, string token)
         {
             return GetBaseByID(baseid).OwnerID == AccountManager.GetAccountByToken(token).UserID;
         }
+        /* Проверяет вводимые данные */
         private static string CheckInput(BaseAction obj)
         {
             if (obj == null) return "wronginput";
             if (GetBaseByID(obj.baseid) == null) return "wrongbaseid";
             return "success";
         }
-        // не прям топ минимизация кода, но пока норма;
+        /* Управляет улучшением базы */
         public static string UpgradeBase(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -123,6 +148,7 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
+        /* Управляет созданием юнитов */
         public static string MakeUnit(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -156,6 +182,7 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
+        /* Управляет созданием построек */
         public static string BuildStructure(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -189,6 +216,7 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
+        /* Управляет улучшением построек */
         public static string UpgradeStructure(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -214,6 +242,7 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
+        /* Управляет починкой базы */
         public static string RepairBase(BaseAction obj)
         {
             if (CheckInput(obj) != "success") return CheckInput(obj);
@@ -237,6 +266,7 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
+        /* Проверяет на возможность приобрести предмет */
         public static bool CanAfford(Base curbase, string itemName)
         {
             Resource resources = GetBaseResources(curbase.BaseID);
@@ -249,36 +279,43 @@ namespace gamelogic
             System.Diagnostics.Debug.WriteLine("успешно купил эту шляпу");
             return true;
         }
+        /* Возвращает данные о базе */
         public static Base GetBaseInfo(Account acc)
         {
             var db = DbManager.GetContext();
             return db.Bases.Where(o => o.BaseID == acc.UserID).FirstOrDefault();
         }
+        /* Возвращает массив всех построек на базе */
         public static IEnumerable<Structure> GetBaseStructures(int BaseID)
         {
             var db = DbManager.GetContext();
             return db.Structures.Where(o => o.BaseID == BaseID).AsEnumerable();
         }
+        /* Возвращает постройку, если она была построена на базе */
         public static Structure HasBaseStructure(Base curbase, string structure) 
         {
             var db = DbManager.GetContext();
             return db.Structures.Where(o => o.Type == structure && o.BaseID == curbase.BaseID).FirstOrDefault();
         }
+        /* Возвращает массив всех ресурсов на базе */
         public static Resource GetBaseResources(int BaseID)
         {
             var db = DbManager.GetContext();
             return db.Resources.Where(o => o.Instance == "bas" + BaseID.ToString()).FirstOrDefault();
         }
+        /* Возвращает массив всех юнитов на базе */
         public static IEnumerable<Unit> GetBaseUnits(int BaseID)
         {
             var db = DbManager.GetContext();
             return db.Units.Where(o => o.Instance == "bas" + BaseID.ToString() && o.Count > 0).AsEnumerable();
         }
+        /* Возвращает общее количество юнитов на базе */
         public static int GetBaseUnitsCount(int BaseID)
         {
             var db = DbManager.GetContext();
             return db.Units.Where(o => o.Instance == "bas" + BaseID.ToString() && o.Count > 0).Sum(p => p.Count);
         }
+        /* Назначает ("добывает") указанной базе ресурсы исходя из наличия необходимых строений */
         public static bool SetBaseResources(Base curbase)
         {
             // дичайший костылище
@@ -302,25 +339,38 @@ namespace gamelogic
             return true;
         }
     }
+    /* */
+    /* Класс менеджера отрядов управляет отрядами */
+    /* */
     public class SquadManager
     {
+        /* Возвращает отряд по его ключу */
         public static Squad GetSquad(string key)
         {
             var db = DbManager.GetContext();
             return db.Squads.Where(o => o.Key == key).FirstOrDefault();
         }
+        /* Возвращает список всех отрядов */
         public static IEnumerable<Squad> GetSquads()
         {
             var db = DbManager.GetContext();
             return db.Squads.AsEnumerable();
         }
-        public static string SendReturnOrder(SquadAction obj) { return "success"; }
-        public static string SendAttackOrder(SquadAction obj) {
+        /* Получает приказ на возвращение отряда */
+        public static string SendReturnOrder(SquadAction obj) 
+        {
+            return "success"; 
+        }
+        /* Получает приказ на атаку отряда */
+        public static string SendAttackOrder(SquadAction obj) 
+        {
             int attackerID = AccountManager.GetAccountByToken(obj.token).UserID;
             int victimID = BaseManager.GetBaseByID(obj.to).OwnerID;
             if (attackerID == victimID) return "failed";
 
             return ProceedActions.DoBattle(attackerID, victimID);
+
+            /* функция не реализована в полной мере */
             /*var db = DbManager.GetContext();
             Account player = AccountManager.GetAccountByToken(obj.token);
             db.Squads.Add(new Squad { Key = obj.key, OwnerID = player.UserID, MoveTo = obj.to, MoveFrom = 1 });
@@ -328,7 +378,11 @@ namespace gamelogic
             return "success";*/
         }
     }
+    /* */
+    /* Класс проведения действий управляет свершениями различных игровых действий */
+    /* */
     class ProceedActions {
+        /* Проводит атаку на базу */
         public static string DoBattle(int attackerID, int victimID) {
             string result;
             var db = DbManager.GetContext();
@@ -379,6 +433,9 @@ namespace gamelogic
     }
 }
 
+/* */
+/* Предполагается, что здесь будут храниться константы игровых единиц (юниты, строения, прочее) */
+/* */
 namespace GameItems 
 {
     class ItemsVars 

@@ -8,7 +8,10 @@ namespace WcfService
 {
     public class Service1 : IService1
     {
-        // auth-n-player section
+        // >> auth-n-player section
+        /* */
+        /* Управляет авторизацией и регистрацией пользователей */
+        /* */
         public string SendAuthData(AuthData data)
         {
             if (data == null) return "nodatareceived";
@@ -25,16 +28,25 @@ namespace WcfService
                 return ex.Message;
             }
         }
+        /* */
+        /* Возвращает список всех игроков */
+        /* */
         public IEnumerable<StatEntity> GetPlayerList()
         {
             return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
         }
 
-        // base section
+        // >> base section
+        /* */
+        /* возвращает список всех баз */
+        /* */
         public IEnumerable<BaseEntity> GetBaseList()
         {
             return Tools.EnumSmartMapper<gamelogic.Base, BaseEntity>(BaseManager.GetBaseList());
         }
+        /* */
+        /* Реализует управление базой */
+        /* */
         public string BaseAction(BaseAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
@@ -73,6 +85,9 @@ namespace WcfService
             }
             return result;
         }
+        /* */
+        /* Возвращает данные о базе */
+        /* */
         public BaseEntity GetBaseInfo(BaseAction obj)
         {
             if (Tools.CheckAuthedInput(obj) != "passed") return null;
@@ -92,6 +107,9 @@ namespace WcfService
 
             return result;
         }
+        /* */
+        /* Возвращает список всех строений на базе */
+        /* */
         public IEnumerable<StructureEntity> GetBaseStructures(BaseAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
@@ -99,6 +117,9 @@ namespace WcfService
 
             return Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(obj.baseid));
         }
+        /* */
+        /* Возвращает список всех отрядов на базе */
+        /* */
         public IEnumerable<UnitsData> GetBaseUnits(BaseAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
@@ -106,7 +127,11 @@ namespace WcfService
 
             return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(obj.baseid));
         }
-        // squad section
+
+        // >> squad section
+        /* */
+        /* Возвращает список всех отрядов */
+        /* */
         public IEnumerable<SquadEntity> GetSquads(SquadAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
@@ -114,6 +139,9 @@ namespace WcfService
 
             return Tools.EnumSmartMapper<gamelogic.Squad, SquadEntity>(SquadManager.GetSquads());
         }
+        /* */
+        /* Реализует управление отрядами */
+        /* */
         public string SquadAction(SquadAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
@@ -145,6 +173,9 @@ namespace WcfService
             }
             return result;
         }
+        /* */
+        /* Это очень плохая реализация игрового лупа, очень плохая и ничем не защищена */
+        /* */
         public string DbStatus()
         {
             var bases = BaseManager.GetBaseList().ToList();
@@ -156,9 +187,15 @@ namespace WcfService
             return "что, опять?";
         }
     }
-
+    /* */
+    /* Забацал свои умные функции для удобной работы с кодом */
+    /* */
     class Tools
     {
+
+        /* */
+        /* Маппер для самостоятельных энтити */
+        /* */
         public static TDestination SmartMapper<TSource, TDestination>(TSource obj) // мульти-маппер-функция на полную ставку
         {
             var config = new MapperConfiguration(cfg => {
@@ -167,6 +204,9 @@ namespace WcfService
             IMapper mapper = config.CreateMapper();
             return mapper.Map<TSource, TDestination>(obj);
         }
+        /* */
+        /* Маппер для энтити в коллекции */
+        /* */
         public static IEnumerable<TDestination> EnumSmartMapper<TSource, TDestination>(IEnumerable<TSource> obj)
         {
             var config = new MapperConfiguration(cfg => {
@@ -175,12 +215,21 @@ namespace WcfService
             IMapper mapper = config.CreateMapper();
             return mapper.Map<IEnumerable<TSource>, IEnumerable<TDestination>>(obj);
         }
+        /* */
+        /* Проверяет пользовательствий ввод на нуль + валидный токен */
+        /* */
         public static string CheckAuthedInput(dynamic obj)
         {
             if (obj == null) return "nodatareceived";
             if (obj.token == null) return "notokenreceived";
             if (!AccountManager.CheckToken(obj.token)) return "wrongtoken";
             return "passed";
+        }
+        /* */
+        /* Реализует механизм логгирования */
+        /* */
+        public static void Log() 
+        {
         }
     }
 }

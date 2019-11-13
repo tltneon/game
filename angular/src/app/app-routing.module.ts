@@ -15,7 +15,7 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
 
 @NgModule({
   imports: [RouterModule.forRoot([
-    { path: '', component: MainPageComponent, data: { title: 'csharpgame' }, pathMatch: 'full', canActivate: [AuthGuard] },
+    { path: '', component: MainPageComponent, pathMatch: 'full', canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'base', component: BaseComponent, canActivate: [AuthGuard] },
     { path: 'battles', component: BattleComponent, canActivate: [AuthGuard] },
@@ -28,7 +28,7 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
           children: [
             { path: 'users', component: AdminUsersComponent, outlet: 'sub', },
             { path: 'bases', component: AdminBasesComponent, outlet: 'sub', },
-            { path: 'settings', component: AdminSettingsComponent, outlet: 'sub', canActivate: [AuthGuard] }
+            { path: 'settings', component: AdminSettingsComponent, outlet: 'sub' }
           ],
         }
       ]

@@ -13,20 +13,11 @@ namespace webapi
         {
             ConfigureAuth(app);
 
-            //BuildUpDamnDB();
-            /*try
-            {
-                Service1Client client = new Service1Client();
-                System.Diagnostics.Debug.WriteLine("Проверка коннекта к БД: " + client.DbStatus());
-                client.Close();
-            }
-            catch
-            {
-                System.Diagnostics.Debug.WriteLine("WCF не хочет подниматься не смотря на параметр minFreeMemoryPercentageToActivateService=\"0\" и кидает System.ServiceModel.ServiceActivationException");
-            }*/
-
             Routine();
         }
+        /* */
+        /* Функция Routine - аналог правильного цикла Routine, исполняемого во многих играх - основной цикл, где выполняются основные действия движка/мода */
+        /* */
         public async void Routine()
         {
             while (true)
