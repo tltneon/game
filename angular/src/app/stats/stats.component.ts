@@ -9,7 +9,7 @@ import { StatsJSON } from '../models/stats';
   providers: [HttpService]
 })
 export class StatsComponent implements OnInit {
-
+  isDataLoaded:boolean = false;
   statsData: StatsJSON[] = [];
   timeLeftMin: number = 4;
   timeLeftSec: number = 59;
@@ -18,7 +18,7 @@ export class StatsComponent implements OnInit {
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
-    this.updateStats();
+    this.loadOnlineData();
 
     this.interval = setInterval(() => {
       this.timeLeftSec--;
@@ -27,26 +27,31 @@ export class StatsComponent implements OnInit {
         this.timeLeftSec = 59;
         if(this.timeLeftSec < 0) {
           this.timeLeftMin = 4;
-          this.updateStats();
+          this.loadOnlineData();
         }
       }
     }, 1000)
   }
-  updateStats(){
+  loadOnlineData(){
     this.httpService.getRequest('api/statistic/getPlayerList').subscribe(
-      (responce: StatsJSON[]) => this.statsData = responce,
+      (responce: StatsJSON[]) => { 
+        console.log(responce);
+        this.statsData = responce;
+        this.isDataLoaded = true;
+      },
       error => console.log(error.message)
     );
   }
-  loadDummyData(){
-    for(let i = 0; i<29;i++)
+  loadOfflineData(){
+    this.isDataLoaded = true;
+    const t = 29;
+    for(let i = 0; i<t; i++)
       this.statsData[this.statsData.length] = {
-        name: "username"+i,
-        basename: "basename"+i,
-        level: 1,
-        wins: 1,
-        loses: i,
-        score: 10-i,
+        playername: "username" + i,
+        basename: "basename" + i,
+        level: t-i,
+        wins: t-i,
+        loses: i
       };
   }
 }

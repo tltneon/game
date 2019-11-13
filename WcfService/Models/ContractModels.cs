@@ -23,6 +23,9 @@ namespace WcfService
         IEnumerable<StructureEntity> GetBaseStructures(BaseAction msg);
 
         [OperationContract]
+        IEnumerable<UnitsData> GetBaseUnits(BaseAction obj);
+
+        [OperationContract]
         BaseEntity GetBaseInfo(BaseAction msg);
         
         [OperationContract]
@@ -99,7 +102,7 @@ namespace WcfService
         [DataMember]
         public IEnumerable<StructureEntity> Structures { get; set; }
         [DataMember]
-        public IEnumerable<ResourcesData> Resources { get; set; }
+        public ResourcesData Resources { get; set; }
         [DataMember]
         public IEnumerable<UnitsData> Units { get; set; }
     }
@@ -157,12 +160,20 @@ namespace WcfService
         [DataMember]
         public string instance { get; set; }
         [DataMember]
+        public int credits { get; set; }
+        [DataMember]
+        public int energy { get; set; }
+        [DataMember]
+        public double neutrino { get; set; }
+    }
+    [DataContract]
+    public class UnitsData
+    {
+        [DataMember]
+        public string instance { get; set; }
+        [DataMember]
         public string type { get; set; }
         [DataMember]
         public int count { get; set; }
-    }
-    [DataContract]
-    public class UnitsData : ResourcesData
-    {
     }
 }

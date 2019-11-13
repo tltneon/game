@@ -26,11 +26,12 @@ namespace entityframework
                             db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = "123", Role = 0, Token = "fl4o" });
                             db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
                             db.Players.Add(new Player { UserID = 2, Playername = "User" });
-                            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0 });
-                            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0 });
-                            db.Resources.Add(new Resource { Instance = "bas1", Type = "credit", Count = 0 });
-                            db.Resources.Add(new Resource { Instance = "bas1", Type = "energy", Count = 0 });
+                            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
+                            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0, IsActive = true });
+                            db.Resources.Add(new Resource { Instance = "bas1", Credits = 200, Energy = 200, Neutrino = 0.0 });
+                            db.Resources.Add(new Resource { Instance = "bas2", Credits = 200, Energy = 200, Neutrino = 0.0 });
                             db.Units.Add(new Unit { Instance = "bas1", Type = "droneUnit", Count = 1 });
+                            db.Units.Add(new Unit { Instance = "bas2", Type = "droneUnit", Count = 2 });
                             db.SaveChanges();
                         }
                         catch
@@ -90,7 +91,7 @@ namespace entityframework
                             foreach (Unit u in db.Units) Console.WriteLine("{0}. {1} - {2}", u.Type, u.Instance, u.Count);
 
                             Console.WriteLine("RESOURCES TABLE:");
-                            foreach (Resource u in db.Resources) Console.WriteLine("{0}. {1} - {2}", u.Type, u.Instance, u.Count);
+                            foreach (Resource u in db.Resources) Console.WriteLine("{0}. {1} - {2}", u.Instance, u.Credits, u.Energy);
                         }
                         catch {
                             Console.WriteLine("\n[Warn] Database models has changed. You need to drop datatables first.\n");

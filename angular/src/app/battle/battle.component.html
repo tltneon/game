@@ -1,3 +1,17 @@
+<div class="{{isDataLoaded?'hide':''}}" style="position:absolute;
+            background-color: #0b0e14c7;
+            z-index: 1;
+            height: calc(100vh - 68px);
+            width:100vw;
+            text-align: center;
+            font-family: monospace;
+            padding:30%;
+            font-size: larger;
+            left: 0;">We're just updating our data, commander... <i class="progress active">x</i>
+            <div (click)="loadOfflineData()">loadOfflineData</div>
+            <div (click)="loadOnlineData()">loadOnlineData</div>
+</div>
+
 <div id="battletable">
 
     <div style="width: 70%; margin-left: 15%; min-height: 200px;">

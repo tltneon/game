@@ -47,7 +47,7 @@ namespace gamelogic
         public string CurrentTask { get; set; }
         public int FinishTime { get; set; }
         public bool IsActive { get; set; }
-        public string Units { get; set; }
+        public int LastAttacked { get; set; }
     }
     public class Structure
     {  
@@ -69,7 +69,7 @@ namespace gamelogic
         public int MoveTo { get; set; }
         public int FinishTime { get; set; }
     }
-    public class Item
+    public class Unit
     {
         [Key]
         public int ID { get; set; }
@@ -77,6 +77,13 @@ namespace gamelogic
         public string Type { get; set; }
         public int Count { get; set; }
     }
-    public class Unit : Item { }
-    public class Resource : Item { }
+    public class Resource
+    {
+        [Key]
+        public int ID { get; set; }
+        public string Instance { get; set; }
+        public int Credits { get; set; }
+        public int Energy { get; set; }
+        public double Neutrino { get; set; }
+    }
 }

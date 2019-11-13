@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { HttpService } from '../http.service';
 import { BattlesJSON } from '../models/battles';
 import { BaseJSON } from '../models/base';
@@ -11,16 +10,42 @@ import { BaseJSON } from '../models/base';
   providers: [HttpService]
 })
 export class BattleComponent implements OnInit {
-
+  isDataLoaded:boolean = false;
   battlesData: BattlesJSON[];
   basesData: BaseJSON[];
   estiamatedTime: number = 0;
-  form;
   destination;
 
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    this.loadOnlineData();
+  }
+
+  doAction(act:string, key:string, to:number){
+    this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}, true).subscribe (
+      (responce) => {
+        console.log("api/squad/Action => " + responce);
+        alert(responce);
+      },
+      error => console.log(error));
+  }
+  loadOnlineData(){
+    this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce:BaseJSON[]) => {
+      if(responce == null)
+        console.log("ошибке");
+      else
+      {
+        this.basesData = responce;
+        console.log(responce);
+      }
+      this.isDataLoaded = true;
+    },
+    error => console.log(error));
+    //this.httpService.postRequest("api/squad/GetSquads", {}, true).subscribe((responce) => update(this, responce));
+  }
+  loadOfflineData(){
+    this.isDataLoaded = true;
     this.battlesData = [
       {
         key: "23rdf",
@@ -87,33 +112,6 @@ export class BattleComponent implements OnInit {
         task: {action:'',result:'',endsin:0},
       }
     ];
-    this.loadData();
-  }
-
-  doAction(act:string, key:string, to:number){
-    function update(is, responce) {
-      if(responce == "success"){
-          console.log(responce);
-      }
-      else
-      {
-        console.log("ошибке");
-      }
-    }
-    this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}, true).subscribe((responce) => update(this, responce));
-  }
-  loadData(){
-      function update(is, responce) {
-          if(responce == null)
-            console.log("ошибке");
-          else
-          {
-            is.basesData = responce;
-            console.log(responce);
-          }
-      }
-      this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce) => update(this, responce));
-      //this.httpService.postRequest("api/squad/GetSquads", {}, true).subscribe((responce) => update(this, responce));
   }
 
   recalculateTime(){

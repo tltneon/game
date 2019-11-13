@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using gamelogic;
 
@@ -52,6 +53,9 @@ namespace WcfService
                     case "build":
                         result = BaseManager.BuildStructure(mapobj);
                         break;
+                    case "upgradestructure":
+                        result = BaseManager.UpgradeStructure(mapobj);
+                        break;
                     case "makeunit":
                         result = BaseManager.MakeUnit(mapobj);
                         break;
@@ -83,7 +87,7 @@ namespace WcfService
             BaseEntity result = Tools.SmartMapper<gamelogic.Base, BaseEntity>(curbase);
 
             result.Structures = Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(curbase.BaseID)); 
-            result.Resources = Tools.EnumSmartMapper<gamelogic.Resource, ResourcesData>(BaseManager.GetBaseResources(curbase.BaseID));
+            result.Resources = Tools.SmartMapper<gamelogic.Resource, ResourcesData>(BaseManager.GetBaseResources(curbase.BaseID));
             result.Units = Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(curbase.BaseID));
 
             return result;
@@ -94,6 +98,13 @@ namespace WcfService
             if (result != "passed") return null;
 
             return Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(obj.baseid));
+        }
+        public IEnumerable<UnitsData> GetBaseUnits(BaseAction obj)
+        {
+            string result = Tools.CheckAuthedInput(obj);
+            if (result != "passed") return null;
+
+            return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(obj.baseid));
         }
         // squad section
         public IEnumerable<SquadEntity> GetSquads(SquadAction obj)
@@ -136,8 +147,13 @@ namespace WcfService
         }
         public string DbStatus()
         {
-            System.Diagnostics.Debug.WriteLine(gamelogic.DbManager.GetContext());
-            return "success request";
+            var bases = BaseManager.GetBaseList().ToList();
+            foreach (Base bas in bases)
+            {
+                BaseManager.SetBaseResources(bas);
+            }
+            System.Diagnostics.Debug.WriteLine("*doin' stuff*");
+            return "что, опять?";
         }
     }
 
@@ -148,7 +164,6 @@ namespace WcfService
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<TSource, TDestination>();
             });
-            System.Diagnostics.Debug.WriteLine("=> smart mapper - гордость поколений =>");
             IMapper mapper = config.CreateMapper();
             return mapper.Map<TSource, TDestination>(obj);
         }

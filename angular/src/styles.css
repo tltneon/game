@@ -169,6 +169,7 @@ app-top-bar h1 {
   animation-name: rotating-anim;
   animation-duration: 0.05s;
   cursor: progress;
+  color: #719dde7a;
 }
 
 @keyframes rotating-anim {

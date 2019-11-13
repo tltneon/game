@@ -9,71 +9,109 @@ import { GameVars } from '../gamevars';
     providers: [HttpService, GameVars]
 })
 export class BaseComponent implements OnInit {
-    isDataLoaded:boolean = false;
-    structuresList: string[] = ["lifeComplex", "energyComplex", "aircraftsComplex", "resourceComplex"];
+    isDataLoaded: boolean = false;
+    resourceProduction: {
+        credits: number;
+        energy: number;
+        neutrino: number;
+        population: number;
+    } = {
+        credits: 0,
+        energy: 0,
+        neutrino: 0,
+        population: 0
+    };
+    structuresList: string[] = ["lifeComplex", "energyComplex", "aircraftsComplex", "resourceComplex", "researchStation"];
     unitsList: string[] = ["droneUnit", "jetUnit", "lincorUnit", "someGiantShitUnit"];
-    baseData:any = {};
+    baseData: any = {};
     interval;
 
-    requestedCreditsToUnit:number = 0;
-    requestedEnergyToUnit:number = 0;
-    requestedCreditsToStructure:number = 0;
-    requestedEnergyToStructure:number = 0;
+    requestedCreditsToUnit: number = 0;
+    requestedEnergyToUnit: number = 0;
+    requestedCreditsToStructure: number = 0;
+    requestedEnergyToStructure: number = 0;
 
     constructor(private httpService: HttpService, private gameVars: GameVars){
         this.baseData.structures = [];
+        this.baseData.resources = {};
         this.baseData.task = {};
     }
 
     ngOnInit() {
         this.loadOnlineData();
-        this.interval = setInterval(() => this.baseData.isActive ? this.updateProdution() : ()=>{}, 1000)
+        this.interval = setInterval(() => this.baseData.isActive ? this.updateProdution() : ()=>{}, 999)
     }
 
-    allowToBuild() {
+    allowToBuild(): string[] {
         return this.structuresList.filter(element => this.baseData.structures.findIndex(o => o.type == element) == -1);
     }
-    defenceMultiplier():string {
-        return (this.baseData.level * 1.1).toFixed(2);
+    formatNumber(num: number): string {
+        num = num || 0;
+        return num.toFixed(2);
     }
-    updateInput(isStructureInput, unitInput){
-        if(isStructureInput){
-            this.requestedCreditsToStructure = this.gameVars.getInfo(unitInput).cost.credits;
-            this.requestedEnergyToStructure = this.gameVars.getInfo(unitInput).cost.credits;
+    defenceMultiplier(): string {
+        return this.formatNumber(this.baseData.level * 0.16 + 1);
+    }
+    updateInput(isStructureInput: boolean, unitInput: string, count: number = 1): void {
+        if(isStructureInput) {
+            this.requestedCreditsToStructure = this.gameVars.getInfo(unitInput).credits;
+            this.requestedEnergyToStructure = this.gameVars.getInfo(unitInput).energy;
         }
         else {
-            this.requestedCreditsToUnit = this.gameVars.getInfo(unitInput).cost.credits;
-            this.requestedEnergyToUnit = this.gameVars.getInfo(unitInput).cost.energy;
+            this.requestedCreditsToUnit = this.gameVars.getInfo(unitInput).credits * count;
+            this.requestedEnergyToUnit = this.gameVars.getInfo(unitInput).energy * count;
         }
+    }
+    reduceCounters(credits: number = 0, energy: number = 0, neutrino: number = 0): void {
+        this.baseData.resources.credits -= credits;
+        this.baseData.resources.energy -= energy;
+        this.baseData.resources.neutrino -= neutrino;
+    }
+    recalculateProduction(): void {
+        this.baseData.structures.forEach(element => {
+            this.resourceProduction.credits += this.gameVars.getInfo(element.type).baseCreditsProduction * element.level || 0;
+            this.resourceProduction.energy += this.gameVars.getInfo(element.type).baseEnergyProduction * element.level || 0;
+            this.resourceProduction.neutrino += this.gameVars.getInfo(element.type).baseNeutrinoProduction * element.level || 0;
+            this.resourceProduction.population += this.gameVars.getInfo(element.type).basePopulationProduction * element.level || 0;
+        });
+        this.resourceProduction.credits /= 60;
+        this.resourceProduction.energy /= 60;
+        this.resourceProduction.neutrino /= 60;
     }
 
-    updateProdution() {
-        for(let i in this.baseData.resources){
-            this.baseData.resources[i].count += this.baseData.level * 1;
-        }
+    updateProdution(): void {
+        this.baseData.resources.credits += this.resourceProduction.credits;
+        this.baseData.resources.energy += this.resourceProduction.energy;
+        this.baseData.resources.neutrino += this.resourceProduction.neutrino;
     }
-    private getStructID(structure):number {
+    private getStructID(structure: any): number {
         if(this.baseData.structures)
             return this.baseData.structures.findIndex((element) => element.type == structure.type);
         else
             return null;
     }
 
-    upgradeStructure(structure){
-        this.baseData.structures[this.getStructID(structure)].level++;
+    upgradeStructure(structure: any): void {
+        console.log(typeof(structure));
         this.setStructureTask(structure, 'upgrade', '', 123456789);
+        
+        this.httpService.postRequest("api/base/action", {action: "upgradestructure", baseid: this.baseData.baseID, result: structure.type}, true).subscribe(
+            (responce) => responce == "success"
+                ? this.baseData.structures[this.getStructID(structure)].level++ 
+                : console.log(responce),
+            error => console.log(error));
     }
-    destroyStructure(structure){
+    destroyStructure(structure: object): void {
         this.baseData.structures.splice(this.getStructID(structure), 1);
     }
-    setStructureTask(structure, task: string, result: string = '', finishTime = 12345678){
+    setStructureTask(structure: object, task: string, result: string = '', finishTime: number = 12345678):void {
         this.baseData.structures[this.getStructID(structure)].task = {
             action: task,
             result: result,
             endsin: finishTime                
         }
     }
-    clearStructureTask(structure){
+    clearStructureTask(structure: object): void {
         this.baseData.structures[this.getStructID(structure)].task = {
             action: '',
             result: '',
@@ -81,153 +119,160 @@ export class BaseComponent implements OnInit {
         }
     }
 
-    canMakeUnits(){
+    canMakeUnits():boolean {
         return this.baseData.structures.findIndex(p => p.type == 'aircraftsComplex') + 1;
     }
-    makeUnit(unitType: string){
-        function update(it, responce){
-            let index = it.baseData.units.findIndex(p => p.type == responce);
-            if(index)
-                it.baseData.units[it.baseData.units.length] = {type: unitType, count: 1};
-            else
-                it.baseData.units[index].count++;
-            console.log(responce);
-        }
+    makeUnit(unitType: string): void {
         this.setBaseTask('makeunit', unitType, 1234567);
-        this.httpService.postRequest("api/base/action", {action: "makeunit", result: unitType, baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? update(this, responce) : console.log(responce));
-    }
-    buildStructure(structureType: string){
-        function update(it, responce){
-            it.baseData.structures[it.baseData.structures.length] = {
-                type: structureType,
-                level: 1,
-                task: {
-                    action: '',
-                    result: '',
-                    endsin: 0
+        this.httpService.postRequest("api/base/action", {action: "makeunit", result: unitType, baseid: this.baseData.baseID}, true).subscribe(
+            (responce: string) => {
+                if(responce == "success") {
+                    let index = this.baseData.units.findIndex(p => p.type == unitType);
+                    if(index == -1)
+                        this.baseData.units[this.baseData.units.length] = {type: unitType, count: 1};
+                    else
+                        this.baseData.units[index].count++;
+                    this.reduceCounters();
                 }
-            };
-            console.log(responce);
-        }
+                console.log(responce);
+                alert(this.gameVars.getText(responce));
+            },
+            error => console.log(error));
+    }
+    buildStructure(structureType: string): void {
         this.setBaseTask('build', structureType, 1234567);
-        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? update(this, responce) : console.log(responce));
+        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe(
+        (responce) => {
+            if(responce == "success") {
+                this.baseData.structures[this.baseData.structures.length] = {
+                    type: structureType,
+                    level: 1,
+                    task: {
+                        action: '',
+                        result: '',
+                        endsin: 0
+                    }
+                };
+            }
+            console.log(responce);
+            alert(this.gameVars.getText(responce.toString()));
+            this.recalculateProduction();
+        },
+        error => console.log(error));
     }
-    upgradeBase(){
+    upgradeBase(): void {
         this.setBaseTask('upgrade', '', 12345678);
-        this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? this.baseData.level++ : console.log(responce));
+        this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}, true).subscribe(
+            (responce) => responce == "success"
+                ? this.baseData.level++ 
+                : console.log(responce),
+            error => console.log(error));
     }
-    toggleBaseActiveness(){
-        this.baseData.isActive = !this.baseData.isActive;
+    toggleBaseActiveness(): void {
         this.setBaseTask(this.baseData.isActive ? 'repair' : '', '', 12345678);
-        this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}, true).subscribe((responce) => responce == "success" ? console.log(responce) : console.log(responce));
+        this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}, true).subscribe(
+            (responce) => responce == "success" 
+                ? this.baseData.isActive = !this.baseData.isActive 
+                : console.log(responce),
+            error => console.log(error));
     }
-    setBaseTask(task: string, result: string, finishTime){
+    setBaseTask(task: string, result: string, finishTime: number): void {
         this.baseData.task = {
             action: task,
             result: result,
             endsin: finishTime
         }
     }
-    clearBaseTask(){
-        this.baseData.task = {
-            action: '',
-            result: '',
-            endsin: 0
-        }
-    }
-    loadOnlineData(){
-        function update(is, responce) {
-            if(responce == null)
-            {
-                console.log("ошибке");
-                is.loadOfflineData();
-            }
-            else
-            {
-                is.baseData = responce;
-                console.log(is.baseData);
-                is.baseData.task = {};
-            }
-            is.isDataLoaded = true;
-        }
-        this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe((responce) => update(this, responce));
-    }
-    loadOfflineData(){
-        this.isDataLoaded = true;
-        this.baseData = 
-            {
-                baseid: 1,
-                name: "planet 1",
-                owner: "Admin",
-                level: 1,
-                isActive: true,
-                structures: [
-                    {
-                        type: "lifeComplex",
-                        level: 1,
-                        task: {
-                            action: 'upgrade',
-                            result: '',
-                            endsin: 123456733
-                        }
-                    },
-                    {
-                        type: "energyComplex",
-                        level: 1,
-                        task: {
-                            action: '',
-                            result: '',
-                            endsin: 0
-                        }
-                    },
-                    {
-                        type: "aircraftsComplex",
-                        level: 1,
-                        task: {
-                            action: 'createUnit',
-                            result: 'lincorUnit',
-                            endsin: 774578585
-                        }
-                    },
-                    {
-                        type: "resourceComplex",
-                        level: 1,
-                        task: {
-                            action: '',
-                            result: '',
-                            endsin: 0
-                        }
-                    }
-                ],
-                resources: [
-                    {
-                        type: "credits",
-                        count: 0
-                    },
-                    {
-                        type: "energy",
-                        count: 0
-                    },
-                ],
-                units: [
-                    {
-                        type: "droneUnit",
-                        count: 0
-                    },
-                    {
-                        type: "jetUnit",
-                        count: 5
-                    },
-                    {
-                        type: "lincorUnit",
-                        count: 5
-                    },
-                ],
-                task: {
-                    action: 'build',
-                    result: 'droneUnit',
-                    endsin: 198765433,
+    loadOnlineData(): void {
+        this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe(
+            (responce) => {
+                if(responce == null)
+                {
+                    console.log("api/base/RetrieveBaseData => null");
+                    this.loadOfflineData();
                 }
+                else
+                {
+                    this.baseData = responce;
+                    this.baseData.task = {};
+                    console.log(this.baseData);
+                }
+                this.isDataLoaded = true;
+                this.recalculateProduction();
+            },
+            error => console.log(error));
+    }
+    loadOfflineData(): void {
+        this.isDataLoaded = true;
+        this.baseData = {
+            baseid: 1,
+            name: "planet 1",
+            owner: "Admin",
+            level: 1,
+            isActive: true,
+            structures: [
+                {
+                    type: "lifeComplex",
+                    level: 1,
+                    task: {
+                        action: 'upgrade',
+                        result: '',
+                        endsin: 123456733
+                    }
+                },
+                {
+                    type: "energyComplex",
+                    level: 1,
+                    task: {
+                        action: '',
+                        result: '',
+                        endsin: 0
+                    }
+                },
+                {
+                    type: "aircraftsComplex",
+                    level: 1,
+                    task: {
+                        action: 'createUnit',
+                        result: 'lincorUnit',
+                        endsin: 774578585
+                    }
+                },
+                {
+                    type: "resourceComplex",
+                    level: 1,
+                    task: {
+                        action: '',
+                        result: '',
+                        endsin: 0
+                    }
+                }
+            ],
+            resources: {
+                credits: 330,
+                energy: 120,
+                neutrino: 0.0,
+            },
+            units: [
+                {
+                    type: "droneUnit",
+                    count: 1
+                },
+                {
+                    type: "jetUnit",
+                    count: 5
+                },
+                {
+                    type: "lincorUnit",
+                    count: 5
+                },
+            ],
+            task: {
+                action: 'build',
+                result: 'droneUnit',
+                endsin: 198765433,
             }
         }
+        this.recalculateProduction();
+    }
 }

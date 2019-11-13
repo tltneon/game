@@ -12,7 +12,12 @@
             <div (click)="loadOnlineData()">loadOnlineData</div>
 </div>
 
-<p id="topbarinfo">Resources: | <span *ngFor="let res of baseData?.resources" class="resource">{{res.type}}: {{res.count}} | </span><i *ngIf="baseData?.isActive" class="activeBase">ø</i></p>
+<p id="topbarinfo">Resources: | 
+    <span class="resource">Credits: {{formatNumber(baseData?.resources.credits)}} | </span>
+    <span class="resource">Energy: {{formatNumber(baseData?.resources.energy)}} | </span>
+    <span class="resource">Neutrino: {{formatNumber(baseData?.resources.neutrino)}} | </span>
+    <i *ngIf="baseData?.isActive" class="activeBase">ø</i>
+</p>
 <div id="block">
     <h4>Structures</h4>
     <div id="structures" class="items" >
@@ -23,7 +28,7 @@
             </div>
             <div class="desc">
                 <div class="cost">level: {{item.level}} => level {{item.level+1}}</div>
-                <div class="cost">credits: {{gameVars.getInfo(item.type).cost.credits}} | energy: {{gameVars.getInfo(item.type).cost.energy}}</div>
+                <div class="cost">credits: {{gameVars.getInfo(item.type).credits}} | energy: {{gameVars.getInfo(item.type).energy}}</div>
             <span *ngIf="false">
                 <div class="task">Task: 
                     <span *ngIf="item.task.action; else unset">
@@ -78,9 +83,10 @@
             </div>
             <div class="desc">
                 <div class="actions">
-                    <select #unitInput.value="ngModel" name="unitInput" [(ngModel)]="unitInput" (change)="updateInput(false, unitInput)">
+                    <select #unitInput.value="ngModel" name="unitInput" [(ngModel)]="unitInput" (change)="updateInput(false, unitInput, unitCount)">
                         <option *ngFor="let str of unitsList" [value]="str">{{gameVars.getInfo(str).name}}</option>
                     </select>
+                    <input class="hide" type="number" #unitCount.value="ngModel" name="unitCount" [(ngModel)]="unitCount" (change)="updateInput(false, unitInput, unitCount)">
                     <div class="button" (click)="makeUnit(unitInput)">Make unit</div>
                 </div>
                 <div class="option">credits: {{requestedCreditsToUnit}} | energy: {{requestedEnergyToUnit}}</div>
@@ -94,7 +100,7 @@
         <div>Name: {{baseData?.basename || "basename"}} | ID {{baseData?.baseID || 0}}</div>
         <div>Owner: You | ID {{baseData?.ownerID || 0}}</div>
         <div>Level: {{baseData?.level || 0}}</div>
-        <div>Defence multiplier: {{defenceMultiplier()}}</div>
+        <div>Defence multiplier: {{defenceMultiplier()}}%</div>
         <div *ngIf="!baseData?.isActive">Base is inactive</div>
     <div class="separatist"></div>
     <h4>Current task</h4>
@@ -108,12 +114,13 @@
         <div *ngIf="baseData.task.action">Ends in: {{baseData?.task.endsin | date :'short'}}</div>
     <div class="separatist"></div>
     <h4>Prodution</h4>
-        <div>Credits: +{{60*baseData?.level || 0}}/min.</div>
-        <div>Energy: +{{60*baseData?.level || 0}}/min.</div>
-        <div>Population: {{10*baseData?.level || 0}}</div>
+        <div>Credits: +{{resourceProduction.credits * 60 || 0}}/min.</div>
+        <div>Energy: +{{resourceProduction.energy * 60 || 0}}/min.</div>
+        <div>Neutrino: +{{resourceProduction.neutrino * 60 || 0}}/min.</div>
+        <div>Population: {{resourceProduction.population || 0}}</div>
     <div class="separatist"></div>
     <h4>Actions</h4>
-    <div class="button" (click)="upgradeBase()">Level up ^</div>
-    <div class="button" (click)="toggleBaseActiveness()">Repair</div>
-    <div class="button" (click)="clearBaseTask()">Clear task</div>
+    <div class="button" (click)="upgradeBase()">Level up ^ ({{baseData?.level * gameVars.getInfo("base").upgrade.energy || 0}})</div>
+    <div class="button" (click)="toggleBaseActiveness()">Repair ({{baseData?.level * gameVars.getInfo("base").repair.energy || 0}})</div>
+    <div class="button" (click)="setBaseTask('', '', 0)">Clear task</div>
 </div>
