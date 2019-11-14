@@ -449,7 +449,7 @@ namespace gamelogic
             }
             using (FileStream fstream = new FileStream($"{dir}/../csharpgame.log", FileMode.OpenOrCreate))
             {
-                byte[] array = System.Text.Encoding.Default.GetBytes(text);
+                byte[] array = System.Text.Encoding.Default.GetBytes(text + "\n");
                 fstream.Seek(0, SeekOrigin.End);
                 await fstream.WriteAsync(array, 0, array.Length);
             }

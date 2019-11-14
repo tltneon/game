@@ -11,8 +11,6 @@ namespace webapi
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
-
             Routine();
         }
         /* */
