@@ -152,11 +152,15 @@ namespace gamelogic
                 Account Account = AccountManager.GetAccountByToken(obj.token);
                 if (Account.UserID == curbase.OwnerID)
                 {
+                    int level;
                     using (Entities db = new Entities())
                     {
-                        db.Bases.FirstOrDefault(o => o.BaseID == curbase.BaseID).Level++;
+                        Base BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == curbase.BaseID);
+                        BaseEntry.Level++;
+                        level = BaseEntry.Level;
                         db.SaveChanges();
                     }
+                    ProceedActions.DoBuyItem(curbase, obj.result, level);
                     ProceedActions.Log("Event", $"{Account.Username} perform base upgrading at 1 level up.");
                     const string result = "success";
                     return result;
@@ -184,6 +188,8 @@ namespace gamelogic
                 {
                     if (HasBaseStructure(curbase, "aircraftsComplex") == null) return "noAircrafts";
                     if (!CanAfford(curbase, obj.result)) return "notenoughresources";
+
+                    ProceedActions.DoBuyItem(curbase, obj.result, 1);
 
                     Unit u = SquadManager.GetUnit("bas" + obj.baseid.ToString(), obj.result);
                         
@@ -225,14 +231,13 @@ namespace gamelogic
                     if (!CanAfford(curbase, obj.result)) return "notenoughresources";
                     if (HasBaseStructure(curbase, obj.result) != null) return "alreadyexists";
 
-                    var db = DbManager.GetContext();
+                    ProceedActions.DoBuyItem(curbase, obj.result, 1);
 
-                    Resource resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + curbase.BaseID.ToString());
-                    resources.Credits -= 100;
-                    resources.Energy -= 100;
-
-                    db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
-                    db.SaveChanges();
+                    using (Entities db = new Entities())
+                    {
+                        db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
+                        db.SaveChanges();
+                    }
                     const string result = "success";
                     return result;
                 }
@@ -258,10 +263,20 @@ namespace gamelogic
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
                 {
                     if (!CanAfford(curbase, obj.result)) return "notenoughresources";
+                    if (HasBaseStructure(curbase, obj.result) == null) return "notexists";
 
-                    Structure str = HasBaseStructure(curbase, obj.result);
-                    str.Level++;
-                    DbManager.GetContext().SaveChanges();
+                    int level;
+
+                    using (Entities db = new Entities()) 
+                    {
+                        var str = db.Structures.FirstOrDefault(o => o.Type == obj.result && o.BaseID == curbase.BaseID);
+                        str.Level++;
+                        level = str.Level;
+                        db.SaveChanges();
+                    }
+
+                    ProceedActions.DoBuyItem(curbase, obj.result, level);
+
                     const string result = "success";
                     return result;
                 }
@@ -286,9 +301,17 @@ namespace gamelogic
                 Base curbase = GetBaseByID(obj.baseid);
                 if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID)
                 {
-                    if ((curbase.Level*2000) > 0) return "notenoughresources";
-                    curbase.IsActive = !curbase.IsActive;
-                    DbManager.GetContext().SaveChanges();
+                    if (!CanAfford(curbase, "base")) return "notenoughresources";
+
+                    int level;
+                    using (Entities db = new Entities())
+                    {
+                        var BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == obj.baseid);
+                        BaseEntry.IsActive = !BaseEntry.IsActive;
+                        level = BaseEntry.Level;
+                        db.SaveChanges(); 
+                    }
+                    ProceedActions.DoBuyItem(curbase, "base", level);
                     const string result = "success";
                     return result;
                 }
@@ -305,16 +328,11 @@ namespace gamelogic
             }
         }
         /* Проверяет на возможность приобрести предмет */
-        public static bool CanAfford(Base curbase, string itemName)
+        public static bool CanAfford(Base curbase, string itemName, int level = 1)
         {
             Resource resources = GetBaseResources(curbase.BaseID);
-            if(itemName.Substring(itemName.Length - 4, 4) == "Unit")
-            {
-
-            }
-            if (resources.Credits < 100 || resources.Energy < 100) return false;
-
-            System.Diagnostics.Debug.WriteLine("успешно купил эту шляпу");
+            var cost = GameItems.ItemsVars.GetCost(itemName);
+            if (resources.Credits < cost.Credits*level || resources.Energy < cost.Energy*level) return false;
             return true;
         }
         /* Возвращает данные о базе */
@@ -405,13 +423,15 @@ namespace gamelogic
         /* Возвращает отряд по его ключу */
         public static Squad GetSquad(string key)
         {
-            var db = DbManager.GetContext();
-            return db.Squads.FirstOrDefault(o => o.Key == key);
+            Squad result;
+            using (Entities db = new Entities())
+                result = db.Squads.FirstOrDefault(o => o.Key == key);
+            return result;
         }
         /* Возвращает список всех отрядов */
         public static IEnumerable<Squad> GetSquads()
         {
-            var db = DbManager.GetContext();
+            using (Entities db = new Entities())
             return db.Squads.ToList();
         }
         /* Получает приказ на возвращение отряда */
@@ -423,7 +443,9 @@ namespace gamelogic
         /* */
         public static Unit GetUnit(string Instance, string Type)
         {
-            const string result = "success";
+            Unit result;
+            using (Entities db = new Entities())
+                result = db.Units.FirstOrDefault(o => o.Instance == Instance && o.Type == Type);
             return result;
         }
         /* Получает приказ на атаку отряда */
@@ -460,7 +482,6 @@ namespace gamelogic
         public static string Battle(int attackerID, int victimID)
         {
             string result;
-            var db = DbManager.GetContext();
             Player attacker = PlayerManager.GetPlayerByID(attackerID);
             Player victim = PlayerManager.GetPlayerByID(victimID);
             IEnumerable<Unit> attackerUnits = BaseManager.GetBaseUnits(attackerID);
@@ -489,37 +510,55 @@ namespace gamelogic
             if (attackerPower > victimPower)
             {
                 double delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
-                DoBattle(ref attacker, ref attackerUnits, ref victim, ref victimUnits, ref db, delta);
+                DoBattle(ref attacker, ref attackerUnits, ref victim, ref victimUnits, delta);
                 result = "youwin";
             }
             else
             {
                 double delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
-                DoBattle(ref victim, ref victimUnits, ref attacker, ref attackerUnits, ref db, delta);
+                DoBattle(ref victim, ref victimUnits, ref attacker, ref attackerUnits, delta);
                 result = "youlose";
             }
             Log("Event", $"Player {attacker.Playername} (units power is {attackerPower}) attacked {victim.Playername} (units power is {victimPower}) and {(attackerPower > victimPower ? "wins" : "loses")} that battle.");
-            db.SaveChanges();
+
             return result;
         }
         /* */
         /* Реализует механизм обработки последствий битвы (занесение очков в стату, обнуление юнитов у проигравшего и вычитание части у победителя) */
         /* */
-        private static void DoBattle(ref Player winner, ref IEnumerable<Unit> winnerUnits, ref Player loser, ref IEnumerable<Unit> loserUnits, ref Entities db, double delta)
+        private static void DoBattle(ref Player winner, ref IEnumerable<Unit> winnerUnits, ref Player loser, ref IEnumerable<Unit> loserUnits, double delta)
         {
-            winner.Wins++;
-
-            foreach (Unit unit in winnerUnits)
+            using (Entities db = new Entities())
             {
-                unit.Count = (int)(unit.Count / delta);
+                winner.Wins++;
+
+                foreach (Unit unit in winnerUnits)
+                {
+                    unit.Count = (int)(unit.Count / delta);
+                }
+
+                loser.Loses++;
+
+                foreach (Unit unit in loserUnits)
+                {
+                    db.Entry(unit).State = EntityState.Deleted;
+                }
+                db.SaveChanges();
+            }
+        }
+        /* Реализует механизм покупки */
+        public static void DoBuyItem(Base curbase, string itemName, int level = 1)
+        {
+            using (Entities db = new Entities()) {
+                Resource resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + curbase.BaseID.ToString());
+                var cost = GameItems.ItemsVars.GetCost(itemName);
+                resources.Credits -= cost.Credits * level;
+                resources.Energy -= cost.Energy * level;
+                resources.Neutrino -= cost.Neutrino * level;
+                db.SaveChanges();
             }
 
-            loser.Loses++;
-
-            foreach (Unit unit in loserUnits)
-            {
-                db.Entry(unit).State = EntityState.Deleted;
-            }
+        System.Diagnostics.Debug.WriteLine("успешно купил эту шляпу");
         }
         /* */
         /* Реализует механизм логгирования */
@@ -586,24 +625,24 @@ namespace GameItems
         public StructureVars GetItemInfo(string str) {
             return Structures.str;
         }*/
-        public object GetCost(string ItemType) // восхитительный костыль
+        public static dynamic GetCost(string ItemType) // восхитительный полукостыль
         {
             switch (ItemType)
             {
-                case "lifeComplex": return new { credits = 300, energy = 25 };
-                case "resourceComplex": return new { credits = 100, energy = 25 };
-                case "energyComplex": return new { credits = 100, energy = 25 };
-                case "aircraftsComplex": return new { credits = 1000, energy = 250 };
-                case "researchStation": return new { credits = 100000, energy = 250000 };
+                case "lifeComplex": return new { Credits = 300, Energy = 25, Neutrino = 0.0 };
+                case "resourceComplex": return new { Credits = 100, Energy = 25, Neutrino = 0.0 };
+                case "energyComplex": return new { Credits = 100, Energy = 25, Neutrino = 0.0 };
+                case "aircraftsComplex": return new { Credits = 1000, Energy = 250, Neutrino = 0.0 };
+                case "researchStation": return new { Credits = 100000, Energy = 250000, Neutrino = 0.0 };
                 /**/
-                case "droneUnit": return new { credits = 100, energy = 25 };
-                case "jetUnit": return new { credits = 1000, energy = 250 };
-                case "lincorUnit": return new { credits = 10000, energy = 2500 };
-                case "someGiantShitUnit": return new { credits = 1000000, energy = 250000, neutrino = 1 };
+                case "droneUnit": return new { Credits = 100, Energy = 25, Neutrino = 0.0 };
+                case "jetUnit": return new { Credits = 1000, Energy = 250, Neutrino = 0.0 };
+                case "lincorUnit": return new { Credits = 10000, Energy = 2500, Neutrino = 0.0 };
+                case "someGiantShitUnit": return new { Credits = 1000000, Energy = 250000, Neutrino = 1.0 };
                     /**/
-                case "base": return new { credits = 2000, energy = 2000 };
+                case "base": return new { Credits = 2000, Energy = 2000, Neutrino = 0.0 };
             }
-            return new { credits = 0, energy = 0 };
+            return new { Credits = 0, Energy = 0, Neutrino = 0.0 };
         }
     }
 }

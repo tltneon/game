@@ -28,7 +28,7 @@
             </div>
             <div class="desc">
                 <div class="cost">level: {{item.level}} => level {{item.level+1}}</div>
-                <div class="cost">credits: {{gameVars.getInfo(item.type).credits}} | energy: {{gameVars.getInfo(item.type).energy}}</div>
+                <div class="cost">credits: {{gameVars.getInfo(item.type).credits * (item.level+1)}} | energy: {{gameVars.getInfo(item.type).energy * (item.level+1)}}</div>
             <span *ngIf="false">
                 <div class="task">Task: 
                     <span *ngIf="item.task.action; else unset">

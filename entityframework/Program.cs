@@ -8,8 +8,7 @@ namespace entityframework
     { 
         static void Main()
         {
-            DbManager.ConnectToDB();
-            using (Entities db = DbManager.GetContext())
+            using (Entities db = new Entities())
             {
             OneMore:
                 Console.Clear();

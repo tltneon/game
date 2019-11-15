@@ -24,7 +24,7 @@ export class BattleComponent implements OnInit {
   }
 
   doAction(act:string, key:string, to:number):void {
-    this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}, true).subscribe (
+    this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}).subscribe (
       (responce: string) => {
         console.log("api/squad/Action => " + responce);
         alert(this.gameVars.getText(responce));
