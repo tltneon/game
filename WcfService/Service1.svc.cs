@@ -24,13 +24,15 @@ namespace WcfService
                 System.Diagnostics.Debug.WriteLine($"Исключение: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"Метод: {ex.TargetSite}");
                 System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
+
+                ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция SendAuthData");
                 return ex.Message;
             }
         }
         /* */
         /* Возвращает список всех игроков */
         /* */
-        public IEnumerable<StatEntity> GetPlayerList()
+        public IEnumerable<StatEntity> GetPlayerStats()
         {
             return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
         }
@@ -81,6 +83,7 @@ namespace WcfService
                 System.Diagnostics.Debug.WriteLine($"Метод: {ex.TargetSite}");
                 System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
                 result = ex.Message;
+                ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция BaseAction");
             }
             return result;
         }
@@ -90,7 +93,6 @@ namespace WcfService
         public BaseEntity GetBaseInfo(BaseAction obj)
         {
             if (Tools.CheckAuthedInput(obj) != "passed") return null;
-            System.Diagnostics.Debug.WriteLine("Token passed");
 
             Account acc = AccountManager.GetAccountByToken(obj.token);
 
@@ -162,10 +164,11 @@ namespace WcfService
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("damn err");
                 System.Diagnostics.Debug.WriteLine($"Исключение: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"Метод: {ex.TargetSite}");
                 System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
+
+                ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция SquadAction");
                 result = "err";
             }
             return result;
@@ -173,11 +176,9 @@ namespace WcfService
         /* */
         /* Это очень плохая реализация игрового лупа, очень плохая и ничем не защищена */
         /* */
-        public string DbStatus()
+        public void DbStatus()
         {
             BaseManager.BaseGatherResources();
-            System.Diagnostics.Debug.WriteLine("*doin' stuff*");
-            return "что, опять?";
         }
     }
     /* */

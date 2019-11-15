@@ -11,7 +11,7 @@ namespace WcfService
         string SendAuthData(AuthData data);
 
         [OperationContract]
-        IEnumerable<StatEntity> GetPlayerList();
+        IEnumerable<StatEntity> GetPlayerStats();
 
         [OperationContract]
         IEnumerable<BaseEntity> GetBaseList();
@@ -35,7 +35,7 @@ namespace WcfService
         string SquadAction(SquadAction obj);
 
         [OperationContract]
-        string DbStatus();
+        void DbStatus();
     }
 
     // дата контракты V
@@ -81,6 +81,10 @@ namespace WcfService
         public int UserID { get; set; }
         [DataMember]
         public string Playername { get; set; }
+        [DataMember]
+        public string Basename { get; set; }
+        [DataMember]
+        public int ResearchPoints { get; set; }
         [DataMember]
         public int Wins { get; set; }
         [DataMember]

@@ -12,7 +12,7 @@ export class TopBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(Cookie.get('token'))
+    //if(Cookie.get('token'))
       this.menu = [
       {name: "Base", routerLink: "base"},
       {name: "Battles", routerLink: "battles"},

@@ -114,8 +114,8 @@
         <div *ngIf="baseData.task.action">Ends in: {{baseData?.task.endsin | date :'short'}}</div>
     <div class="separatist"></div>
     <h4>Prodution</h4>
-        <div>Credits: +{{resourceProduction.credits * 60 || 0}}/min.</div>
-        <div>Energy: +{{resourceProduction.energy * 60 || 0}}/min.</div>
+        <div>Credits: +{{formatNumber(resourceProduction.credits * 60) || 0}}/min.</div>
+        <div>Energy: +{{formatNumber(resourceProduction.energy * 60) || 0}}/min.</div>
         <div>Neutrino: +{{resourceProduction.neutrino * 60 || 0}}/min.</div>
         <div>Population: {{resourceProduction.population || 0}}</div>
     <div class="separatist"></div>

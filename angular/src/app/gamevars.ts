@@ -83,7 +83,11 @@ export class GameVars {
         "alreadyexists": "That structure already made",
         "wronginput": "Wrong input",
         "wrongbaseid": "Wrong base data",
-        "success": "Successfully perform an act"
+        "success": "Successfully perform an act",
+        "youwin": "You win that battle!",
+        "youlose": "You lose that battle",
+        "cannotuseatyourself": "You can't perform that action on yourself!",
+        "baseisinactive": "You can't attack innactive base!",
     }
 
     getInfo(item:string) {

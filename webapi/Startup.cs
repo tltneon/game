@@ -21,9 +21,8 @@ namespace webapi
             while (true)
             {
                 Thread.Sleep(6000);
-                await Task.Factory.StartNew(() => {
+                await Task.Run(() => {
                     Service1Client client = new Service1Client();
-                    System.Diagnostics.Debug.WriteLine("пинаем wcf");
                     client.DbStatus();
                     client.Close();
                 });

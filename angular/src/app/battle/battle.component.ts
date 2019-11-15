@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { BattlesJSON } from '../models/battles';
 import { BaseJSON } from '../models/base';
+import { GameVars } from '../gamevars';
 
 @Component({
   selector: 'app-battle',
   templateUrl: './battle.component.html',
   styleUrls: ['./battle.component.css'],
-  providers: [HttpService]
+  providers: [HttpService, GameVars]
 })
 export class BattleComponent implements OnInit {
   isDataLoaded:boolean = false;
@@ -16,21 +17,21 @@ export class BattleComponent implements OnInit {
   estiamatedTime: number = 0;
   destination;
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private gameVars: GameVars) { }
 
   ngOnInit() {
     this.loadOnlineData();
   }
 
-  doAction(act:string, key:string, to:number){
+  doAction(act:string, key:string, to:number):void {
     this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}, true).subscribe (
-      (responce) => {
+      (responce: string) => {
         console.log("api/squad/Action => " + responce);
-        alert(responce);
+        alert(this.gameVars.getText(responce));
       },
       error => console.log(error));
   }
-  loadOnlineData(){
+  loadOnlineData():void {
     this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce:BaseJSON[]) => {
       if(responce == null)
         console.log("ошибке");
@@ -44,7 +45,7 @@ export class BattleComponent implements OnInit {
     error => console.log(error));
     //this.httpService.postRequest("api/squad/GetSquads", {}, true).subscribe((responce) => update(this, responce));
   }
-  loadOfflineData(){
+  loadOfflineData():void {
     this.isDataLoaded = true;
     this.battlesData = [
       {
@@ -114,10 +115,10 @@ export class BattleComponent implements OnInit {
     ];
   }
 
-  recalculateTime(){
+  recalculateTime():void {
     this.estiamatedTime = new Date(Date.now()).getSeconds();
   }
-  returnSquad(squad){
+  returnSquad(squad):void {
     this.doAction("return", squad.key, this.destination);
     let index = this.battlesData.findIndex((element) => element.key == squad.key);
     this.battlesData[index].action ="returning";
@@ -126,7 +127,7 @@ export class BattleComponent implements OnInit {
     this.battlesData[index].to = destination;
     this.battlesData[index].arrival += this.battlesData[index].arrival - this.battlesData[index].departure;
   }
-  sendSquad(){
+  sendSquad():void {
     /*this.battlesData[this.battlesData.length] = {
       key: "fh6hrtf"+Math.random(),
       action: "attacking",
