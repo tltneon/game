@@ -88,6 +88,9 @@ export class GameVars {
         "youlose": "You lose that battle",
         "cannotuseatyourself": "You can't perform that action on yourself!",
         "baseisinactive": "You can't attack innactive base!",
+        "populationLimit": "Not enough population to create new unit",
+        "noLifeComplex": "Life Complex is not exists on the base",
+        "noAircrafts": "Aircrafts Factory is not exists on the base"
     }
 
     getInfo(item:string) {

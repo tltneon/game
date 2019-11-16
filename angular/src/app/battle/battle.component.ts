@@ -34,7 +34,7 @@ export class BattleComponent implements OnInit {
   loadOnlineData():void {
     this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce:BaseJSON[]) => {
       if(responce == null)
-        console.log("ошибке");
+        console.log("api/base/GetBaseList => null");
       else
       {
         this.basesData = responce;

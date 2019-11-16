@@ -4,7 +4,9 @@ using System.Data.Entity;
 
 namespace gamelogic
 {
-    // Connecting to DB
+    /// <summary>
+    /// Контекст для общения с базой
+    /// </summary>
     public class Entities : DbContext
     {
         public Entities() : base("DbConnection") { }
@@ -16,7 +18,10 @@ namespace gamelogic
         public DbSet<Unit> Units { get; set; }
         public DbSet<Resource> Resources { get; set; }
     }
-    // Tables
+
+    /// <summary>
+    /// Таблица аккаунта
+    /// </summary>
     public class Account
     {
         [Key]
@@ -27,6 +32,10 @@ namespace gamelogic
         public short Role { get; set; }
         public string Token { get; set; }
     }
+
+    /// <summary>
+    /// Таблица игрока
+    /// </summary>
     public class Player
     {
         [Key]
@@ -35,6 +44,10 @@ namespace gamelogic
         public int Wins { get; set; }
         public int Loses { get; set; }
     }
+
+    /// <summary>
+    /// Таблица базы
+    /// </summary>
     public class Base
     {
         [Key]
@@ -49,6 +62,10 @@ namespace gamelogic
         public bool IsActive { get; set; }
         public int LastAttacked { get; set; }
     }
+
+    /// <summary>
+    /// Таблица строений на базе
+    /// </summary>
     public class Structure
     {  
         [Key]
@@ -59,6 +76,10 @@ namespace gamelogic
         public string CurrentTask { get; set; }
         public int FinishTime { get; set; }
     }
+
+    /// <summary>
+    /// Таблица отрядов
+    /// </summary>
     public class Squad
     {
         [Key]
@@ -69,6 +90,10 @@ namespace gamelogic
         public int MoveTo { get; set; }
         public int FinishTime { get; set; }
     }
+
+    /// <summary>
+    /// Таблица юнитов
+    /// </summary>
     public class Unit
     {
         [Key]
@@ -77,6 +102,10 @@ namespace gamelogic
         public string Type { get; set; }
         public int Count { get; set; }
     }
+
+    /// <summary>
+    /// Таблица ресурсов
+    /// </summary>
     public class Resource
     {
         [Key]

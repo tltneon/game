@@ -7,12 +7,16 @@ using System.Linq;
 
 namespace gamelogic
 {
-    /* */
-    /* Класс менеджера аккаунтов управляет авторизацией, регистрацией и прочим взаимодействием с аккаунтами */
-    /* */
+    /// <summary>
+    /// Класс менеджера аккаунтов управляет авторизацией, регистрацией и прочим взаимодействием с аккаунтами
+    /// </summary>
     public class AccountManager
     {
-        /* Управляет авторизацией пользователя */
+        /// <summary>
+        /// Управляет авторизацией пользователя
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static string AuthClient(AuthData data)
         {
             using (Entities db = new Entities())
@@ -37,93 +41,160 @@ namespace gamelogic
                 }
             }
         }
-        /* Управляет созданием аккаунта */
+
+        /// <summary>
+        /// Управляет созданием аккаунта
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static string CreateUser(string username, string password)
         {
             using (Entities db = new Entities())
-            try
-            {
-                // пока без шифрации пароля
-                Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=потом придумаю как шифровать токен для " + username };
-                db.Accounts.Add(user);
-                db.SaveChanges();
+                try
+                {
+                    // пока без шифрации пароля
+                    Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=потом придумаю как шифровать токен для " + username };
+                    db.Accounts.Add(user);
+                    db.SaveChanges();
 
-                int newIdentityValue = user.UserID;
-                db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
-                db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
-                db.SaveChanges();
-                return user.Token;
-            }
-            catch (Exception ex)
-            {
-                ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция CreateUser");
-                return "Error#Exception: " + ex.Message;
-            }
+                    int newIdentityValue = user.UserID;
+                    db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
+                    db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
+                    db.SaveChanges();
+                    return user.Token;
+                }
+                catch (Exception ex)
+                {
+                    ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция CreateUser");
+                    return "Error#Exception: " + ex.Message;
+                }
         }
-        /* Возвращает аккаунт по его токену */
+        /// <summary>
+        /// Возвращает аккаунт по его токену
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static Account GetAccountByToken(string token)
         {
             using (Entities db = new Entities())
+            {
                 return db.Accounts.FirstOrDefault(o => o.Token == token);
+            }
         }
-        /* Проверяет токен игрока */
+
+        /// <summary>
+        /// Проверяет токен игрока
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static bool CheckToken(string token)
         {
             return GetAccountByToken(token) != null;
         }
     }
-    /* */
-    /* Класс менеджера игроков возвращает данные о игроках ("игрок" - персонаж, создаваемый для аккаунта) */
-    /* */
+
+    /// <summary>
+    /// Класс менеджера игроков возвращает данные о игроках ("игрок" - персонаж, создаваемый для аккаунта)
+    /// </summary>
     public class PlayerManager
     {
-        /* Возвращает игрока по его ИД */
+        /// <summary>
+        /// Возвращает игрока по его ИД
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         public static Player GetPlayerByID(int userid)
         {
             using (Entities db = new Entities())
+            {
                 return db.Players.FirstOrDefault(o => o.UserID == userid);
+            }
         }
-        /* Возвращает базу игрока по его ИД */
+
+        /// <summary>
+        /// Возвращает базу игрока по его ИД
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         public static Base GetBaseByUserID(int userid)
         {
             using (Entities db = new Entities())
+            {
                 return db.Bases.FirstOrDefault(o => o.OwnerID == userid);
+            }
         }
-        /* Возвращает список игроков */
+
+        /// <summary>
+        /// Возвращает список игроков
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<Player> GetPlayerList()
         {
             using (Entities db = new Entities())
+            {
                 return db.Players.ToList();
+            }
         }
-        /* Возвращает статистику игроков */
+
+        /// <summary>
+        /// Возвращает статистику игроков
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<StatsData> GetPlayerStats()
         {
             return null;
         }
     }
-    /* */
-    /* Класс менеджера баз принимает и возвращает все сведения о базах игроков */
-    /* */
+
+    /// <summary>
+    /// Класс менеджера баз принимает и возвращает все сведения о базах игроков
+    /// </summary>
     public class BaseManager
     {
-        /* Возвращает список баз */
+        /// <summary>
+        /// Возвращает список баз
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<Base> GetBaseList()
         {
             using (Entities db = new Entities())
+            {
                 return db.Bases.ToList();
+            }
         }
-        /* Возвращает данные о базе по ИД */
+
+        /// <summary>
+        /// Возвращает данные о базе по ИД
+        /// </summary>
+        /// <param name="baseid"></param>
+        /// <returns></returns>
         public static Base GetBaseByID(int baseid)
         {
             using (Entities db = new Entities())
+            {
                 return db.Bases.FirstOrDefault(o => o.BaseID == baseid);
+            }
         }
-        /* Проверяет, является ли игрок владельцем базы */
+
+        /// <summary>
+        /// Проверяет, является ли игрок владельцем базы
+        /// </summary>
+        /// <param name="baseid"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         private static bool IsOwner(int baseid, string token)
         {
-            return GetBaseByID(baseid).OwnerID == AccountManager.GetAccountByToken(token).UserID;
+            Base curbase = GetBaseByID(baseid);
+            Account Account = AccountManager.GetAccountByToken(token);
+            return Account.UserID == curbase.OwnerID;
         }
-        /* Проверяет вводимые данные */
+
+        /// <summary>
+        /// Проверяет вводимые данные
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         private static string CheckInput(BaseAction obj)
         {
             if (obj == null)
@@ -142,26 +213,35 @@ namespace gamelogic
                 return result;
             }
         }
-        /* Управляет улучшением базы */
+
+        /// <summary>
+        /// Управляет улучшением базы
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string UpgradeBase(BaseAction obj)
         {
-            if (CheckInput(obj) != "success") return CheckInput(obj);
+            if (CheckInput(obj) != "success")
+            {
+                return CheckInput(obj);
+            }
             try
             {
-                Base curbase = GetBaseByID(obj.baseid);
-                Account Account = AccountManager.GetAccountByToken(obj.token);
-                if (Account.UserID == curbase.OwnerID)
+                if (IsOwner(obj.baseid, obj.token))
                 {
-                    int level;
+                    Base curbase = GetBaseByID(obj.baseid);
+                    if (!CanAfford(obj.baseid, "baseUpgrade", curbase.Level + 1))
+                    {
+                        return "notenoughresources";
+                    }
+                    ProceedActions.DoBuyItem(obj.baseid, "baseUpgrade", curbase.Level + 1);
                     using (Entities db = new Entities())
                     {
-                        Base BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == curbase.BaseID);
+                        Base BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == obj.baseid);
                         BaseEntry.Level++;
-                        level = BaseEntry.Level;
                         db.SaveChanges();
                     }
-                    ProceedActions.DoBuyItem(curbase, obj.result, level);
-                    ProceedActions.Log("Event", $"{Account.Username} perform base upgrading at 1 level up.");
+                    ProceedActions.Log("Event", $"Base ID {obj.baseid} has been upgraded at 1 level up.");
                     const string result = "success";
                     return result;
                 }
@@ -177,28 +257,56 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
-        /* Управляет созданием юнитов */
+
+        /// <summary>
+        /// Управляет созданием юнитов
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string MakeUnit(BaseAction obj)
         {
-            if (CheckInput(obj) != "success") return CheckInput(obj);
+            if (CheckInput(obj) != "success")
+            {
+                return CheckInput(obj);
+            }
             try
             {
-                Base curbase = GetBaseByID(obj.baseid);
-                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
+                if (IsOwner(obj.baseid, obj.token) && obj.result != null)
                 {
-                    if (HasBaseStructure(curbase, "aircraftsComplex") == null) return "noAircrafts";
-                    if (!CanAfford(curbase, obj.result)) return "notenoughresources";
+                    if (HasBaseStructure(obj.baseid, "aircraftsComplex") == null)
+                    {
+                        return "noAircrafts";
+                    }
 
-                    ProceedActions.DoBuyItem(curbase, obj.result, 1);
+                    if (!CanAfford(obj.baseid, obj.result))
+                    {
+                        return "notenoughresources";
+                    }
+
+                    var population = HasBaseStructure(obj.baseid, "lifeComplex");
+                    if (population == null)
+                    {
+                        return "noLifeComplex";
+                    }
+                    if (population.Level * 7 <= GetBaseUnitsCount(obj.baseid))
+                    {
+                        return "populationLimit";
+                    }
+
+                    ProceedActions.DoBuyItem(obj.baseid, obj.result, 1);
 
                     Unit u = SquadManager.GetUnit("bas" + obj.baseid.ToString(), obj.result);
-                        
+
                     using (Entities db = new Entities())
                     {
                         if (u == null)
+                        {
                             db.Units.Add(new Unit { Instance = "bas" + obj.baseid.ToString(), Type = obj.result, Count = 1 });
+                        }
                         else
+                        {
                             u.Count++;
+                        }
                         db.SaveChanges();
                     }
 
@@ -217,21 +325,35 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
-        /* Управляет созданием построек */
+
+        /// <summary>
+        /// Управляет созданием построек
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string BuildStructure(BaseAction obj)
         {
-            if (CheckInput(obj) != "success") return CheckInput(obj);
+            if (CheckInput(obj) != "success")
+            {
+                return CheckInput(obj);
+            }
+
             try
             {
-                Base curbase = GetBaseByID(obj.baseid);
-                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
+                if (IsOwner(obj.baseid, obj.token) && obj.result != null)
                 {
                     obj.result = obj.result ?? "lifeComplex";
 
-                    if (!CanAfford(curbase, obj.result)) return "notenoughresources";
-                    if (HasBaseStructure(curbase, obj.result) != null) return "alreadyexists";
+                    if (!CanAfford(obj.baseid, obj.result))
+                    {
+                        return "notenoughresources";
+                    }
+                    if (HasBaseStructure(obj.baseid, obj.result) != null)
+                    {
+                        return "alreadyexists";
+                    }
 
-                    ProceedActions.DoBuyItem(curbase, obj.result, 1);
+                    ProceedActions.DoBuyItem(obj.baseid, obj.result, 1);
 
                     using (Entities db = new Entities())
                     {
@@ -253,29 +375,42 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
-        /* Управляет улучшением построек */
+
+        /// <summary>
+        /// Управляет улучшением построек
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string UpgradeStructure(BaseAction obj)
         {
-            if (CheckInput(obj) != "success") return CheckInput(obj);
+            if (CheckInput(obj) != "success")
+            {
+                return CheckInput(obj);
+            }
             try
             {
-                Base curbase = GetBaseByID(obj.baseid);
-                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID && obj.result != null)
+                if (IsOwner(obj.baseid, obj.token) && obj.result != null)
                 {
-                    if (!CanAfford(curbase, obj.result)) return "notenoughresources";
-                    if (HasBaseStructure(curbase, obj.result) == null) return "notexists";
+                    if (!CanAfford(obj.baseid, obj.result))
+                    {
+                        return "notenoughresources";
+                    }
+                    if (HasBaseStructure(obj.baseid, obj.result) == null)
+                    {
+                        return "notexists";
+                    }
 
                     int level;
 
                     using (Entities db = new Entities()) 
                     {
-                        var str = db.Structures.FirstOrDefault(o => o.Type == obj.result && o.BaseID == curbase.BaseID);
+                        var str = db.Structures.FirstOrDefault(o => o.Type == obj.result && o.BaseID == obj.baseid);
                         str.Level++;
                         level = str.Level;
                         db.SaveChanges();
                     }
 
-                    ProceedActions.DoBuyItem(curbase, obj.result, level);
+                    ProceedActions.DoBuyItem(obj.baseid, obj.result, level);
 
                     const string result = "success";
                     return result;
@@ -292,16 +427,27 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
-        /* Управляет починкой базы */
+
+        /// <summary>
+        /// Управляет починкой базы
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string RepairBase(BaseAction obj)
         {
-            if (CheckInput(obj) != "success") return CheckInput(obj);
+            if (CheckInput(obj) != "success")
+            {
+                return CheckInput(obj);
+            }
+
             try
             {
-                Base curbase = GetBaseByID(obj.baseid);
-                if (AccountManager.GetAccountByToken(obj.token).UserID == curbase.OwnerID)
+                if (IsOwner(obj.baseid, obj.token))
                 {
-                    if (!CanAfford(curbase, "base")) return "notenoughresources";
+                    if (!CanAfford(obj.baseid, "base"))
+                    {
+                        return "notenoughresources";
+                    }
 
                     int level;
                     using (Entities db = new Entities())
@@ -311,7 +457,7 @@ namespace gamelogic
                         level = BaseEntry.Level;
                         db.SaveChanges(); 
                     }
-                    ProceedActions.DoBuyItem(curbase, "base", level);
+                    ProceedActions.DoBuyItem(obj.baseid, "baseRepair", level);
                     const string result = "success";
                     return result;
                 }
@@ -327,51 +473,102 @@ namespace gamelogic
                 return "Error#Exception: " + ex.Message;
             }
         }
-        /* Проверяет на возможность приобрести предмет */
-        public static bool CanAfford(Base curbase, string itemName, int level = 1)
+
+        /// <summary>
+        /// Проверяет на возможность приобрести предмет
+        /// </summary>
+        /// <param name="baseid"></param>
+        /// <param name="itemName"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static bool CanAfford(int baseid, string itemName, int level = 1)
         {
-            Resource resources = GetBaseResources(curbase.BaseID);
+            Resource resources = GetBaseResources(baseid);
             var cost = GameItems.ItemsVars.GetCost(itemName);
-            if (resources.Credits < cost.Credits*level || resources.Energy < cost.Energy*level) return false;
+            if (resources.Credits < cost.Credits * level || resources.Energy < cost.Energy * level)
+            {
+                return false;
+            }
             return true;
         }
-        /* Возвращает данные о базе */
+
+        /// <summary>
+        /// Возвращает данные о базе
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <returns></returns>
         public static Base GetBaseInfo(Account acc)
         {
             Base result;
             using (Entities db = new Entities())
+            {
                 result = db.Bases.FirstOrDefault(o => o.BaseID == acc.UserID);
+            }
             return result;
         }
-        /* Возвращает массив всех построек на базе */
+
+        /// <summary>
+        /// Возвращает массив всех построек на базе
+        /// </summary>
+        /// <param name="BaseID"></param>
+        /// <returns></returns>
         public static IEnumerable<Structure> GetBaseStructures(int BaseID)
         {
             using (Entities db = new Entities())
+            {
                 return db.Structures.Where(o => o.BaseID == BaseID).ToList();
+            }
         }
-        /* Возвращает постройку, если она была построена на базе */
-        public static Structure HasBaseStructure(Base curbase, string structure) 
+
+        /// <summary>
+        /// Возвращает постройку, если она была построена на базе
+        /// </summary>
+        /// <param name="baseid"></param>
+        /// <param name="structure"></param>
+        /// <returns></returns>
+        public static Structure HasBaseStructure(int baseid, string structure)
         {
             Structure result;
             using (Entities db = new Entities())
-                result = db.Structures.FirstOrDefault(o => o.Type == structure && o.BaseID == curbase.BaseID);
+            {
+                result = db.Structures.FirstOrDefault(o => o.Type == structure && o.BaseID == baseid);
+            }
             return result;
         }
-        /* Возвращает массив всех ресурсов на базе */
+
+        /// <summary>
+        /// Возвращает массив всех ресурсов на базе
+        /// </summary>
+        /// <param name="BaseID"></param>
+        /// <returns></returns>
         public static Resource GetBaseResources(int BaseID)
         {
             Resource result;
             using (Entities db = new Entities())
+            {
                 result = db.Resources.FirstOrDefault(o => o.Instance == "bas" + BaseID.ToString());
+            }
             return result;
         }
-        /* Возвращает массив всех юнитов на базе */
+
+        /// <summary>
+        /// Возвращает массив всех юнитов на базе
+        /// </summary>
+        /// <param name="BaseID"></param>
+        /// <returns></returns>
         public static IEnumerable<Unit> GetBaseUnits(int BaseID)
         {
             using (Entities db = new Entities())
+            {
                 return db.Units.Where(o => o.Instance == "bas" + BaseID.ToString() && o.Count > 0).ToList();
+            }
         }
-        /* Возвращает общее количество юнитов на базе */
+
+        /// <summary>
+        /// Возвращает общее количество юнитов на базе
+        /// </summary>
+        /// <param name="BaseID"></param>
+        /// <returns></returns>
         public static int GetBaseUnitsCount(int BaseID)
         {
             return 1;
@@ -381,10 +578,13 @@ namespace gamelogic
                 .GroupBy(o => o.Instance)
                 .Select(p => new { Total = p.Sum(i => i.Count) }).FirstOrDefault().Total;*/
         }
-        /* Назначает ("добывает") всем базам ресурсы исходя из наличия необходимых строений */
+
+        /// <summary>
+        /// Назначает ("добывает") всем базам ресурсы исходя из наличия необходимых строений
+        /// </summary>
+        /// <returns></returns>
         public static bool BaseGatherResources()
         {
-            // дичайший костылище
             using (Entities DB = new Entities())
             {
                 var Bases = DB.Bases.ToList();
@@ -394,14 +594,23 @@ namespace gamelogic
                     {
                         Resource Resources = DB.Resources.FirstOrDefault(o => o.Instance == "bas" + CurrentBase.BaseID.ToString());
 
-                        Structure creditsStruct = HasBaseStructure(CurrentBase, "resourceComplex");
-                        if (creditsStruct != null) Resources.Credits += 10 * creditsStruct.Level / 10;
+                        Structure creditsStruct = HasBaseStructure(CurrentBase.BaseID, "resourceComplex");
+                        if (creditsStruct != null)
+                        {
+                            Resources.Credits += 10 * creditsStruct.Level / 10;
+                        }
 
-                        Structure energyStruct = HasBaseStructure(CurrentBase, "energyComplex");
-                        if (energyStruct != null) Resources.Energy += 10 * energyStruct.Level / 10;
+                        Structure energyStruct = HasBaseStructure(CurrentBase.BaseID, "energyComplex");
+                        if (energyStruct != null)
+                        {
+                            Resources.Energy += 10 * energyStruct.Level / 10;
+                        }
 
-                        Structure neutrinoStruct = HasBaseStructure(CurrentBase, "researchStation");
-                        if (neutrinoStruct != null) Resources.Neutrino += 0.000001 * neutrinoStruct.Level / 10;
+                        Structure neutrinoStruct = HasBaseStructure(CurrentBase.BaseID, "researchStation");
+                        if (neutrinoStruct != null)
+                        {
+                            Resources.Neutrino += 0.000001 * neutrinoStruct.Level / 10;
+                        }
 
                         // базовое значение * уровень здания / 10 частей в минуте
                     }
@@ -415,40 +624,71 @@ namespace gamelogic
             return true;
         }
     }
-    /* */
-    /* Класс менеджера отрядов управляет отрядами */
-    /* */
+
+    /// <summary>
+    /// Класс менеджера отрядов управляет отрядами
+    /// </summary>
     public class SquadManager
     {
-        /* Возвращает отряд по его ключу */
+        /// <summary>
+        /// Возвращает отряд по его ключу
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static Squad GetSquad(string key)
         {
             Squad result;
             using (Entities db = new Entities())
+            {
                 result = db.Squads.FirstOrDefault(o => o.Key == key);
+            }
             return result;
         }
-        /* Возвращает список всех отрядов */
+
+        /// <summary>
+        /// Возвращает список всех отрядов
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<Squad> GetSquads()
         {
             using (Entities db = new Entities())
-            return db.Squads.ToList();
+            {
+                return db.Squads.ToList();
+            }
         }
-        /* Получает приказ на возвращение отряда */
+
+        /// <summary>
+        /// Получает приказ на возвращение отряда
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string SendReturnOrder(SquadAction obj)
         {
             const string result = "success";
             return result;
         }
-        /* */
+
+        /// <summary>
+        /// Возвращает количество юнитов в инстансе
+        /// </summary>
+        /// <param name="Instance"></param>
+        /// <param name="Type"></param>
+        /// <returns></returns>
         public static Unit GetUnit(string Instance, string Type)
         {
             Unit result;
             using (Entities db = new Entities())
+            {
                 result = db.Units.FirstOrDefault(o => o.Instance == Instance && o.Type == Type);
+            }
             return result;
         }
-        /* Получает приказ на атаку отряда */
+
+        /// <summary>
+        /// Получает приказ на атаку отряда
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string SendAttackOrder(SquadAction obj) 
         {
             Account attacker = AccountManager.GetAccountByToken(obj.token);
@@ -465,20 +705,20 @@ namespace gamelogic
             }
 
             return ProceedActions.Battle(attacker.UserID, victimBase.OwnerID);
-
-            /* функция не реализована в полной мере */
-            /*var db = DbManager.GetContext();
-            Account player = AccountManager.GetAccountByToken(obj.token);
-            db.Squads.Add(new Squad { Key = obj.key, OwnerID = player.UserID, MoveTo = obj.to, MoveFrom = 1 });
-            db.SaveChanges();
-            return "success";*/
         }
     }
-    /* */
-    /* Класс проведения действий управляет свершениями различных игровых действий */
-    /* */
-    public class ProceedActions {
-        /* Проводит атаку на базу */
+
+    /// <summary>
+    /// Класс проведения действий управляет свершениями различных игровых действий
+    /// </summary>
+    public class ProceedActions
+    {
+        /// <summary>
+        /// Проводит атаку на базу
+        /// </summary>
+        /// <param name="attackerID"></param>
+        /// <param name="victimID"></param>
+        /// <returns></returns>
         public static string Battle(int attackerID, int victimID)
         {
             string result;
@@ -498,13 +738,13 @@ namespace gamelogic
             int victimPower = 0;
             foreach (Unit unit in attackerUnits)
             {
-                attackerPower += unit.Count * 10;
+                attackerPower += unit.Count * GameItems.ItemsVars.GetCost(unit.Type);
                 Log("Battle", $"Player {attacker.Playername} has {unit.Count} units of {unit.Type} class.");
             }
             foreach (Unit unit in victimUnits)
             {
                 Log("Battle", $"Player {victim.Playername} has {unit.Count} units of {unit.Type} class.");
-                victimPower += unit.Count * 10; // todo: getPower(unit.Type);
+                victimPower += unit.Count * GameItems.ItemsVars.GetCost(unit.Type);
             }
 
             if (attackerPower > victimPower)
@@ -519,13 +759,20 @@ namespace gamelogic
                 DoBattle(ref victim, ref victimUnits, ref attacker, ref attackerUnits, delta);
                 result = "youlose";
             }
-            Log("Event", $"Player {attacker.Playername} (units power is {attackerPower}) attacked {victim.Playername} (units power is {victimPower}) and {(attackerPower > victimPower ? "wins" : "loses")} that battle.");
+            Log("Event", $"Player {attacker.Playername} (units power is {attackerPower}) attacked {victim.Playername} " +
+                $"(units power is {victimPower}) and {(attackerPower > victimPower ? "wins" : "loses")} that battle.");
 
             return result;
         }
-        /* */
-        /* Реализует механизм обработки последствий битвы (занесение очков в стату, обнуление юнитов у проигравшего и вычитание части у победителя) */
-        /* */
+
+        /// <summary>
+        /// Реализует механизм обработки последствий битвы (занесение очков в стату, обнуление юнитов у проигравшего и вычитание части у победителя)
+        /// </summary>
+        /// <param name="winner"></param>
+        /// <param name="winnerUnits"></param>
+        /// <param name="loser"></param>
+        /// <param name="loserUnits"></param>
+        /// <param name="delta"></param>
         private static void DoBattle(ref Player winner, ref IEnumerable<Unit> winnerUnits, ref Player loser, ref IEnumerable<Unit> loserUnits, double delta)
         {
             using (Entities db = new Entities())
@@ -546,11 +793,18 @@ namespace gamelogic
                 db.SaveChanges();
             }
         }
-        /* Реализует механизм покупки */
-        public static void DoBuyItem(Base curbase, string itemName, int level = 1)
+
+        /// <summary>
+        ///  Реализует механизм покупки
+        /// </summary>
+        /// <param name="baseid"></param>
+        /// <param name="itemName"></param>
+        /// <param name="level"></param>
+        public static void DoBuyItem(int baseid, string itemName, int level = 1)
         {
-            using (Entities db = new Entities()) {
-                Resource resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + curbase.BaseID.ToString());
+            using (Entities db = new Entities())
+            {
+                Resource resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + baseid.ToString());
                 var cost = GameItems.ItemsVars.GetCost(itemName);
                 resources.Credits -= cost.Credits * level;
                 resources.Energy -= cost.Energy * level;
@@ -560,9 +814,12 @@ namespace gamelogic
 
         System.Diagnostics.Debug.WriteLine("успешно купил эту шляпу");
         }
-        /* */
-        /* Реализует механизм логгирования */
-        /* */
+
+        /// <summary>
+        /// Реализует механизм логгирования
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="text"></param>
         public async static void Log(string type, string text)
         {
             string dir = AppDomain.CurrentDomain.BaseDirectory;
@@ -582,49 +839,18 @@ namespace gamelogic
     }
 }
 
-/* */
-/* Предполагается, что здесь будут храниться константы игровых единиц (юниты, строения, прочее) */
-/* */
+/// <summary>
+/// Предполагается, что здесь будут храниться константы игровых единиц (юниты, строения, прочее)
+/// </summary>
 namespace GameItems 
 {
-    class ItemsVars 
+    class ItemsVars
     {
-        internal class StructureVars
-        {
-            public StructureVars(string name)
-            {
-                Type = name;
-            }
-            public string Type { get; set; }
-            public int Credits { get; set; }
-            public int Energy { get; set; }
-            public double Neutrino { get; set; }
-        }
-        /* class UnitsVars : StructureVars
-        {
-            new public UnitsVars(string name)
-            {
-                Type = name;
-            }
-            new public string Type { get; set; }
-            public int Power { get; set; }
-        }
-            internal readonly Dictionary<string, StructureVars> Structures = new Dictionary<string, StructureVars> {
-                { "lifeComplex", new StructureVars {Credits = 190, Energy = 210, Neutrino = 0} },
-                { "resourceComplex", new StructureVars {Credits = 100, Energy = 50, Neutrino = 0} },
-                { "energyComplex", new StructureVars {Credits = 100, Energy = 150, Neutrino = 0} },
-                { "aircraftsComplex", new StructureVars {Credits = 250, Energy = 320, Neutrino = 0} },
-                { "researchStation", new StructureVars {Credits = 2000, Energy = 1000, Neutrino = 0} },
-            };
-            internal readonly Dictionary<string, UnitsVars> Units = new Dictionary<string, UnitsVars> {
-                { "droneUnit", new UnitsVars {Credits = 100, Energy = 100, Neutrino = 0, Power = 100} },
-                { "jetUnit", new UnitsVars {Credits = 100, Energy = 100, Neutrino = 0, Power = 1000} },
-                { "lincorUnit", new UnitsVars {Credits = 100, Energy = 100, Neutrino = 0, Power = 1500} },
-                { "someGiantShitUnit", new UnitsVars {Credits = 100, Energy = 100, Neutrino = 1, Power = 200000} },
-            };
-        public StructureVars GetItemInfo(string str) {
-            return Structures.str;
-        }*/
+        /// <summary>
+        /// Возвращает базовую стоимость игровой единицы
+        /// </summary>
+        /// <param name="ItemType"></param>
+        /// <returns></returns>
         public static dynamic GetCost(string ItemType) // восхитительный полукостыль
         {
             switch (ItemType)
@@ -639,10 +865,28 @@ namespace GameItems
                 case "jetUnit": return new { Credits = 1000, Energy = 250, Neutrino = 0.0 };
                 case "lincorUnit": return new { Credits = 10000, Energy = 2500, Neutrino = 0.0 };
                 case "someGiantShitUnit": return new { Credits = 1000000, Energy = 250000, Neutrino = 1.0 };
-                    /**/
-                case "base": return new { Credits = 2000, Energy = 2000, Neutrino = 0.0 };
+                /**/
+                case "repairBase": return new { Credits = 200, Energy = 200, Neutrino = 0.0 };
+                case "upgradeBase": return new { Credits = 2000, Energy = 2000, Neutrino = 0.0 };
             }
             return new { Credits = 0, Energy = 0, Neutrino = 0.0 };
+        }
+
+        /// <summary>
+        /// Возвращает показатель силы юнита
+        /// </summary>
+        /// <param name="ItemType"></param>
+        /// <returns></returns>
+        public static int GetPower(string ItemType)
+        {
+            switch (ItemType)
+            {
+                case "droneUnit": return 10;
+                case "jetUnit": return 100;
+                case "lincorUnit": return 1500;
+                case "someGiantShitUnit": return 200000;
+            }
+            return 1;
         }
     }
 }

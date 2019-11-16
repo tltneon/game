@@ -28,7 +28,10 @@
             </div>
             <div class="desc">
                 <div class="cost">level: {{item.level}} => level {{item.level+1}}</div>
-                <div class="cost">credits: {{gameVars.getInfo(item.type).credits * (item.level+1)}} | energy: {{gameVars.getInfo(item.type).energy * (item.level+1)}}</div>
+                <div class="cost">
+                    credits: {{gameVars.getInfo(item.type).credits * (item.level+1)}} | 
+                    energy: {{gameVars.getInfo(item.type).energy * (item.level+1)}}
+                </div>
             <span *ngIf="false">
                 <div class="task">Task: 
                     <span *ngIf="item.task.action; else unset">
@@ -83,10 +86,12 @@
             </div>
             <div class="desc">
                 <div class="actions">
-                    <select #unitInput.value="ngModel" name="unitInput" [(ngModel)]="unitInput" (change)="updateInput(false, unitInput, unitCount)">
+                    <select #unitInput.value="ngModel" name="unitInput" 
+                        [(ngModel)]="unitInput" (change)="updateInput(false, unitInput, unitCount)">
                         <option *ngFor="let str of unitsList" [value]="str">{{gameVars.getInfo(str).name}}</option>
                     </select>
-                    <input class="hide" type="number" #unitCount.value="ngModel" name="unitCount" [(ngModel)]="unitCount" (change)="updateInput(false, unitInput, unitCount)">
+                    <input class="hide" type="number" #unitCount.value="ngModel" 
+                        name="unitCount" [(ngModel)]="unitCount" (change)="updateInput(false, unitInput, unitCount)">
                     <div class="button" (click)="makeUnit(unitInput)">Make unit</div>
                 </div>
                 <div class="option">credits: {{requestedCreditsToUnit}} | energy: {{requestedEnergyToUnit}}</div>

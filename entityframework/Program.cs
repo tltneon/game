@@ -2,7 +2,7 @@
 using System.Linq;
 using gamelogic;
 
-namespace entityframework
+namespace deploytool
 {
     class Program
     { 
@@ -12,7 +12,8 @@ namespace entityframework
             {
             OneMore:
                 Console.Clear();
-                Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n2 - fill database with dummy data\n3 - drop databases\n4 - make new user\n5 - find user by name");
+                Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n" +
+                    "2 - fill database with dummy data\n3 - drop databases\n4 - make new user\n5 - find user by name");
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.Clear();
                 
@@ -25,8 +26,8 @@ namespace entityframework
                             db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = "123", Role = 0, Token = "fl4o" });
                             db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
                             db.Players.Add(new Player { UserID = 2, Playername = "User" });
-                            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
-                            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 0, IsActive = true });
+                            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
+                            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 1, IsActive = true });
                             db.Resources.Add(new Resource { Instance = "bas1", Credits = 200, Energy = 200, Neutrino = 0.0 });
                             db.Resources.Add(new Resource { Instance = "bas2", Credits = 200, Energy = 200, Neutrino = 0.0 });
                             db.Units.Add(new Unit { Instance = "bas1", Type = "droneUnit", Count = 1 });
@@ -61,7 +62,7 @@ namespace entityframework
                         var us = db.Accounts.Where(o => o.Username == username);
                         foreach (Account customer in us)
                         {
-                            Console.WriteLine("Found: id{0}, {1}, Password {2}, Role {3} ", customer.UserID, customer.Username, customer.Password, customer.Role);
+                            Console.WriteLine($"Found: id{customer.UserID}, {customer.Username}, Password {customer.Password}, Role {customer.Role} ");
                         }
                         Console.WriteLine("DONE");
                         break;
@@ -72,25 +73,46 @@ namespace entityframework
                         try
                         {
                             Console.WriteLine("ACCOUNTS TABLE:");
-                            foreach (Account u in db.Accounts) Console.WriteLine("{0}. {1} - {2}, Role {3}, Token={4}", u.UserID, u.Username, u.Password, u.Role, u.Token);
+                            foreach (Account u in db.Accounts)
+                            {
+                                Console.WriteLine($"ID{u.UserID}. {u.Username} - {u.Password}, Role {u.Role}, Token={u.Token}");
+                            }
 
                             Console.WriteLine("PLAYERS TABLE:");
-                            foreach (Player u in db.Players) Console.WriteLine("{0}. {1}: W{2}|L{3}", u.UserID, u.Playername, u.Wins, u.Loses);
+                            foreach (Player u in db.Players)
+                            {
+                                Console.WriteLine($"ID{u.UserID}. {u.Playername}: W{u.Wins}|L{u.Loses}");
+                            }
 
                             Console.WriteLine("BASES TABLE:");
-                            foreach (Base u in db.Bases) Console.WriteLine("{0}. {1} ({2} lvl) - {3}. Coords: {4}x{5}", u.BaseID, u.Basename, u.Level, u.OwnerID, u.CoordX, u.CoordY);
+                            foreach (Base u in db.Bases)
+                            {
+                                Console.WriteLine($"ID{u.BaseID}. {u.Basename} (lvl{u.Level}) - OwnerID{u.OwnerID}");
+                            }
 
                             Console.WriteLine("STRUCTURES TABLE:");
-                            foreach (Structure u in db.Structures) Console.WriteLine("BaseID{0}. {1} - {2}", u.BaseID, u.Type, u.Level);
+                            foreach (Structure u in db.Structures)
+                            {
+                                Console.WriteLine($"BaseID{u.BaseID}. {u.Type} (lvl{u.Level})");
+                            }
 
                             Console.WriteLine("SQUADS TABLE:");
-                            foreach (Squad u in db.Squads) Console.WriteLine("{0}. {1} - {2}", u.Key, u.MoveFrom, u.MoveTo);
+                            foreach (Squad u in db.Squads)
+                            {
+                                Console.WriteLine($"{u.Key}. {u.MoveFrom} => {u.MoveTo}");
+                            }
 
                             Console.WriteLine("UNITS TABLE:");
-                            foreach (Unit u in db.Units) Console.WriteLine("{0}. {1} - {2}", u.Type, u.Instance, u.Count);
+                            foreach (Unit u in db.Units)
+                            {
+                                Console.WriteLine($"{u.Instance}. Type: {u.Type} x{u.Count}");
+                            }
 
                             Console.WriteLine("RESOURCES TABLE:");
-                            foreach (Resource u in db.Resources) Console.WriteLine("{0}. {1} - {2}", u.Instance, u.Credits, u.Energy);
+                            foreach (Resource u in db.Resources)
+                            {
+                                Console.WriteLine($"{u.Instance} contains: {u.Credits} Credits, {u.Energy} Energy, {u.Neutrino} Neutrino");
+                            }
                         }
                         catch {
                             Console.WriteLine("\n[Warn] Database models has changed. You need to drop datatables first.\n");

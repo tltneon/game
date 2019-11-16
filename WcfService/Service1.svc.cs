@@ -5,16 +5,28 @@ using gamelogic;
 
 namespace WcfService
 {
+    /// <summary>
+    /// Класс для обращения к сервису WCF
+    /// </summary>
     public class Service1 : IService1
     {
         // >> auth-n-player section
-        /* */
-        /* Управляет авторизацией и регистрацией пользователей */
-        /* */
+        /// <summary>
+        /// Управляет авторизацией и регистрацией пользователей
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public string SendAuthData(AuthData data)
         {
-            if (data == null) return "nodatareceived";
-            if (data.username == null || data.password == null || data.username.Length < 3 || data.password.Length < 3 || data.username.Length > 20 || data.password.Length > 20) return "wrongdatareceived";
+            if (data == null)
+            {
+                return "nodatareceived";
+            }
+            if (data.username == null || data.password == null || data.username.Length < 3 || 
+                data.password.Length < 3 || data.username.Length > 20 || data.password.Length > 20)
+            {
+                return "wrongdatareceived";
+            }
             try
             {
                 return AccountManager.AuthClient(Tools.SmartMapper<AuthData, gamelogic.Models.AuthData>(data));
@@ -29,29 +41,38 @@ namespace WcfService
                 return ex.Message;
             }
         }
-        /* */
-        /* Возвращает список всех игроков */
-        /* */
+
+        /// <summary>
+        /// Возвращает список всех игроков
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<StatEntity> GetPlayerList()
         {
             return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
         }
 
         // >> base section
-        /* */
-        /* возвращает список всех баз */
-        /* */
+        /// <summary>
+        /// возвращает список всех баз
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<BaseEntity> GetBaseList()
         {
             return Tools.EnumSmartMapper<gamelogic.Base, BaseEntity>(BaseManager.GetBaseList());
         }
-        /* */
-        /* Реализует управление базой */
-        /* */
+
+        /// <summary>
+        /// Реализует управление базой
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public string BaseAction(BaseAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
-            if (result != "passed") return result;
+            if (result != "passed")
+            {
+                return result;
+            }
 
             gamelogic.Models.BaseAction mapobj = Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj);
             try
@@ -87,12 +108,18 @@ namespace WcfService
             }
             return result;
         }
-        /* */
-        /* Возвращает данные о базе */
-        /* */
+
+        /// <summary>
+        /// Возвращает данные о базе
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public BaseEntity GetBaseInfo(BaseAction obj)
         {
-            if (Tools.CheckAuthedInput(obj) != "passed") return null;
+            if (Tools.CheckAuthedInput(obj) != "passed")
+            {
+                return null;
+            }
 
             Account acc = AccountManager.GetAccountByToken(obj.token);
 
@@ -106,45 +133,68 @@ namespace WcfService
 
             return result;
         }
-        /* */
-        /* Возвращает список всех строений на базе */
-        /* */
+
+        /// <summary>
+        /// Возвращает список всех строений на базе
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public IEnumerable<StructureEntity> GetBaseStructures(BaseAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
-            if (result != "passed") return null;
+            if (result != "passed")
+            {
+                return null;
+            }
 
             return Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(obj.baseid));
         }
-        /* */
-        /* Возвращает список всех отрядов на базе */
-        /* */
+
+        /// <summary>
+        /// Возвращает список всех отрядов на базе
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public IEnumerable<UnitsData> GetBaseUnits(BaseAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
-            if (result != "passed") return null;
+            if (result != "passed")
+            {
+                return null;
+            }
 
             return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(obj.baseid));
         }
 
         // >> squad section
-        /* */
-        /* Возвращает список всех отрядов */
-        /* */
+        /// <summary>
+        /// Возвращает список всех отрядов
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public IEnumerable<SquadEntity> GetSquads(SquadAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
-            if (result != "passed") return null;
+            if (result != "passed")
+            {
+                return null;
+            }
 
             return Tools.EnumSmartMapper<gamelogic.Squad, SquadEntity>(SquadManager.GetSquads());
         }
-        /* */
-        /* Реализует управление отрядами */
-        /* */
+
+        /// <summary>
+        /// Реализует управление отрядами
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public string SquadAction(SquadAction obj)
         {
             string result = Tools.CheckAuthedInput(obj);
-            if (result != "passed") return result;
+            if (result != "passed")
+            {
+                return result;
+            }
 
             try
             {
@@ -173,23 +223,28 @@ namespace WcfService
             }
             return result;
         }
-        /* */
-        /* Это очень плохая реализация игрового лупа, очень плохая и ничем не защищена */
-        /* */
+
+        /// <summary>
+        ///  Это очень плохая реализация игрового лупа, очень плохая и ничем не защищена
+        /// </summary>
         public void DbStatus()
         {
             BaseManager.BaseGatherResources();
         }
     }
-    /* */
-    /* Забацал свои умные функции для удобной работы с кодом */
-    /* */
+
+    /// <summary>
+    /// Умные функции для работы с кодом
+    /// </summary>
     class Tools
     {
-
-        /* */
-        /* Маппер для самостоятельных энтити */
-        /* */
+        /// <summary>
+        /// Маппер для самостоятельных энтити
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static TDestination SmartMapper<TSource, TDestination>(TSource obj) // мульти-маппер-функция на полную ставку
         {
             var config = new MapperConfiguration(cfg => {
@@ -198,9 +253,14 @@ namespace WcfService
             IMapper mapper = config.CreateMapper();
             return mapper.Map<TSource, TDestination>(obj);
         }
-        /* */
-        /* Маппер для энтити в коллекции */
-        /* */
+
+        /// <summary>
+        /// Маппер для энтити в коллекции
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static IEnumerable<TDestination> EnumSmartMapper<TSource, TDestination>(IEnumerable<TSource> obj)
         {
             var config = new MapperConfiguration(cfg => {
@@ -209,14 +269,26 @@ namespace WcfService
             IMapper mapper = config.CreateMapper();
             return mapper.Map<IEnumerable<TSource>, IEnumerable<TDestination>>(obj);
         }
-        /* */
-        /* Проверяет пользовательствий ввод на нуль + валидный токен */
-        /* */
+
+        /// <summary>
+        /// Проверяет пользовательствий ввод на нуль + валидный токен
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string CheckAuthedInput(dynamic obj)
         {
-            if (obj == null) return "nodatareceived";
-            if (obj.token == null) return "notokenreceived";
-            if (!AccountManager.CheckToken(obj.token)) return "wrongtoken";
+            if (obj == null)
+            {
+                return "nodatareceived";
+            }
+            if (obj.token == null)
+            {
+                return "notokenreceived";
+            }
+            if (!AccountManager.CheckToken(obj.token))
+            {
+                return "wrongtoken";
+            }
             return "passed";
         }
     }
