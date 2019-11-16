@@ -46,20 +46,16 @@ namespace WcfService
         /// Возвращает список всех игроков
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<StatEntity> GetPlayerList()
-        {
-            return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
-        }
+        public IEnumerable<StatEntity> GetPlayerList() => 
+            Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
 
         // >> base section
         /// <summary>
         /// возвращает список всех баз
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<BaseEntity> GetBaseList()
-        {
-            return Tools.EnumSmartMapper<gamelogic.Base, BaseEntity>(BaseManager.GetBaseList());
-        }
+        public IEnumerable<BaseEntity> GetBaseList() => 
+            Tools.EnumSmartMapper<gamelogic.Base, BaseEntity>(BaseManager.GetBaseList());
 
         /// <summary>
         /// Реализует управление базой
@@ -227,10 +223,7 @@ namespace WcfService
         /// <summary>
         ///  Это очень плохая реализация игрового лупа, очень плохая и ничем не защищена
         /// </summary>
-        public void DbStatus()
-        {
-            BaseManager.BaseGatherResources();
-        }
+        public void DbStatus() => BaseManager.BaseGatherResources();
     }
 
     /// <summary>

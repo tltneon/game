@@ -34,15 +34,12 @@ namespace webapi.Controllers
         /// Возвращает тестовые данные
         /// </summary>
         /// <returns></returns>
-        public WcfService.AuthData GetAccountData()
-        {
-            return new WcfService.AuthData { username = "testuser", password = "testpass" };
-        }
+        public WcfService.AuthData GetAccountData() => new WcfService.AuthData { username = "testuser", password = "testpass" };
     }
     /// <summary>
     /// Класс для работы с данными авторизации
     /// </summary>
-    class AuthDataUtils
+    internal class AuthDataUtils
     {
         /// <summary>
         /// Проверяет на некорректность ввода

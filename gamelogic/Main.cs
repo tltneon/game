@@ -844,7 +844,7 @@ namespace gamelogic
 /// </summary>
 namespace GameItems 
 {
-    class ItemsVars
+    internal class ItemsVars
     {
         /// <summary>
         /// Возвращает базовую стоимость игровой единицы
