@@ -11,7 +11,7 @@ namespace WcfService
         string SendAuthData(AuthData data);
 
         [OperationContract]
-        IEnumerable<StatEntity> GetPlayerStats();
+        IEnumerable<StatEntity> GetPlayerList();
 
         [OperationContract]
         IEnumerable<BaseEntity> GetBaseList();

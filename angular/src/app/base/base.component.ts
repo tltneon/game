@@ -101,11 +101,18 @@ export class BaseComponent implements OnInit {
         console.log(typeof(structure));
         this.setStructureTask(structure, 'upgrade', '', 123456789);
         
-        this.httpService.postRequest("api/base/action", {action: "upgradestructure", baseid: this.baseData.baseID, result: structure.type}, true).subscribe(
-            (responce) => responce == "success"
-                ? this.baseData.structures[this.getStructID(structure)].level++ 
-                : console.log(responce),
-            error => console.log(error));
+        this.httpService.postRequest("api/base/action", {action: "upgradestructure", baseid: this.baseData.baseID, result: structure.type}).subscribe(
+            (responce: string) => {
+                if(responce == "success") {
+                    alert(this.gameVars.getText(responce));
+                    this.baseData.structures[this.getStructID(structure)].level++
+                }
+                else
+                {
+                    console.log(responce);
+                }
+
+            });
     }
     // убивает строение (только UI)
     destroyStructure(structure: object): void {
@@ -126,7 +133,7 @@ export class BaseComponent implements OnInit {
     // создаёт юнит
     makeUnit(unitType: string): void {
         this.setBaseTask('makeunit', unitType, 1234567);
-        this.httpService.postRequest("api/base/action", {action: "makeunit", result: unitType, baseid: this.baseData.baseID}, true).subscribe(
+        this.httpService.postRequest("api/base/action", {action: "makeunit", result: unitType, baseid: this.baseData.baseID}).subscribe(
             (responce: string) => {
                 if(responce == "success") {
                     let index = this.baseData.units.findIndex(p => p.type == unitType);
@@ -144,7 +151,7 @@ export class BaseComponent implements OnInit {
     // создаёт постройку
     buildStructure(structureType: string): void {
         this.setBaseTask('build', structureType, 1234567);
-        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}, true).subscribe(
+        this.httpService.postRequest("api/base/action", {action: "build", result: structureType, baseid: this.baseData.baseID}).subscribe(
         (responce) => {
             if(responce == "success") {
                 this.baseData.structures[this.baseData.structures.length] = {
@@ -157,6 +164,7 @@ export class BaseComponent implements OnInit {
                     }
                 };
             }
+            this.reduceCounters(this.gameVars.getText(structureType).credits, this.gameVars.getText(structureType).energy, this.gameVars.getText(structureType).neutrino);
             console.log(responce);
             alert(this.gameVars.getText(responce.toString()));
             this.recalculateProduction();
@@ -166,7 +174,7 @@ export class BaseComponent implements OnInit {
     // улучшает базу
     upgradeBase(): void {
         this.setBaseTask('upgrade', '', 12345678);
-        this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}, true).subscribe(
+        this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}).subscribe(
             (responce) => responce == "success"
                 ? this.baseData.level++ 
                 : console.log(responce),
@@ -175,7 +183,7 @@ export class BaseComponent implements OnInit {
     // переключает активность базы ака ремонтирует
     toggleBaseActiveness(): void {
         this.setBaseTask(this.baseData.isActive ? 'repair' : '', '', 12345678);
-        this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}, true).subscribe(
+        this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}).subscribe(
             (responce) => responce == "success" 
                 ? this.baseData.isActive = !this.baseData.isActive 
                 : console.log(responce),

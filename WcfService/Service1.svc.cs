@@ -32,7 +32,7 @@ namespace WcfService
         /* */
         /* Возвращает список всех игроков */
         /* */
-        public IEnumerable<StatEntity> GetPlayerStats()
+        public IEnumerable<StatEntity> GetPlayerList()
         {
             return Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
         }
