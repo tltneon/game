@@ -102,8 +102,6 @@ export class BaseComponent implements OnInit {
     }
     // улучшает постройку
     upgradeStructure(structure: any): void {
-        console.log(typeof(structure));
-        console.log(structure);
         this.setStructureTask(structure, 'upgrade', '', 123456789);
         
         this.httpService.postRequest(
@@ -112,11 +110,11 @@ export class BaseComponent implements OnInit {
                 .subscribe(
                     (responce: string) => {
                         if(responce == "success") {
-                            this.baseData.structures[this.getStructID(structure)].level++
-                        }
-                        else
-                        {
-                            console.log(responce);
+                            this.baseData.structures[this.getStructID(structure)].level++;
+                            this.reduceCounters(
+                                this.gameVars.getInfo(structure.type).credits * structure.level,
+                                this.gameVars.getInfo(structure.type).energy * structure.level, 
+                                this.gameVars.getInfo(structure.type).neutrino * structure.level);
                         }
                         alert(this.gameVars.getText(responce));
                     });
@@ -156,7 +154,6 @@ export class BaseComponent implements OnInit {
                                     this.gameVars.getInfo(unitType).energy, 
                                     this.gameVars.getInfo(unitType).neutrino);
                         }
-                        console.log(responce);
                         alert(this.gameVars.getText(responce));
                     },
                     error => console.log(error));
@@ -186,7 +183,6 @@ export class BaseComponent implements OnInit {
                                     this.gameVars.getInfo(structureType).energy, 
                                     this.gameVars.getInfo(structureType).neutrino);
                             }
-                            console.log(responce);
                             alert(this.gameVars.getText(responce.toString()));
                             this.recalculateProduction();
                         },
@@ -205,7 +201,6 @@ export class BaseComponent implements OnInit {
                         this.gameVars.getInfo("base").upgrade.energy * this.baseData.level, 
                         this.gameVars.getInfo("base").upgrade.neutrino * this.baseData.level);
                 }
-                console.log(responce);
                 alert(this.gameVars.getText(responce.toString()));
             },
             error => console.log(error));
@@ -243,7 +238,6 @@ export class BaseComponent implements OnInit {
                 {
                     this.baseData = responce;
                     this.baseData.task = {};
-                    console.log(this.baseData);
                 }
                 this.isDataLoaded = true;
                 this.recalculateProduction();

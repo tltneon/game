@@ -13,10 +13,11 @@ namespace webapi
         {
             Routine();
         }
+
         /// <summary>
         /// Функция Routine - аналог правильного цикла Routine, исполняемого во многих играх - основной цикл, где выполняются основные действия движка/мода
         /// </summary>
-        public async void Routine()
+        private async void Routine()
         {
             while (true)
             {
