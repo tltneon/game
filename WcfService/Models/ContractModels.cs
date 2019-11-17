@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.ServiceModel;
 
-namespace WcfService
+namespace wcfservice
 {
     [ServiceContract]
     public interface IService1

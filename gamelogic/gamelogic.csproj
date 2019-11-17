@@ -51,8 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseManager.cs" />
+    <Compile Include="PlayerManager.cs" />
+    <Compile Include="ProceedActions.cs" />
+    <Compile Include="SquadManager.cs" />
+    <Compile Include="ItemsVars.cs" />
     <Compile Include="Models\Entity.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="AccountManager.cs" />
     <Compile Include="Models\TransferModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

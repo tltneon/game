@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using gamelogic;
 
 namespace deploytool
@@ -61,11 +60,8 @@ namespace deploytool
                         case '5':
                             Console.WriteLine("Find user by name: ");
                             string username = Console.ReadLine();
-                            var us = db.Accounts.Where(o => o.Username == username);
-                            foreach (Account customer in us)
-                            {
-                                Console.WriteLine($"Found: id{customer.UserID}, {customer.Username}, Password {customer.Password}, Role {customer.Role} ");
-                            }
+                            Player player = PlayerManager.FindByName(username);
+                            Console.WriteLine($"Found: id{player.UserID}, {player.Playername}, Password {player.Wins}, Role {player.Loses} ");
                             Console.WriteLine("DONE");
                             break;
 

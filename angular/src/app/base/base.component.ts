@@ -103,6 +103,7 @@ export class BaseComponent implements OnInit {
     // улучшает постройку
     upgradeStructure(structure: any): void {
         console.log(typeof(structure));
+        console.log(structure);
         this.setStructureTask(structure, 'upgrade', '', 123456789);
         
         this.httpService.postRequest(

@@ -16,7 +16,7 @@ namespace webapi.Controllers
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> Auth(WcfService.AuthData message)
+        public async Task<HttpResponseMessage> Auth(wcfservice.AuthData message)
         {
             if (AuthDataUtils.CheckWrongData(message) || !ModelState.IsValid)
             {
@@ -34,7 +34,7 @@ namespace webapi.Controllers
         /// Возвращает тестовые данные
         /// </summary>
         /// <returns></returns>
-        public WcfService.AuthData GetAccountData() => new WcfService.AuthData { username = "testuser", password = "testpass" };
+        public wcfservice.AuthData GetAccountData() => new wcfservice.AuthData { username = "testuser", password = "testpass" };
     }
     /// <summary>
     /// Класс для работы с данными авторизации
@@ -46,7 +46,7 @@ namespace webapi.Controllers
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static bool CheckWrongData(WcfService.AuthData message) { // прочекаем входные данные на вшивость
+        public static bool CheckWrongData(wcfservice.AuthData message) { // прочекаем входные данные на вшивость
             if (message == null)
             {
                 return true;
@@ -84,10 +84,10 @@ namespace webapi.Controllers
         /// Возвращает данные статистики
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<WcfService.StatEntity>> GetPlayerList()
+        public async Task<IEnumerable<wcfservice.StatEntity>> GetPlayerList()
         {
             Service1Client client = new Service1Client();
-            IEnumerable<WcfService.StatEntity> entities = await client.GetPlayerListAsync();
+            IEnumerable<wcfservice.StatEntity> entities = await client.GetPlayerListAsync();
             client.Close();
             return entities;
         }
@@ -101,10 +101,10 @@ namespace webapi.Controllers
         /// Возвращает данные о базах
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<WcfService.BaseEntity>> GetBaseList()
+        public async Task<IEnumerable<wcfservice.BaseEntity>> GetBaseList()
         {
             Service1Client client = new Service1Client();
-            IEnumerable<WcfService.BaseEntity> entities = await client.GetBaseListAsync();
+            IEnumerable<wcfservice.BaseEntity> entities = await client.GetBaseListAsync();
             client.Close();
             return entities;
         }
@@ -114,10 +114,10 @@ namespace webapi.Controllers
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public async Task<WcfService.BaseEntity> RetrieveBaseData(WcfService.BaseAction msg)
+        public async Task<wcfservice.BaseEntity> RetrieveBaseData(wcfservice.BaseAction msg)
         {
             Service1Client client = new Service1Client();
-            WcfService.BaseEntity result = await client.GetBaseInfoAsync(msg);
+            wcfservice.BaseEntity result = await client.GetBaseInfoAsync(msg);
             client.Close();
             return result;
         }
@@ -127,7 +127,7 @@ namespace webapi.Controllers
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public async Task<string> Action(WcfService.BaseAction msg)
+        public async Task<string> Action(wcfservice.BaseAction msg)
         {
             Service1Client client = new Service1Client();
             string result = await client.BaseActionAsync(msg);
@@ -144,12 +144,12 @@ namespace webapi.Controllers
         /// Возвращает данные об отрядах
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<WcfService.SquadEntity> GetSquads()
+        public IEnumerable<wcfservice.SquadEntity> GetSquads()
         {
             System.Diagnostics.Debug.WriteLine("какого чёрта надо этой функции, чтобы работать?");
             Service1Client client = new Service1Client();
-            WcfService.SquadAction msg = null;
-            IEnumerable<WcfService.SquadEntity> result = client.GetSquads(msg);
+            wcfservice.SquadAction msg = null;
+            IEnumerable<wcfservice.SquadEntity> result = client.GetSquads(msg);
             client.Close();
             return result;
         }
@@ -159,7 +159,7 @@ namespace webapi.Controllers
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public async Task<string> Action(WcfService.SquadAction msg)
+        public async Task<string> Action(wcfservice.SquadAction msg)
         {
             Service1Client client = new Service1Client();
             string result = await client.SquadActionAsync(msg);
