@@ -15,8 +15,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         public async Task<IEnumerable<wcfservice.StatEntity>> GetPlayerList()
         {
-            Service1Client client = new Service1Client();
-            IEnumerable<wcfservice.StatEntity> entities = await client.GetPlayerListAsync();
+            var client = new Service1Client();
+            var entities = await client.GetPlayerListAsync();
             client.Close();
             return entities;
         }
@@ -27,8 +27,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         public async Task<IEnumerable<wcfservice.StatEntity>> GetUnitsList(wcfservice.BaseEntity q)
         {
-            Service1Client client = new Service1Client();
-            IEnumerable<wcfservice.StatEntity> entities = await client.GetPlayerListAsync();
+            var client = new Service1Client();
+            var entities = await client.GetPlayerListAsync();
             client.Close();
             return entities;
         }

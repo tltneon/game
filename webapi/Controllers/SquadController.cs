@@ -17,7 +17,7 @@ namespace webapi.Controllers
         public async Task<IEnumerable<wcfservice.UnitsData>> GetSquads(wcfservice.BaseAction msg)
         {
             System.Diagnostics.Debug.WriteLine("какого чёрта надо этой функции, чтобы работать?");
-            Service1Client client = new Service1Client();
+            var client = new Service1Client();
             var result = await client.GetBaseUnitsAsync(msg);
             client.Close();
             return result;
@@ -30,8 +30,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         public async Task<string> Action(wcfservice.SquadAction msg)
         {
-            Service1Client client = new Service1Client();
-            string result = await client.SquadActionAsync(msg);
+            var client = new Service1Client();
+            var result = await client.SquadActionAsync(msg);
             client.Close();
             return result;
         }

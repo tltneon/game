@@ -7,15 +7,15 @@ namespace deploytool
     { 
         private static void Main()
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
-                bool flag = true;
+                var flag = true;
                 while (flag)
                 {
                     Console.Clear();
                     Console.WriteLine("[Database deployment tool]\nEnter the command:\n1 - show data from tables\n" +
                         "2 - fill database with dummy data\n3 - drop databases\n4 - make new user\n5 - find user by name");
-                    ConsoleKeyInfo key = Console.ReadKey();
+                    var key = Console.ReadKey();
                     Console.Clear();
 
                     switch (key.KeyChar)
@@ -50,17 +50,17 @@ namespace deploytool
 
                         case '4':
                             Console.WriteLine("username:");
-                            string usr = Console.ReadLine();
+                            var usr = Console.ReadLine();
                             Console.WriteLine("password:");
-                            string pas = Console.ReadLine();
+                            var pas = Console.ReadLine();
                             Console.WriteLine("doin' magic...");
                             Console.WriteLine(AccountManager.CreateUser(usr, pas));
                             break;
 
                         case '5':
                             Console.WriteLine("Find user by name: ");
-                            string username = Console.ReadLine();
-                            Player player = PlayerManager.FindByName(username);
+                            var username = Console.ReadLine();
+                            var player = PlayerManager.FindByName(username);
                             Console.WriteLine($"Found: id{player.UserID}, {player.Playername}, Password {player.Wins}, Role {player.Loses} ");
                             Console.WriteLine("DONE");
                             break;
@@ -71,43 +71,43 @@ namespace deploytool
                             try
                             {
                                 Console.WriteLine("ACCOUNTS TABLE:");
-                                foreach (Account u in db.Accounts)
+                                foreach (var u in db.Accounts)
                                 {
                                     Console.WriteLine($"ID{u.UserID}. {u.Username} - {u.Password}, Role {u.Role}, Token={u.Token}");
                                 }
 
                                 Console.WriteLine("PLAYERS TABLE:");
-                                foreach (Player u in db.Players)
+                                foreach (var u in db.Players)
                                 {
                                     Console.WriteLine($"ID{u.UserID}. {u.Playername}: W{u.Wins}|L{u.Loses}");
                                 }
 
                                 Console.WriteLine("BASES TABLE:");
-                                foreach (Base u in db.Bases)
+                                foreach (var u in db.Bases)
                                 {
                                     Console.WriteLine($"ID{u.BaseID}. {u.Basename} (lvl{u.Level}) - OwnerID{u.OwnerID}");
                                 }
 
                                 Console.WriteLine("STRUCTURES TABLE:");
-                                foreach (Structure u in db.Structures)
+                                foreach (var u in db.Structures)
                                 {
                                     Console.WriteLine($"BaseID{u.BaseID}. {u.Type} (lvl{u.Level})");
                                 }
 
                                 Console.WriteLine("SQUADS TABLE:");
-                                foreach (Squad u in db.Squads)
+                                foreach (var u in db.Squads)
                                 {
                                     Console.WriteLine($"{u.Key}. {u.MoveFrom} => {u.MoveTo}");
                                 }
 
                                 Console.WriteLine("UNITS TABLE:");
-                                foreach (Unit u in db.Units)
+                                foreach (var u in db.Units)
                                 {
                                     Console.WriteLine($"{u.Instance}. Type: {u.Type} x{u.Count}");
                                 }
 
                                 Console.WriteLine("RESOURCES TABLE:");
-                                foreach (Resource u in db.Resources)
+                                foreach (var u in db.Resources)
                                 {
                                     Console.WriteLine($"{u.Instance} contains: {u.Credits} Credits, {u.Energy} Energy, {u.Neutrino} Neutrino");
                                 }

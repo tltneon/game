@@ -22,7 +22,7 @@ namespace wcfservice
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<TSource, TDestination>();
             });
-            IMapper mapper = config.CreateMapper();
+            var mapper = config.CreateMapper();
             return mapper.Map<TSource, TDestination>(obj);
         }
 
@@ -38,7 +38,7 @@ namespace wcfservice
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<TSource, TDestination>();
             });
-            IMapper mapper = config.CreateMapper();
+            var mapper = config.CreateMapper();
             return mapper.Map<IEnumerable<TSource>, IEnumerable<TDestination>>(obj);
         }
 

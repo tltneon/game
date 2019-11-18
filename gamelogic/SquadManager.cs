@@ -16,7 +16,7 @@ namespace gamelogic
         /// <returns></returns>
         public static Squad GetSquad(string key)
         {
-            Squad result;
+            var result = new Squad { };
             using (Entities db = new Entities())
             {
                 result = db.Squads.FirstOrDefault(o => o.Key == key);
@@ -30,12 +30,10 @@ namespace gamelogic
         /// <returns></returns>
         public static IEnumerable<Unit> GetInstanceUnits(string Instance)
         {
-            IEnumerable<Unit> result;
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
-                result = db.Units.Where(o => o.Instance == Instance && o.Count > 0).ToList();
+                return db.Units.Where(o => o.Instance == Instance && o.Count > 0).ToList();
             }
-            return result;
         }
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace gamelogic
         /// <returns></returns>
         public static IEnumerable<Squad> GetSquads()
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Squads.ToList();
             }
@@ -69,7 +67,7 @@ namespace gamelogic
         /// <returns></returns>
         public static Unit GetUnit(string Instance, string Type)
         {
-            Unit result;
+            var result = new Unit { };
             using (Entities db = new Entities())
             {
                 result = db.Units.FirstOrDefault(o => o.Instance == Instance && o.Type == Type);
@@ -84,8 +82,8 @@ namespace gamelogic
         /// <returns></returns>
         public static string SendAttackOrder(SquadAction obj)
         {
-            Account attacker = AccountManager.GetAccountByToken(obj.token);
-            Base victimBase = BaseManager.GetBaseByID(obj.to);
+            var attacker = AccountManager.GetAccountByToken(obj.token);
+            var victimBase = BaseManager.GetBaseByID(obj.to);
             if (attacker.UserID == victimBase.OwnerID)
             {
                 const string result = "cannotuseatyourself";

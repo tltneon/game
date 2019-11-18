@@ -16,7 +16,7 @@ namespace gamelogic
         /// <returns></returns>
         public static Player GetPlayerByID(int userid)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Players.FirstOrDefault(o => o.UserID == userid);
             }
@@ -29,7 +29,7 @@ namespace gamelogic
         /// <returns></returns>
         public static Base GetBaseByUserID(int userid)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Bases.FirstOrDefault(o => o.OwnerID == userid);
             }
@@ -41,7 +41,7 @@ namespace gamelogic
         /// <returns></returns>
         public static IEnumerable<Player> GetPlayerList()
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Players.ToList();
             }
@@ -49,7 +49,7 @@ namespace gamelogic
 
         public static Player FindByName(string name)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Players.FirstOrDefault(o => o.Playername == name);
             }
