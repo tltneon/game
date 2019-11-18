@@ -37,7 +37,7 @@ namespace wcfservice
                 System.Diagnostics.Debug.WriteLine($"Метод: {ex.TargetSite}");
                 System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
 
-                ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция SendAuthData");
+                ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция Service1.SendAuthData");
                 return ex.Message;
             }
         }
@@ -159,7 +159,13 @@ namespace wcfservice
                 return null;
             }
 
-            return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(obj.baseid));
+            Account acc = AccountManager.GetAccountByToken(obj.token);
+
+            gamelogic.Base curbase = BaseManager.GetBaseInfo(acc);
+
+            ProceedActions.Log("dflgj", obj.token + curbase.BaseID);
+
+            return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(curbase.BaseID));
         }
 
         // >> squad section

@@ -92,7 +92,7 @@ namespace gamelogic
                     {
                         return "notenoughresources";
                     }
-                    ProceedActions.DoBuyItem(obj.baseid, "baseUpgrade", curbase.Level);
+                    ProceedActions.DoBuyItem(obj.baseid, "upgradeBase", curbase.Level);
                     using (Entities db = new Entities())
                     {
                         Base BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == obj.baseid);
@@ -306,7 +306,7 @@ namespace gamelogic
                 if (IsOwner(obj.baseid, obj.token))
                 {
                     var BaseData = GetBaseByID(obj.baseid);
-                    if (!CanAfford(obj.baseid, "base", BaseData.Level))
+                    if (!CanAfford(obj.baseid, "repairBase", BaseData.Level))
                     {
                         return "notenoughresources";
                     }
@@ -417,13 +417,7 @@ namespace gamelogic
         /// </summary>
         /// <param name="BaseID"></param>
         /// <returns></returns>
-        public static IEnumerable<Unit> GetBaseUnits(int BaseID)
-        {
-            using (Entities db = new Entities())
-            {
-                return db.Units.Where(o => o.Instance == "bas" + BaseID.ToString() && o.Count > 0).ToList();
-            }
-        }
+        public static IEnumerable<Unit> GetBaseUnits(int BaseID) => SquadManager.GetInstanceUnits("bas" + BaseID.ToString());
 
         /// <summary>
         /// Возвращает общее количество юнитов на базе

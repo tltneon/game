@@ -25,6 +25,20 @@ namespace gamelogic
         }
 
         /// <summary>
+        /// Возвращает список юнитов в инстансе
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Unit> GetInstanceUnits(string Instance)
+        {
+            IEnumerable<Unit> result;
+            using (Entities db = new Entities())
+            {
+                result = db.Units.Where(o => o.Instance == Instance && o.Count > 0).ToList();
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Возвращает список всех отрядов
         /// </summary>
         /// <returns></returns>

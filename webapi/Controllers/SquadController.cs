@@ -1,39 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace webapi.Controllers
 {
-    public class ЫйSquadController : ApiController
+    /// <summary>
+    /// Контроллер, получающий данные об отрядах
+    /// </summary>
+    public class SquadController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        /// <summary>
+        /// Возвращает данные об отрядах
+        /// </summary>
+        /// <returns></returns>
+        //public IEnumerable<wcfservice.SquadEntity> GetSquads()
+        public async Task<IEnumerable<wcfservice.UnitsData>> GetSquads(wcfservice.BaseAction msg)
         {
-            return new string[] { "value1", "value2" };
+            System.Diagnostics.Debug.WriteLine("какого чёрта надо этой функции, чтобы работать?");
+            Service1Client client = new Service1Client();
+            var result = await client.GetBaseUnitsAsync(msg);
+            client.Close();
+            return result;
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        /// <summary>
+        /// Выполняет действия игрока с отрядом
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public async Task<string> Action(wcfservice.SquadAction msg)
         {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            Service1Client client = new Service1Client();
+            string result = await client.SquadActionAsync(msg);
+            client.Close();
+            return result;
         }
     }
 }

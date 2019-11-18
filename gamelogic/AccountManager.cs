@@ -21,7 +21,7 @@ namespace gamelogic
                 var us = db.Accounts.FirstOrDefault(o => o.Username == data.username);
                 if (us != null)
                 {
-                    if (us.Password == data.password)
+                    if (Base64Decode(us.Password) == data.password)
                     {
                         return us.Token;
                     }
@@ -50,14 +50,14 @@ namespace gamelogic
             using (Entities db = new Entities())
                 try
                 {
-                    // пока без шифрации пароля
-                    Account user = new Account { Username = username, Password = password, Role = 0, Token = "Token=потом придумаю как шифровать токен для " + username };
+                    Account user = new Account { Username = username, Password = Base64Encode(password), Role = 0, Token = "Token" + Base64Encode(username + "salt") };
                     db.Accounts.Add(user);
                     db.SaveChanges();
 
                     int newIdentityValue = user.UserID;
                     db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
                     db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
+                    db.Resources.Add(new Resource { Instance = "bas" + newIdentityValue, Credits = 200, Energy = 200, Neutrino = 0.0 });
                     db.SaveChanges();
                     return user.Token;
                 }
@@ -67,6 +67,7 @@ namespace gamelogic
                     return "Error#Exception: " + ex.Message;
                 }
         }
+
         /// <summary>
         /// Возвращает аккаунт по его токену
         /// </summary>
@@ -88,6 +89,28 @@ namespace gamelogic
         public static bool CheckToken(string token)
         {
             return GetAccountByToken(token) != null;
+        }
+
+        /// <summary>
+        /// Кодирует строку в BASE64
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <returns></returns>
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        /// <summary>
+        /// Декодирует строку из BASE64
+        /// </summary>
+        /// <param name="base64EncodedData"></param>
+        /// <returns></returns>
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

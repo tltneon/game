@@ -1,39 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace webapi.Controllers
 {
-    public class Aut : ApiController
+    /// <summary>
+    /// Контроллер, получающий данные об аккаунте
+    /// </summary>
+    public class AccountController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        /// <summary>
+        /// Выполняет действия авторизации / регистрации игрока
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> Auth(wcfservice.AuthData message)
         {
-            return new string[] { "value1", "value2" };
+            if (CheckWrongData(message) || !ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(
+                    HttpStatusCode.BadRequest,
+                    "Invalid input");
+            }
+            Service1Client client = new Service1Client();
+            string token = await client.SendAuthDataAsync(message);
+            client.Close();
+            return Request.CreateResponse(HttpStatusCode.OK, token);
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+        /// <summary>
+        /// Возвращает тестовые данные
+        /// </summary>
+        /// <returns></returns>
+        public wcfservice.AuthData GetAccountData() => new wcfservice.AuthData { username = "testuser", password = "testpass" };
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+        /// <summary>
+        /// Проверяет на некорректность ввода
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private static bool CheckWrongData(wcfservice.AuthData message)
+        { // прочекаем входные данные на вшивость
+            if (message == null)
+            {
+                return true;
+            }
+            if (message.username == null || message.password == null)
+            {
+                return true;
+            }
+            if (message.username.Length < 3 || message.password.Length < 3)
+            {
+                return true;
+            }
+            //заявка на проверку регуляркой Regex.IsMatch(message.username, @"[^0-9a-zA-Z&+=\\\-&?*%:;#№@!)(]+") || Regex.IsMatch(message.password, @"[^0-9a-zA-Z&+=\\\-&?*%:;#№@!)(]+")
+            return false;
         }
     }
 }

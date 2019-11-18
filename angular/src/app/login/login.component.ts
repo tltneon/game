@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.error = ". . .";
     document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active", "progress");
-    this.httpService.postRequest("api/account/auth", {"username": login, "password": password}).subscribe(
+    this.httpService.postRequest("api/account/auth", {"username": login, "password": password}, false).subscribe(
       (responce:string) => responce.slice(0,5) == "Error" 
         ? updateErrorMessage(this, responce.replace('Error#',''))
         : proceedAuth(this.router, responce)
