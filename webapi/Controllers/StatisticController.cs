@@ -20,5 +20,17 @@ namespace webapi.Controllers
             client.Close();
             return entities;
         }
+
+        /// <summary>
+        /// Возвращает данные статистики
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<wcfservice.StatEntity>> GetUnitsList(wcfservice.BaseEntity q)
+        {
+            Service1Client client = new Service1Client();
+            IEnumerable<wcfservice.StatEntity> entities = await client.GetPlayerListAsync();
+            client.Close();
+            return entities;
+        }
     }
 }
