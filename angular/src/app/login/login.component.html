@@ -1,8 +1,9 @@
-<div id="login">
+<form id="login">
   <div>{{error}}</div>
   <div>Login <input #login.value="ngModel" value="{{userData?.username}}" name="login" [(ngModel)]="login" /></div>
   <div>pass <input #password.value="ngModel" value="{{userData?.password}}" name="password" [(ngModel)]="password" type="password" /></div>
-  <p (click)="auth(password, login)" class="button" id="auth">Authorize</p><p id="processing">x</p>
-</div>
+  <input type="submit" (click)="auth(password, login)" class="button" id="auth" value="Authorize">
+  <p id="processing">x</p>
+</form>
 
 <p (click)="fakeauth()" class="button" title="In case youre forgot your passwrd or other shit - hit dat button, buddy">Fake auth</p>

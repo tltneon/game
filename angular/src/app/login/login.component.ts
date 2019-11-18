@@ -16,18 +16,16 @@ export class LoginComponent implements OnInit {
 
   constructor(private httpService: HttpService, private router: Router) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   auth(password, login){
     function updateErrorMessage(baseclass, str){
-      console.log(str);
       baseclass.error = typeof(str) == "string" ? str : str.name + " ("+str.error.message+")";
       document.body.querySelector("#auth").innerHTML = "Authorize";
       document.body.querySelector("#processing").classList.remove("active", "progress");
     }
+
     function proceedAuth(router, responce){
-      console.log(responce, responce.slice(0,5));
       Cookie.set('token', responce);
       router.navigate(['/']);
     }
@@ -35,14 +33,15 @@ export class LoginComponent implements OnInit {
     this.error = ". . .";
     document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active", "progress");
-    this.httpService.postRequest("api/account/auth", {"username": login, "password": password}).subscribe(
+    this.httpService.postRequest("api/account/auth", {"username": login, "password": password}, false).subscribe(
       (responce:string) => responce.slice(0,5) == "Error" 
-      ? updateErrorMessage(this, responce.replace('Error#',''))
-      : proceedAuth(this.router, responce)
+        ? updateErrorMessage(this, responce.replace('Error#',''))
+        : proceedAuth(this.router, responce)
       , error => updateErrorMessage(this, error));
   }
+
   fakeauth(){
-    Cookie.set('token', 'fakecock');
+    Cookie.set('token', 'faketoken');
     this.router.navigate(['/']);
   }
 }

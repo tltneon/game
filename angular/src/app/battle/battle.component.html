@@ -7,9 +7,11 @@
             font-family: monospace;
             padding:30%;
             font-size: larger;
-            left: 0;">We're just updating our data, commander... <i class="progress active">x</i>
-            <div (click)="loadOfflineData()">loadOfflineData</div>
-            <div (click)="loadOnlineData()">loadOnlineData</div>
+            left: 0;">We're now updating our data, commander... <i class="progress active">x</i>
+            <div style="position: absolute; left: 0; bottom: 0;">
+                <div (click)="loadOfflineData()">loadOfflineData</div>
+                <div (click)="loadOnlineData()">loadOnlineData</div>
+            </div>
 </div>
 
 <div id="battletable">

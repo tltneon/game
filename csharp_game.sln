@@ -3,16 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "deploytool", "entityframework\deploytool.csproj", "{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "deploytool", "deploytool\deploytool.csproj", "{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapi", "webapi\webapi.csproj", "{195427E5-37D5-4310-9634-EF376C92B260}"
 	ProjectSection(ProjectDependencies) = postProject
 		{82367F0C-AE46-4DB2-8C88-DE1B43B4B042} = {82367F0C-AE46-4DB2-8C88-DE1B43B4B042}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapi.Tests", "webapi.Tests\webapi.Tests.csproj", "{9CD4FE96-DAA8-4931-ACC5-1D81436A48E7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfService", "WcfService\WcfService.csproj", "{82367F0C-AE46-4DB2-8C88-DE1B43B4B042}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wcfservice", "wcfservice\wcfservice.csproj", "{82367F0C-AE46-4DB2-8C88-DE1B43B4B042}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gamelogic", "gamelogic\gamelogic.csproj", "{C3686188-6622-4F09-A224-9FD6C32E8364}"
 EndProject
@@ -30,9 +28,6 @@ Global
 		{195427E5-37D5-4310-9634-EF376C92B260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{195427E5-37D5-4310-9634-EF376C92B260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{195427E5-37D5-4310-9634-EF376C92B260}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CD4FE96-DAA8-4931-ACC5-1D81436A48E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CD4FE96-DAA8-4931-ACC5-1D81436A48E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CD4FE96-DAA8-4931-ACC5-1D81436A48E7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82367F0C-AE46-4DB2-8C88-DE1B43B4B042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82367F0C-AE46-4DB2-8C88-DE1B43B4B042}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82367F0C-AE46-4DB2-8C88-DE1B43B4B042}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using gamelogic;
 
 namespace deploytool
@@ -24,8 +23,8 @@ namespace deploytool
                         case '2':
                             try
                             {
-                                db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = "123456", Role = 1, Token = "fgio" });
-                                db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = "123", Role = 0, Token = "fl4o" });
+                                db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = AccountManager.Base64Encode("123456"), Role = 1, Token = "fgio" });
+                                db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = AccountManager.Base64Encode("123"), Role = 0, Token = "fl4o" });
                                 db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
                                 db.Players.Add(new Player { UserID = 2, Playername = "User" });
                                 db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
@@ -61,11 +60,8 @@ namespace deploytool
                         case '5':
                             Console.WriteLine("Find user by name: ");
                             string username = Console.ReadLine();
-                            var us = db.Accounts.Where(o => o.Username == username);
-                            foreach (Account customer in us)
-                            {
-                                Console.WriteLine($"Found: id{customer.UserID}, {customer.Username}, Password {customer.Password}, Role {customer.Role} ");
-                            }
+                            Player player = PlayerManager.FindByName(username);
+                            Console.WriteLine($"Found: id{player.UserID}, {player.Playername}, Password {player.Wins}, Role {player.Loses} ");
                             Console.WriteLine("DONE");
                             break;
 
