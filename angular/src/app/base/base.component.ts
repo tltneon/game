@@ -203,7 +203,7 @@ export class BaseComponent implements OnInit {
                 }
                 alert(this.gameVars.getText(responce.toString()));
             },
-            error => console.log(error));
+            error => this.gameVars.registerError(error.message));
     }
     // переключает активность базы ака ремонтирует
     toggleBaseActiveness(): void {
@@ -215,7 +215,7 @@ export class BaseComponent implements OnInit {
                     : console.log(responce)
                 alert(this.gameVars.getText(responce.toString()));
             },
-            error => console.log(error));
+            error => this.gameVars.registerError(error.message));
     }
     // назначает таску базе
     setBaseTask(task: string, result: string, finishTime: number): void {
@@ -231,8 +231,8 @@ export class BaseComponent implements OnInit {
             (responce) => {
                 if(responce == null)
                 {
-                    console.log("api/base/RetrieveBaseData => null");
                     this.loadOfflineData();
+                    this.gameVars.registerError("api/base/RetrieveBaseData => null");
                 }
                 else
                 {
@@ -242,7 +242,7 @@ export class BaseComponent implements OnInit {
                 this.isDataLoaded = true;
                 this.recalculateProduction();
             },
-            error => console.log(error));
+            error => this.gameVars.registerError(error.message));
     }
     // грузит оффлайновые данные
     loadOfflineData(): void {

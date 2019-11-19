@@ -27,7 +27,7 @@ p {
   border: 1px solid black;
 }
 .cont {
-  width: 160px;
+  width: auto;
 }
 
 #background, html {

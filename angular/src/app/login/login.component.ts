@@ -20,29 +20,26 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   auth(password, login){
-    function updateErrorMessage(baseclass, str){
-      baseclass.error = typeof(str) == "string" ? str : str.name + " ("+str.error.message+")";
-      document.body.querySelector("#auth").innerHTML = "Authorize";
-      document.body.querySelector("#processing").classList.remove("active", "progress");
-    }
-
-    function proceedAuth(router, responce){
-      Cookie.set('token', responce);
-      console.log(responce);
-      router.navigate(['/']);
-    }
-
     this.error = ". . .";
     document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active", "progress");
     this.httpService.postRequest("api/account/auth", {"username": login, "password": password}, false).subscribe(
-      (responce:string) => responce.slice(0,5) == "Token"
-        ? proceedAuth(this.router, responce)
-        : updateErrorMessage(this, this.gameVars.getText(responce))
-      , error => updateErrorMessage(this, error));
+      (responce:string) => {
+        if(responce.slice(0,5) == "Token") {
+          Cookie.set('token', responce);
+          this.router.navigate(['/']);
+        }
+        else {
+          this.error = responce;
+          document.body.querySelector("#auth").innerHTML = "Authorize";
+          document.body.querySelector("#processing").classList.remove("active", "progress");
+          this.gameVars.registerError(responce);
+        }
+      },
+      error => this.gameVars.registerError(error.message));
   }
 
-  fakeauth(){
+  fakeauth() {
     Cookie.set('token', 'faketoken');
     this.router.navigate(['/']);
   }

@@ -98,7 +98,13 @@ export class GameVars {
     getInfo(item: string) {
         return this.data[item] || {};
     }
-    getText(string: string) {
+    getText(string: string): string {
         return this.text[string] || string;
+    }
+
+    registerError(msg: string) {
+        document.body.querySelector("#errorSign").classList.add("error")
+        let myContainer = <HTMLElement> document.body.querySelector("#errorSign").children[1].children[1];
+        myContainer.innerHTML += '<li>' + msg + '</li>';
     }
 }

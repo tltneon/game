@@ -29,7 +29,7 @@ export class BattleComponent implements OnInit {
         console.log("api/squad/Action => " + responce);
         alert(this.gameVars.getText(responce));
       },
-      error => console.log(error));
+      error => this.gameVars.registerError(error.message));
   }
   loadOnlineData():void {
     this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce:BaseJSON[]) => {
@@ -42,7 +42,7 @@ export class BattleComponent implements OnInit {
       }
       this.isDataLoaded = true;
     },
-    error => console.log(error));
+    error => this.gameVars.registerError(error.message));
     //this.httpService.postRequest("api/squad/GetSquads", {}).subscribe((responce) => console.log(this, responce));
   }
   loadOfflineData():void {
