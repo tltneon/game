@@ -23,7 +23,7 @@ namespace webapi
             {
                 Thread.Sleep(6000);
                 await Task.Run(() => {
-                    Service1Client client = new Service1Client();
+                    var client = new Service1Client();
                     client.DbStatus();
                     client.Close();
                 });

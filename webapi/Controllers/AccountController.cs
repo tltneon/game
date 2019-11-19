@@ -23,8 +23,8 @@ namespace webapi.Controllers
                     HttpStatusCode.BadRequest,
                     "Invalid input");
             }
-            Service1Client client = new Service1Client();
-            string token = await client.SendAuthDataAsync(message);
+            var client = new Service1Client();
+            var token = await client.SendAuthDataAsync(message);
             client.Close();
             return Request.CreateResponse(HttpStatusCode.OK, token);
         }

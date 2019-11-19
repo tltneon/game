@@ -66,19 +66,16 @@ namespace wcfservice
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="StatEntity", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
-    public partial class StatEntity : object, System.Runtime.Serialization.IExtensibleDataObject
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerData", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatsData))]
+    public partial class PlayerData : object, System.Runtime.Serialization.IExtensibleDataObject
     {
         
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        private string BasenameField;
-        
         private int LosesField;
         
         private string PlayernameField;
-        
-        private int ResearchPointsField;
         
         private int UserIDField;
         
@@ -93,19 +90,6 @@ namespace wcfservice
             set
             {
                 this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Basename
-        {
-            get
-            {
-                return this.BasenameField;
-            }
-            set
-            {
-                this.BasenameField = value;
             }
         }
         
@@ -136,19 +120,6 @@ namespace wcfservice
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ResearchPoints
-        {
-            get
-            {
-                return this.ResearchPointsField;
-            }
-            set
-            {
-                this.ResearchPointsField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public int UserID
         {
             get
@@ -171,6 +142,43 @@ namespace wcfservice
             set
             {
                 this.WinsField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StatsData", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
+    public partial class StatsData : wcfservice.PlayerData
+    {
+        
+        private string BasenameField;
+        
+        private int LevelField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Basename
+        {
+            get
+            {
+                return this.BasenameField;
+            }
+            set
+            {
+                this.BasenameField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Level
+        {
+            get
+            {
+                return this.LevelField;
+            }
+            set
+            {
+                this.LevelField = value;
             }
         }
     }
@@ -675,8 +683,10 @@ namespace wcfservice
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SquadEntity", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.AuthData))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatEntity[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatEntity))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.PlayerData[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.PlayerData))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatsData[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatsData))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.BaseEntity[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.BaseEntity))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ResourcesData))]
@@ -826,10 +836,16 @@ public interface IService1
     System.Threading.Tasks.Task<string> SendAuthDataAsync(wcfservice.AuthData data);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetPlayerList", ReplyAction="http://tempuri.org/IService1/GetPlayerListResponse")]
-    wcfservice.StatEntity[] GetPlayerList();
+    wcfservice.PlayerData[] GetPlayerList();
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetPlayerList", ReplyAction="http://tempuri.org/IService1/GetPlayerListResponse")]
-    System.Threading.Tasks.Task<wcfservice.StatEntity[]> GetPlayerListAsync();
+    System.Threading.Tasks.Task<wcfservice.PlayerData[]> GetPlayerListAsync();
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetStats", ReplyAction="http://tempuri.org/IService1/GetStatsResponse")]
+    wcfservice.StatsData[] GetStats();
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetStats", ReplyAction="http://tempuri.org/IService1/GetStatsResponse")]
+    System.Threading.Tasks.Task<wcfservice.StatsData[]> GetStatsAsync();
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseList", ReplyAction="http://tempuri.org/IService1/GetBaseListResponse")]
     wcfservice.BaseEntity[] GetBaseList();
@@ -849,11 +865,11 @@ public interface IService1
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseStructures", ReplyAction="http://tempuri.org/IService1/GetBaseStructuresResponse")]
     System.Threading.Tasks.Task<wcfservice.StructureEntity[]> GetBaseStructuresAsync(wcfservice.BaseAction msg);
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseUnits", ReplyAction="http://tempuri.org/IService1/GetBaseUnitsResponse")]
-    wcfservice.UnitsData[] GetBaseUnits(wcfservice.BaseAction obj);
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseUnitsList", ReplyAction="http://tempuri.org/IService1/GetBaseUnitsListResponse")]
+    wcfservice.UnitsData[] GetBaseUnitsList(wcfservice.BaseAction obj);
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseUnits", ReplyAction="http://tempuri.org/IService1/GetBaseUnitsResponse")]
-    System.Threading.Tasks.Task<wcfservice.UnitsData[]> GetBaseUnitsAsync(wcfservice.BaseAction obj);
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseUnitsList", ReplyAction="http://tempuri.org/IService1/GetBaseUnitsListResponse")]
+    System.Threading.Tasks.Task<wcfservice.UnitsData[]> GetBaseUnitsListAsync(wcfservice.BaseAction obj);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetBaseInfo", ReplyAction="http://tempuri.org/IService1/GetBaseInfoResponse")]
     wcfservice.BaseEntity GetBaseInfo(wcfservice.BaseAction msg);
@@ -924,14 +940,24 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
         return base.Channel.SendAuthDataAsync(data);
     }
     
-    public wcfservice.StatEntity[] GetPlayerList()
+    public wcfservice.PlayerData[] GetPlayerList()
     {
         return base.Channel.GetPlayerList();
     }
     
-    public System.Threading.Tasks.Task<wcfservice.StatEntity[]> GetPlayerListAsync()
+    public System.Threading.Tasks.Task<wcfservice.PlayerData[]> GetPlayerListAsync()
     {
         return base.Channel.GetPlayerListAsync();
+    }
+    
+    public wcfservice.StatsData[] GetStats()
+    {
+        return base.Channel.GetStats();
+    }
+    
+    public System.Threading.Tasks.Task<wcfservice.StatsData[]> GetStatsAsync()
+    {
+        return base.Channel.GetStatsAsync();
     }
     
     public wcfservice.BaseEntity[] GetBaseList()
@@ -964,14 +990,14 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
         return base.Channel.GetBaseStructuresAsync(msg);
     }
     
-    public wcfservice.UnitsData[] GetBaseUnits(wcfservice.BaseAction obj)
+    public wcfservice.UnitsData[] GetBaseUnitsList(wcfservice.BaseAction obj)
     {
-        return base.Channel.GetBaseUnits(obj);
+        return base.Channel.GetBaseUnitsList(obj);
     }
     
-    public System.Threading.Tasks.Task<wcfservice.UnitsData[]> GetBaseUnitsAsync(wcfservice.BaseAction obj)
+    public System.Threading.Tasks.Task<wcfservice.UnitsData[]> GetBaseUnitsListAsync(wcfservice.BaseAction obj)
     {
-        return base.Channel.GetBaseUnitsAsync(obj);
+        return base.Channel.GetBaseUnitsListAsync(obj);
     }
     
     public wcfservice.BaseEntity GetBaseInfo(wcfservice.BaseAction msg)

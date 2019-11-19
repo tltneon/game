@@ -5,10 +5,43 @@ using System.Data.Entity;
 namespace gamelogic
 {
     /// <summary>
+    /// Класс, наследующий механизм обнуления ДБ при изменении модели
+    /// </summary>
+    class EntitiesInitializer : DropCreateDatabaseIfModelChanges<Entities>
+    {
+        /// <summary>
+        /// Записывает дефолтные данные в БД
+        /// </summary>
+        /// <param name="db"></param>
+        protected override void Seed(Entities db)
+        {
+            db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = AccountManager.Base64Encode("123456"), Role = 1, Token = "fgio" });
+            db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = AccountManager.Base64Encode("123"), Role = 0, Token = "fl4o" });
+            db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
+            db.Players.Add(new Player { UserID = 2, Playername = "User" });
+            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
+            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 1, IsActive = true });
+            db.Resources.Add(new Resource { Instance = "bas1", Credits = 200, Energy = 200, Neutrino = 0.0 });
+            db.Resources.Add(new Resource { Instance = "bas2", Credits = 200, Energy = 200, Neutrino = 0.0 });
+            db.Units.Add(new Unit { Instance = "bas1", Type = "droneUnit", Count = 1 });
+            db.Units.Add(new Unit { Instance = "bas2", Type = "droneUnit", Count = 2 });
+            db.SaveChanges();
+            ProceedActions.Log("Event", "Database default data successfully filled. MyContextInitializer.Seed");
+        }
+    }
+
+    /// <summary>
     /// Контекст для общения с базой
     /// </summary>
     public class Entities : DbContext
     {
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            ProceedActions.Log("Event", "Database model successfully created. Entities.OnModelCreating");
+        }
+        static Entities() { 
+            Database.SetInitializer(new EntitiesInitializer());
+        }
         public Entities() : base("DbConnection") { }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Player> Players { get; set; }

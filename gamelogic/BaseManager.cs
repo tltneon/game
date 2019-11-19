@@ -29,7 +29,7 @@ namespace gamelogic
         /// <returns></returns>
         public static Base GetBaseByID(int baseid)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Bases.FirstOrDefault(o => o.BaseID == baseid);
             }
@@ -43,8 +43,8 @@ namespace gamelogic
         /// <returns></returns>
         private static bool IsOwner(int baseid, string token)
         {
-            Base curbase = GetBaseByID(baseid);
-            Account Account = AccountManager.GetAccountByToken(token);
+            var curbase = GetBaseByID(baseid);
+            var Account = AccountManager.GetAccountByToken(token);
             return Account.UserID == curbase.OwnerID;
         }
 
@@ -87,7 +87,7 @@ namespace gamelogic
             {
                 if (IsOwner(obj.baseid, obj.token))
                 {
-                    Base curbase = GetBaseByID(obj.baseid);
+                    var curbase = GetBaseByID(obj.baseid);
                     if (!CanAfford(obj.baseid, "baseUpgrade", curbase.Level))
                     {
                         return "notenoughresources";
@@ -95,7 +95,7 @@ namespace gamelogic
                     ProceedActions.DoBuyItem(obj.baseid, "upgradeBase", curbase.Level);
                     using (Entities db = new Entities())
                     {
-                        Base BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == obj.baseid);
+                        var BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == obj.baseid);
                         BaseEntry.Level++;
                         db.SaveChanges();
                     }
@@ -155,10 +155,10 @@ namespace gamelogic
 
                     ProceedActions.DoBuyItem(obj.baseid, obj.result);
 
-                    Unit u = SquadManager.GetUnit("bas" + obj.baseid.ToString(), obj.result);
+                    var u = SquadManager.GetUnit("bas" + obj.baseid.ToString(), obj.result);
                     ProceedActions.Log("Event", $"В инстансе {obj.baseid.ToString()} {u.Count} юнитов типа {obj.result}");
 
-                    using (Entities db = new Entities())
+                    using (var db = new Entities())
                     {
                         if (u == null)
                         {
@@ -166,7 +166,7 @@ namespace gamelogic
                         }
                         else
                         {
-                            Unit unit = db.Units.FirstOrDefault(o => o.Instance == u.Instance && o.Type == u.Type);
+                            var unit = db.Units.FirstOrDefault(o => o.Instance == u.Instance && o.Type == u.Type);
                             unit.Count++;
                         }
                         db.SaveChanges();
@@ -218,7 +218,7 @@ namespace gamelogic
 
                     ProceedActions.DoBuyItem(obj.baseid, obj.result);
 
-                    using (Entities db = new Entities())
+                    using (var db = new Entities())
                     {
                         db.Structures.Add(new Structure { BaseID = obj.baseid, Type = obj.result, Level = 1 });
                         db.SaveChanges();
@@ -266,7 +266,7 @@ namespace gamelogic
 
                     ProceedActions.DoBuyItem(obj.baseid, obj.result, Struct.Level);
 
-                    using (Entities db = new Entities())
+                    using (var db = new Entities())
                     {
                         var str = db.Structures.FirstOrDefault(o => o.Type == obj.result && o.BaseID == obj.baseid);
                         str.Level++;
@@ -312,7 +312,7 @@ namespace gamelogic
                     }
                     ProceedActions.DoBuyItem(obj.baseid, "baseRepair", BaseData.Level);
 
-                    using (Entities db = new Entities())
+                    using (var db = new Entities())
                     {
                         var BaseEntry = db.Bases.FirstOrDefault(o => o.BaseID == obj.baseid);
                         BaseEntry.IsActive = !BaseEntry.IsActive;
@@ -343,7 +343,7 @@ namespace gamelogic
         /// <returns></returns>
         public static bool CanAfford(int baseid, string itemName, int level = 0)
         {
-            Resource resources = GetBaseResources(baseid);
+            var resources = GetBaseResources(baseid);
             var cost = ItemsVars.GetCost(itemName);
             level++;
             if (resources.Credits < cost.Credits * level || resources.Energy < cost.Energy * level)
@@ -360,8 +360,8 @@ namespace gamelogic
         /// <returns></returns>
         public static Base GetBaseInfo(Account acc)
         {
-            Base result;
-            using (Entities db = new Entities())
+            var result = new Base { };
+            using (var db = new Entities())
             {
                 result = db.Bases.FirstOrDefault(o => o.BaseID == acc.UserID);
             }
@@ -375,7 +375,7 @@ namespace gamelogic
         /// <returns></returns>
         public static IEnumerable<Structure> GetBaseStructures(int BaseID)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Structures.Where(o => o.BaseID == BaseID).ToList();
             }
@@ -389,8 +389,8 @@ namespace gamelogic
         /// <returns></returns>
         public static Structure HasBaseStructure(int baseid, string structure)
         {
-            Structure result;
-            using (Entities db = new Entities())
+            var result = new Structure { };
+            using (var db = new Entities())
             {
                 result = db.Structures.FirstOrDefault(o => o.Type == structure && o.BaseID == baseid);
             }
@@ -404,8 +404,8 @@ namespace gamelogic
         /// <returns></returns>
         public static Resource GetBaseResources(int BaseID)
         {
-            Resource result;
-            using (Entities db = new Entities())
+            var result = new Resource { };
+            using (var db = new Entities())
             {
                 result = db.Resources.FirstOrDefault(o => o.Instance == "bas" + BaseID.ToString());
             }
@@ -427,8 +427,8 @@ namespace gamelogic
         public static int GetBaseUnitsCount(int BaseID)
         {
             var units = GetBaseUnits(BaseID);
-            int sum = 0;
-            foreach (Unit u in units) 
+            var sum = 0;
+            foreach (var u in units) 
             {
                 sum += u.Count;
             }
@@ -436,33 +436,33 @@ namespace gamelogic
         }
 
         /// <summary>
-        /// Назначает ("добывает") всем базам ресурсы исходя из наличия необходимых строений
+        /// Выдаёт всем базам ресурсы исходя из наличия необходимых строений
         /// </summary>
         /// <returns></returns>
         public static bool BaseGatherResources()
         {
-            using (Entities DB = new Entities())
+            using (var DB = new Entities())
             {
                 var Bases = DB.Bases.ToList();
-                foreach (Base CurrentBase in Bases)
+                foreach (var CurrentBase in Bases)
                 {
                     if (CurrentBase.IsActive)
                     {
-                        Resource Resources = DB.Resources.FirstOrDefault(o => o.Instance == "bas" + CurrentBase.BaseID.ToString());
+                        var Resources = DB.Resources.FirstOrDefault(o => o.Instance == "bas" + CurrentBase.BaseID.ToString());
 
-                        Structure creditsStruct = HasBaseStructure(CurrentBase.BaseID, "resourceComplex");
+                        var creditsStruct = HasBaseStructure(CurrentBase.BaseID, "resourceComplex");
                         if (creditsStruct != null)
                         {
                             Resources.Credits += 10 * creditsStruct.Level / 10;
                         }
 
-                        Structure energyStruct = HasBaseStructure(CurrentBase.BaseID, "energyComplex");
+                        var energyStruct = HasBaseStructure(CurrentBase.BaseID, "energyComplex");
                         if (energyStruct != null)
                         {
                             Resources.Energy += 10 * energyStruct.Level / 10;
                         }
 
-                        Structure neutrinoStruct = HasBaseStructure(CurrentBase.BaseID, "researchStation");
+                        var neutrinoStruct = HasBaseStructure(CurrentBase.BaseID, "researchStation");
                         if (neutrinoStruct != null)
                         {
                             Resources.Neutrino += 0.000001 * neutrinoStruct.Level / 10;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
 using gamelogic;
+using gamelogic.Models;
 
 namespace wcfservice
 {
@@ -46,8 +46,15 @@ namespace wcfservice
         /// Возвращает список всех игроков
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<StatEntity> GetPlayerList() => 
-            Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
+        public IEnumerable<PlayerData> GetPlayerList() => 
+            Tools.EnumSmartMapper<gamelogic.Player, PlayerData>(PlayerManager.GetPlayerList());
+
+        /// <summary>
+        /// Возвращает статистику всех игроков
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<StatsData> GetStats() =>
+            Tools.EnumSmartMapper<gamelogic.Models.StatsData, StatsData>(PlayerManager.GetStats());
 
         // >> base section
         /// <summary>
@@ -64,13 +71,13 @@ namespace wcfservice
         /// <returns></returns>
         public string BaseAction(BaseAction obj)
         {
-            string result = Tools.CheckAuthedInput(obj);
+            var result = Tools.CheckAuthedInput(obj);
             if (result != "passed")
             {
                 return result;
             }
 
-            gamelogic.Models.BaseAction mapobj = Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj);
+            var mapobj = Tools.SmartMapper<BaseAction, gamelogic.Models.BaseAction>(obj);
             try
             {
                 switch (mapobj.action) {
@@ -117,11 +124,11 @@ namespace wcfservice
                 return null;
             }
 
-            Account acc = AccountManager.GetAccountByToken(obj.token);
+            var acc = AccountManager.GetAccountByToken(obj.token);
 
-            gamelogic.Base curbase = BaseManager.GetBaseInfo(acc);
+            var curbase = BaseManager.GetBaseInfo(acc);
 
-            BaseEntity result = Tools.SmartMapper<gamelogic.Base, BaseEntity>(curbase);
+            var result = Tools.SmartMapper<gamelogic.Base, BaseEntity>(curbase);
 
             result.Structures = Tools.EnumSmartMapper<gamelogic.Structure, StructureEntity>(BaseManager.GetBaseStructures(curbase.BaseID)); 
             result.Resources = Tools.SmartMapper<gamelogic.Resource, ResourcesData>(BaseManager.GetBaseResources(curbase.BaseID));
@@ -137,7 +144,7 @@ namespace wcfservice
         /// <returns></returns>
         public IEnumerable<StructureEntity> GetBaseStructures(BaseAction obj)
         {
-            string result = Tools.CheckAuthedInput(obj);
+            var result = Tools.CheckAuthedInput(obj);
             if (result != "passed")
             {
                 return null;
@@ -151,19 +158,17 @@ namespace wcfservice
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public IEnumerable<UnitsData> GetBaseUnits(BaseAction obj)
+        public IEnumerable<UnitsData> GetBaseUnitsList(BaseAction obj)
         {
-            string result = Tools.CheckAuthedInput(obj);
+            var result = Tools.CheckAuthedInput(obj);
             if (result != "passed")
             {
                 return null;
             }
 
-            Account acc = AccountManager.GetAccountByToken(obj.token);
+            var acc = AccountManager.GetAccountByToken(obj.token);
 
-            gamelogic.Base curbase = BaseManager.GetBaseInfo(acc);
-
-            ProceedActions.Log("dflgj", obj.token + curbase.BaseID);
+            var curbase = BaseManager.GetBaseInfo(acc);
 
             return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(curbase.BaseID));
         }
@@ -176,7 +181,7 @@ namespace wcfservice
         /// <returns></returns>
         public IEnumerable<SquadEntity> GetSquads(SquadAction obj)
         {
-            string result = Tools.CheckAuthedInput(obj);
+            var result = Tools.CheckAuthedInput(obj);
             if (result != "passed")
             {
                 return null;
@@ -192,7 +197,7 @@ namespace wcfservice
         /// <returns></returns>
         public string SquadAction(SquadAction obj)
         {
-            string result = Tools.CheckAuthedInput(obj);
+            var result = Tools.CheckAuthedInput(obj);
             if (result != "passed")
             {
                 return result;
@@ -200,7 +205,7 @@ namespace wcfservice
 
             try
             {
-                gamelogic.Models.SquadAction mapobj = Tools.SmartMapper<SquadAction, gamelogic.Models.SquadAction>(obj);
+                var mapobj = Tools.SmartMapper<SquadAction, gamelogic.Models.SquadAction>(obj);
                 switch (obj.action)
                 {
                     case "attack":

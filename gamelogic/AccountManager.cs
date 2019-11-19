@@ -16,7 +16,7 @@ namespace gamelogic
         /// <returns></returns>
         public static string AuthClient(AuthData data)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 var us = db.Accounts.FirstOrDefault(o => o.Username == data.username);
                 if (us != null)
@@ -47,10 +47,10 @@ namespace gamelogic
         /// <returns></returns>
         public static string CreateUser(string username, string password)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
                 try
                 {
-                    Account user = new Account { Username = username, Password = Base64Encode(password), Role = 0, Token = "Token" + Base64Encode(username + "salt") };
+                    var user = new Account { Username = username, Password = Base64Encode(password), Role = 0, Token = "Token" + Base64Encode(username + "salt") };
                     db.Accounts.Add(user);
                     db.SaveChanges();
 
@@ -75,7 +75,7 @@ namespace gamelogic
         /// <returns></returns>
         public static Account GetAccountByToken(string token)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 return db.Accounts.FirstOrDefault(o => o.Token == token);
             }

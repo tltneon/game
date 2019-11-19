@@ -19,41 +19,40 @@ namespace gamelogic
         /// <returns></returns>
         public static string Battle(int attackerID, int victimID)
         {
-            string result;
-            Player attacker = PlayerManager.GetPlayerByID(attackerID);
-            Player victim = PlayerManager.GetPlayerByID(victimID);
-            IEnumerable<Unit> attackerUnits = BaseManager.GetBaseUnits(attackerID);
-            IEnumerable<Unit> victimUnits = BaseManager.GetBaseUnits(victimID);
-
             if (BaseManager.GetBaseUnitsCount(attackerID) == 0)
             {
                 return "nounits";
             }
+            var attacker = PlayerManager.GetPlayerByID(attackerID);
+            var victim = PlayerManager.GetPlayerByID(victimID);
+            var attackerUnits = BaseManager.GetBaseUnits(attackerID);
+            var victimUnits = BaseManager.GetBaseUnits(victimID);
 
             Log("Event", $"Player {attacker.Playername} initiated a battle.");
 
-            int attackerPower = 0;
-            int victimPower = 0;
-            foreach (Unit unit in attackerUnits)
+            var attackerPower = 0;
+            var victimPower = 0;
+            foreach (var unit in attackerUnits)
             {
                 attackerPower += unit.Count * ItemsVars.GetCost(unit.Type);
                 Log("Battle", $"Player {attacker.Playername} has {unit.Count} units of {unit.Type} class.");
             }
-            foreach (Unit unit in victimUnits)
+            foreach (var unit in victimUnits)
             {
                 Log("Battle", $"Player {victim.Playername} has {unit.Count} units of {unit.Type} class.");
                 victimPower += unit.Count * ItemsVars.GetCost(unit.Type);
             }
 
+            var result = "";
             if (attackerPower > victimPower)
             {
-                double delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
+                var delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
                 DoBattle(ref attacker, ref attackerUnits, ref victim, ref victimUnits, delta);
                 result = "youwin";
             }
             else
             {
-                double delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
+                var delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
                 DoBattle(ref victim, ref victimUnits, ref attacker, ref attackerUnits, delta);
                 result = "youlose";
             }
@@ -73,18 +72,18 @@ namespace gamelogic
         /// <param name="delta"></param>
         private static void DoBattle(ref Player winner, ref IEnumerable<Unit> winnerUnits, ref Player loser, ref IEnumerable<Unit> loserUnits, double delta)
         {
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
                 winner.Wins++;
 
-                foreach (Unit unit in winnerUnits)
+                foreach (var unit in winnerUnits)
                 {
                     unit.Count = (int)(unit.Count / delta);
                 }
 
                 loser.Loses++;
 
-                foreach (Unit unit in loserUnits)
+                foreach (var unit in loserUnits)
                 {
                     db.Entry(unit).State = EntityState.Deleted;
                 }
@@ -101,17 +100,15 @@ namespace gamelogic
         public static void DoBuyItem(int baseid, string itemName, int level = 0)
         {
             level++;
-            using (Entities db = new Entities())
+            using (var db = new Entities())
             {
-                Resource resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + baseid.ToString());
+                var resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + baseid.ToString());
                 var cost = ItemsVars.GetCost(itemName);
                 resources.Credits -= cost.Credits * level;
                 resources.Energy -= cost.Energy * level;
                 resources.Neutrino -= cost.Neutrino * level;
                 db.SaveChanges();
             }
-
-            System.Diagnostics.Debug.WriteLine("успешно купил эту шляпу");
         }
 
         /// <summary>
@@ -121,19 +118,19 @@ namespace gamelogic
         /// <param name="text"></param>
         public async static void Log(string type, string text)
         {
-            string dir = AppDomain.CurrentDomain.BaseDirectory;
-            DirectoryInfo dirInfo = new DirectoryInfo(dir);
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+            var dirInfo = new DirectoryInfo(dir);
             if (!dirInfo.Exists)
             {
                 dirInfo.Create();
             }
-            using (FileStream fstream = new FileStream($"{dir}/../csharpgame.log", FileMode.OpenOrCreate))
+            using (var fstream = new FileStream($"{dir}/../csharpgame.log", FileMode.OpenOrCreate))
             {
-                byte[] array = System.Text.Encoding.Default.GetBytes($"{DateTime.Now.ToString("h:mm:ss tt")} [{type}] {text}{Environment.NewLine}");
+                var array = System.Text.Encoding.Default.GetBytes($"{DateTime.Now.ToString("h:mm:ss tt")} [{type}] {text}{Environment.NewLine}");
                 fstream.Seek(0, SeekOrigin.End);
                 await fstream.WriteAsync(array, 0, array.Length);
             }
-            // Вечная память нашему брату, с которым дебажили в консоли, имя ему - System.Diagnostics.Debug.WriteLine
+            // System.Diagnostics.Debug.WriteLine
         }
     }
 }

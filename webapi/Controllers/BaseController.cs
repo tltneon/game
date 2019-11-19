@@ -15,8 +15,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         public async Task<IEnumerable<wcfservice.BaseEntity>> GetBaseList()
         {
-            Service1Client client = new Service1Client();
-            IEnumerable<wcfservice.BaseEntity> entities = await client.GetBaseListAsync();
+            var client = new Service1Client();
+            var entities = await client.GetBaseListAsync();
             client.Close();
             return entities;
         }
@@ -28,8 +28,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         public async Task<wcfservice.BaseEntity> RetrieveBaseData(wcfservice.BaseAction msg)
         {
-            Service1Client client = new Service1Client();
-            wcfservice.BaseEntity result = await client.GetBaseInfoAsync(msg);
+            var client = new Service1Client();
+            var result = await client.GetBaseInfoAsync(msg);
             client.Close();
             return result;
         }
@@ -41,8 +41,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         public async Task<string> Action(wcfservice.BaseAction msg)
         {
-            Service1Client client = new Service1Client();
-            string result = await client.BaseActionAsync(msg);
+            var client = new Service1Client();
+            var result = await client.BaseActionAsync(msg);
             client.Close();
             return result;
         }
