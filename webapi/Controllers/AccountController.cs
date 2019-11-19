@@ -54,7 +54,6 @@ namespace webapi.Controllers
             {
                 return true;
             }
-            //заявка на проверку регуляркой Regex.IsMatch(message.username, @"[^0-9a-zA-Z&+=\\\-&?*%:;#№@!)(]+") || Regex.IsMatch(message.password, @"[^0-9a-zA-Z&+=\\\-&?*%:;#№@!)(]+")
             return false;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using gamelogic;
-using gamelogic.Models;
 
 namespace wcfservice
 {
@@ -24,6 +24,11 @@ namespace wcfservice
             }
             if (data.username == null || data.password == null || data.username.Length < 3 || 
                 data.password.Length < 3 || data.username.Length > 20 || data.password.Length > 20)
+            {
+                return "wrongdatareceived";
+            }
+            const string pattern = @"[^a-zA-ZА-Яа-я0-9!№%*@#$^]";
+            if (Regex.IsMatch(data.username, pattern))
             {
                 return "wrongdatareceived";
             }

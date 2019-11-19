@@ -43,7 +43,7 @@ export class BattleComponent implements OnInit {
       this.isDataLoaded = true;
     },
     error => console.log(error));
-    this.httpService.postRequest("api/squad/GetSquads", {}).subscribe((responce) => console.log(this, responce));
+    //this.httpService.postRequest("api/squad/GetSquads", {}).subscribe((responce) => console.log(this, responce));
   }
   loadOfflineData():void {
     this.isDataLoaded = true;

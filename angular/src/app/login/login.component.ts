@@ -2,19 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { GameVars } from '../gamevars';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [HttpService]
+  providers: [HttpService, GameVars]
 })
 export class LoginComponent implements OnInit {
   password: string;
   login:string;
-  error:string = "r u rly authed?";
+  error:string = "Enter your credentials here:";
 
-  constructor(private httpService: HttpService, private router: Router) { }
+  constructor(private httpService: HttpService, private router: Router, private gameVars: GameVars) { }
 
   ngOnInit() {}
 
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
 
     function proceedAuth(router, responce){
       Cookie.set('token', responce);
+      console.log(responce);
       router.navigate(['/']);
     }
 
@@ -34,9 +36,9 @@ export class LoginComponent implements OnInit {
     document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active", "progress");
     this.httpService.postRequest("api/account/auth", {"username": login, "password": password}, false).subscribe(
-      (responce:string) => responce.slice(0,5) == "Error" 
-        ? updateErrorMessage(this, responce.replace('Error#',''))
-        : proceedAuth(this.router, responce)
+      (responce:string) => responce.slice(0,5) == "Token"
+        ? proceedAuth(this.router, responce)
+        : updateErrorMessage(this, this.gameVars.getText(responce))
       , error => updateErrorMessage(this, error));
   }
 

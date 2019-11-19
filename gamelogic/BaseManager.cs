@@ -441,12 +441,12 @@ namespace gamelogic
         /// <returns></returns>
         public static bool BaseGatherResources()
         {
-            using (var DB = new Entities())
+            var Bases = GetBaseList();
+            foreach (var CurrentBase in Bases)
             {
-                var Bases = DB.Bases.ToList();
-                foreach (var CurrentBase in Bases)
+                if (CurrentBase.IsActive)
                 {
-                    if (CurrentBase.IsActive)
+                    using (var DB = new Entities())
                     {
                         var Resources = DB.Resources.FirstOrDefault(o => o.Instance == "bas" + CurrentBase.BaseID.ToString());
 
@@ -469,14 +469,11 @@ namespace gamelogic
                         }
 
                         // базовое значение * уровень здания / 10 частей в минуте
+                        DB.SaveChanges();
                     }
-
                 }
-
-                ProceedActions.Log("Event", "Routine() iteration");
-
-                DB.SaveChanges();
             }
+            ProceedActions.Log("Event", "Routine() iteration");
             return true;
         }
     }

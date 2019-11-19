@@ -67,11 +67,11 @@ export class GameVars {
         },
         /* special */
         base: {
-            repair:{
+            repair: {
                 credits: 2000,
                 energy: 2000
             },
-            upgrade:{
+            upgrade: {
                 credits: 5000,
                 energy: 5000
             },
@@ -90,13 +90,15 @@ export class GameVars {
         "baseisinactive": "You can't attack innactive base!",
         "populationLimit": "Not enough population to create new unit",
         "noLifeComplex": "Life Complex is not exists on the base",
-        "noAircrafts": "Aircrafts Factory is not exists on the base"
+        "noAircrafts": "Aircrafts Factory is not exists on the base",
+        "wrongdatareceived": "Wrong data received",
+        "wrongpassword": "Wrong password",
     }
 
-    getInfo(item:string) {
+    getInfo(item: string) {
         return this.data[item] || {};
     }
-    getText(string:string) {
+    getText(string: string) {
         return this.text[string] || string;
     }
 }

@@ -16,26 +16,27 @@ namespace gamelogic
         /// <returns></returns>
         public static string AuthClient(AuthData data)
         {
-            using (var db = new Entities())
+            data.username = data.username.ToLower();
+            //ProceedActions.Log("Event", $"{data.username} {data.password}");
+            //var user = dal.AccountQuery.GetUserByName(data.username);
+            //ProceedActions.Log("Event", $"{user.Username} {user.Password} {user.Token} | {data.username} {data.password}");
+            var user = GetUserByName(data.username);
+            if (user != null)
             {
-                var us = db.Accounts.FirstOrDefault(o => o.Username == data.username);
-                if (us != null)
+                if (Base64Decode(user.Password) == data.password)
                 {
-                    if (Base64Decode(us.Password) == data.password)
-                    {
-                        return us.Token;
-                    }
-                    else
-                    {
-                        ProceedActions.Log("Event", $"Неудачная попытка авторизоваться под аккаунтом {us.Username}");
-                        const string error = "Error#Wrong Password";
-                        return error;
-                    }
+                    return user.Token;
                 }
                 else
                 {
-                    return CreateUser(data.username, data.password);
+                    ProceedActions.Log("Event", $"Неудачная попытка авторизоваться под аккаунтом {user.Username}");
+                    const string error = "wrongpassword";
+                    return error;
                 }
+            }
+            else
+            {
+                return CreateUser(data.username, data.password);
             }
         }
 
@@ -82,6 +83,21 @@ namespace gamelogic
         }
 
         /// <summary>
+        /// Возвращает аккаунт по его нику
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public static Account GetUserByName(string username)
+        {
+            var acc = new Account { };
+            using (var db = new Entities())
+            {
+                acc = db.Accounts.FirstOrDefault(o => o.Username == username);
+            }
+            return acc;
+        }
+
+        /// <summary>
         /// Проверяет токен игрока
         /// </summary>
         /// <param name="token"></param>
@@ -89,26 +105,6 @@ namespace gamelogic
         public static bool CheckToken(string token)
         {
             return GetAccountByToken(token) != null;
-        }
-
-        /// <summary>
-        /// Проверяет доступ к админке
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public static bool IsAdmin(string token)
-        {
-            var user = GetAccountByToken(token);
-            if (user == null)
-            {
-                return false;
-            }
-            if (user.Role == 1)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
