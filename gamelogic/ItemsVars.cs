@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="ItemType"></param>
         /// <returns></returns>
-        public static dynamic GetCost(string ItemType) // восхитительный полукостыль
+        public static dynamic GetCost(string ItemType)
         {
             switch (ItemType)
             {
@@ -47,11 +47,40 @@
             }
             return 1;
         }
+
         /// <summary>
         /// Возвращает текущее значение максимальной популяции на базе
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
         public static int GetPopulation(int level = 1) => level * 7;
+
+        /// <summary>
+        /// Возвращает количество добываемых кредитов за уровень здания
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static int GetCreditProducingAmount(int level = 1) => level * 10;
+
+        /// <summary>
+        /// Возвращает количество добываемой энергии за уровень здания
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static int GetEnergyProducingAmount(int level = 1) => level * 10;
+
+        /// <summary>
+        /// Возвращает количество добываемого нейтрино за уровень здания
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static double GetNeutrinoProducingAmount(int level = 1) => level * 0.000001;
+
+        /// <summary>
+        /// Возвращает количество добываемого нейтрино за уровень здания
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static double GetBaseDefenceMultiplier(int level = 1) => 1 + level * 0.16;
     }
 }
