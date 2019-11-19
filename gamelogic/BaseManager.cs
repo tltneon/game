@@ -436,7 +436,7 @@ namespace gamelogic
         }
 
         /// <summary>
-        /// Назначает ("добывает") всем базам ресурсы исходя из наличия необходимых строений
+        /// Выдаёт всем базам ресурсы исходя из наличия необходимых строений
         /// </summary>
         /// <returns></returns>
         public static bool BaseGatherResources()

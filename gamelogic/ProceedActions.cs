@@ -130,7 +130,7 @@ namespace gamelogic
                 fstream.Seek(0, SeekOrigin.End);
                 await fstream.WriteAsync(array, 0, array.Length);
             }
-            // Вечная память нашему брату, с которым дебажили в консоли, имя ему - System.Diagnostics.Debug.WriteLine
+            // System.Diagnostics.Debug.WriteLine
         }
     }
 }

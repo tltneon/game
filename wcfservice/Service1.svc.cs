@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using gamelogic;
+using gamelogic.Models;
 
 namespace wcfservice
 {
@@ -45,8 +46,15 @@ namespace wcfservice
         /// Возвращает список всех игроков
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<StatEntity> GetPlayerList() => 
-            Tools.EnumSmartMapper<gamelogic.Player, StatEntity>(PlayerManager.GetPlayerList());
+        public IEnumerable<PlayerData> GetPlayerList() => 
+            Tools.EnumSmartMapper<gamelogic.Player, PlayerData>(PlayerManager.GetPlayerList());
+
+        /// <summary>
+        /// Возвращает статистику всех игроков
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<StatsData> GetStats() =>
+            Tools.EnumSmartMapper<gamelogic.Models.StatsData, StatsData>(PlayerManager.GetStats());
 
         // >> base section
         /// <summary>
@@ -150,7 +158,7 @@ namespace wcfservice
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public IEnumerable<UnitsData> GetBaseUnits(BaseAction obj)
+        public IEnumerable<UnitsData> GetBaseUnitsList(BaseAction obj)
         {
             var result = Tools.CheckAuthedInput(obj);
             if (result != "passed")
@@ -161,8 +169,6 @@ namespace wcfservice
             var acc = AccountManager.GetAccountByToken(obj.token);
 
             var curbase = BaseManager.GetBaseInfo(acc);
-
-            ProceedActions.Log("dflgj", obj.token + curbase.BaseID);
 
             return Tools.EnumSmartMapper<gamelogic.Unit, UnitsData>(BaseManager.GetBaseUnits(curbase.BaseID));
         }

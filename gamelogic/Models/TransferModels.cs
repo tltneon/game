@@ -11,8 +11,12 @@
     }
     public class StatsData
     {
+        public int UserID { get; set; }
+        public string Playername { get; set; }
+        public int Wins { get; set; }
+        public int Loses { get; set; }
         public string Basename { get; set; }
-        public int ResearchLevel { get; set; }
+        public int Level { get; set; }
     }
     public class BaseAction : WithToken
     {

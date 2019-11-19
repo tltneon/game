@@ -14,6 +14,7 @@ export class StatsComponent implements OnInit {
   timeLeftMin: number = 4;
   timeLeftSec: number = 59;
   interval;
+  index:number = 0;
 
   constructor(private httpService: HttpService) { }
 
@@ -32,16 +33,20 @@ export class StatsComponent implements OnInit {
       }
     }, 1000)
   }
+
   loadOnlineData(){
-    this.httpService.getRequest('api/statistic/getPlayerList').subscribe(
+    this.httpService.getRequest('api/statistic/GetStats').subscribe(
       (responce: StatsJSON[]) => { 
         console.log(responce);
-        this.statsData = responce;
+        this.statsData = responce.sort((a,b) => (a.level > b.level) ? -1 : ((b.level > a.level) ? 1 : 0));
         this.isDataLoaded = true;
+        this.timeLeftMin = 4;
+        this.timeLeftSec = 59;
       },
       error => console.log(error.message)
     );
   }
+
   loadOfflineData(){
     this.isDataLoaded = true;
     const t = 29;
