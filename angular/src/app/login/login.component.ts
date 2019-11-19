@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
           this.error = responce;
           document.body.querySelector("#auth").innerHTML = "Authorize";
           document.body.querySelector("#processing").classList.remove("active", "progress");
-          this.gameVars.registerError(responce);
+          this.error = this.gameVars.getText(responce);
         }
       },
       error => this.gameVars.registerError(error.message));

@@ -19,7 +19,7 @@ p {
   display: none;
   position: absolute;
   flex-wrap: wrap;
-  bottom: 0;
+  top: 0;
   left: 100%;
   max-width: 320px;
   background-color: #561524bd;

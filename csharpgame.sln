@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "deploytool", "deploytool\deploytool.csproj", "{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapi", "webapi\webapi.csproj", "{195427E5-37D5-4310-9634-EF376C92B260}"
 	ProjectSection(ProjectDependencies) = postProject
 		{82367F0C-AE46-4DB2-8C88-DE1B43B4B042} = {82367F0C-AE46-4DB2-8C88-DE1B43B4B042}
@@ -21,9 +19,6 @@ Global
 		Description = OGame-like web game
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7193ED1F-4FBB-4BD4-ACD9-B15054F23D27}.Release|Any CPU.Build.0 = Release|Any CPU
 		{195427E5-37D5-4310-9634-EF376C92B260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{195427E5-37D5-4310-9634-EF376C92B260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{195427E5-37D5-4310-9634-EF376C92B260}.Release|Any CPU.ActiveCfg = Release|Any CPU

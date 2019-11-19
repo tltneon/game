@@ -65,7 +65,7 @@ namespace gamelogic
                 catch (Exception ex)
                 {
                     ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция AccountManager.CreateUser");
-                    return "Error#Exception: " + ex.Message;
+                    return ex.Message;
                 }
         }
 

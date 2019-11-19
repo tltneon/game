@@ -15,8 +15,8 @@ namespace gamelogic
         /// <param name="db"></param>
         protected override void Seed(Entities db)
         {
-            db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = AccountManager.Base64Encode("123456"), Role = 1, Token = "fgio" });
-            db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = AccountManager.Base64Encode("123"), Role = 0, Token = "fl4o" });
+            db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = AccountManager.Base64Encode("123456"), Role = 1, Token = "Tokenfgio" });
+            db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = AccountManager.Base64Encode("123"), Role = 0, Token = "Tokenfl4o" });
             db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
             db.Players.Add(new Player { UserID = 2, Playername = "User" });
             db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
@@ -26,7 +26,7 @@ namespace gamelogic
             db.Units.Add(new Unit { Instance = "bas1", Type = "droneUnit", Count = 1 });
             db.Units.Add(new Unit { Instance = "bas2", Type = "droneUnit", Count = 2 });
             db.SaveChanges();
-            ProceedActions.Log("Event", "Database default data successfully filled. MyContextInitializer.Seed");
+            ProceedActions.Log("Event", "Database default data successfully filled. EntitiesInitializer.Seed");
         }
     }
 
@@ -117,7 +117,7 @@ namespace gamelogic
     {
         [Key]
         public string Key { get; set; }
-        public int OwnerID { get; set; }
+        public int OwnerI2D { get; set; }
         public int MoveFrom { get; set; }
         public int StartTime { get; set; }
         public int MoveTo { get; set; }

@@ -93,6 +93,7 @@ export class GameVars {
         "noAircrafts": "Aircrafts Factory is not exists on the base",
         "wrongdatareceived": "Wrong data received",
         "wrongpassword": "Wrong password",
+        "wrongtoken": "Wrong user data",
     }
 
     getInfo(item: string) {
