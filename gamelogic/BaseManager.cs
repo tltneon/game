@@ -88,7 +88,7 @@ namespace gamelogic
                 if (IsOwner(obj.baseid, obj.token))
                 {
                     var curbase = GetBaseByID(obj.baseid);
-                    if (!CanAfford(obj.baseid, "baseUpgrade", curbase.Level))
+                    if (!CanAfford(obj.baseid, "upgradeBase", curbase.Level))
                     {
                         return "notenoughresources";
                     }
@@ -310,7 +310,7 @@ namespace gamelogic
                     {
                         return "notenoughresources";
                     }
-                    ProceedActions.DoBuyItem(obj.baseid, "baseRepair", BaseData.Level);
+                    ProceedActions.DoBuyItem(obj.baseid, "repairBase", BaseData.Level);
 
                     using (var db = new Entities())
                     {
@@ -453,19 +453,19 @@ namespace gamelogic
                         var creditsStruct = HasBaseStructure(CurrentBase.BaseID, "resourceComplex");
                         if (creditsStruct != null)
                         {
-                            Resources.Credits += 10 * creditsStruct.Level / 10;
+                            Resources.Credits += ItemsVars.GetCreditProducingAmount(creditsStruct.Level) / 10;
                         }
 
                         var energyStruct = HasBaseStructure(CurrentBase.BaseID, "energyComplex");
                         if (energyStruct != null)
                         {
-                            Resources.Energy += 10 * energyStruct.Level / 10;
+                            Resources.Energy += ItemsVars.GetEnergyProducingAmount(energyStruct.Level) / 10;
                         }
 
                         var neutrinoStruct = HasBaseStructure(CurrentBase.BaseID, "researchStation");
                         if (neutrinoStruct != null)
                         {
-                            Resources.Neutrino += 0.000001 * neutrinoStruct.Level / 10;
+                            Resources.Neutrino += ItemsVars.GetNeutrinoProducingAmount(neutrinoStruct.Level) / 10;
                         }
 
                         // базовое значение * уровень здания / 10 частей в минуте

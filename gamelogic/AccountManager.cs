@@ -92,6 +92,26 @@ namespace gamelogic
         }
 
         /// <summary>
+        /// Проверяет доступ к админке
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static bool IsAdmin(string token)
+        {
+            var user = GetAccountByToken(token);
+            if (user == null)
+            {
+                return false;
+            }
+            if (user.Role == 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Кодирует строку в BASE64
         /// </summary>
         /// <param name="plainText"></param>
