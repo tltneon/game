@@ -29,11 +29,6 @@
                 <div class="name">{{gameVars.getInfo(item.type).name}}</div>
             </div>
             <div class="desc">
-                <div class="cost">level: {{item.level}} => level {{item.level+1}}</div>
-                <div class="cost">
-                    credits: {{gameVars.getInfo(item.type).credits * (item.level+1)}} | 
-                    energy: {{gameVars.getInfo(item.type).energy * (item.level+1)}}
-                </div>
             <span *ngIf="false">
                 <div class="task">Task: 
                     <span *ngIf="item.task.action; else unset">
@@ -46,10 +41,13 @@
                 </div>
             </span>
                 <div class="actions">
-                    <div class="levelUpIcon button" (click)="upgradeStructure(item)">Upgrade</div>
+                    <div class="levelUpIcon button" (click)="upgradeStructure(item)">Upgrade structure [+1]</div>
                     <div class="levelUpIcon button hide" (click)="setStructureTask(item)">Clear task</div>
-                    <div class="button" (click)="destroyStructure(item)">Destroy</div>
+                    <div class="button hide" (click)="destroyStructure(item)">Destroy</div>
                 </div>
+                <div class="option">level: {{item.level}} => level {{item.level+1}}</div>
+                <div class="option">credits: {{gameVars.getInfo(item.type).credits * (item.level+1)}} |
+                     energy: {{gameVars.getInfo(item.type).energy * (item.level+1)}}</div>
             </div>
         </div>
         <span *ngIf="allowToBuild().length > 0">
@@ -107,27 +105,38 @@
         <div>Name: {{baseData?.basename || "basename"}} | ID {{baseData?.baseID || 0}}</div>
         <div>Owner: You | ID {{baseData?.ownerID || 0}}</div>
         <div>Level: {{baseData?.level || 0}}</div>
+        <div>Attack multiplier: {{attackMultiplier()}}%</div>
         <div>Defence multiplier: {{defenceMultiplier()}}%</div>
+        <div>Max. population: {{resourceProduction.population || 0}} units</div>
         <div *ngIf="!baseData?.isActive">Base is inactive</div>
     <div class="separatist"></div>
-    <h4>Current task</h4>
+    <h4>Last task</h4>
         <div [ngSwitch]="baseData?.task.action">
-            <ng-template ngSwitchCase="build">Building: {{baseData?.task.result}}</ng-template>
+            <ng-template ngSwitchCase="build">Building: {{gameVars.getInfo(baseData?.task.result).name}}</ng-template>
             <ng-template ngSwitchCase="upgrade">Upgrading base</ng-template>
             <ng-template ngSwitchCase="repair">Repairing base</ng-template>
-            <ng-template ngSwitchCase="create">Creating: {{baseData?.task.result}}</ng-template>
+            <ng-template ngSwitchCase="create">Creating: {{gameVars.getInfo(baseData?.task.result.name)}}</ng-template>
             <ng-template ngSwitchDefault="">None</ng-template>
         </div>
-        <div *ngIf="baseData.task.action">Ends in: {{baseData?.task.endsin | date :'short'}}</div>
+        <div *ngIf="baseData.task.endsin">Ends in: {{baseData?.task.endsin | date :'short'}}</div>
     <div class="separatist"></div>
     <h4>Prodution</h4>
         <div>Credits: +{{formatNumber(resourceProduction.credits * 60) || 0}}/min.</div>
         <div>Energy: +{{formatNumber(resourceProduction.energy * 60) || 0}}/min.</div>
         <div>Neutrino: +{{resourceProduction.neutrino * 60 || 0}}/min.</div>
-        <div>Population: {{resourceProduction.population || 0}}</div>
     <div class="separatist"></div>
     <h4>Actions</h4>
-    <div class="button" (click)="upgradeBase()">Level up ^ ({{baseData?.level * gameVars.getInfo("base").upgrade.energy || 0}})</div>
-    <div class="button" (click)="toggleBaseActiveness()">Repair ({{baseData?.level * gameVars.getInfo("base").repair.energy || 0}})</div>
-    <div class="button" (click)="setBaseTask('', '', 0)">Clear task</div>
+        
+    <span *ngIf="baseData?.isActive; else unset">
+        <div class="button" (click)="upgradeBase()">Level up base [+1]</div>
+        <div>Cost: [level {{baseData?.level}} => level{{baseData?.level+1}}]</div>
+        <div>Credits: {{baseData?.level * gameVars.getInfo("base").upgrade.credits || 0}}</div>
+        <div>Energy: {{baseData?.level * gameVars.getInfo("base").upgrade.energy || 0}}</div>
+    </span>
+
+    <ng-template #unset>  
+            <div class="button" (click)="toggleBaseActiveness()">Repair base</div>
+            <div>Credits: {{(baseData?.level-1) * gameVars.getInfo("base").repair.credits || 0}}</div>
+            <div>Energy: {{(baseData?.level-1) * gameVars.getInfo("base").repair.energy || 0}}</div>
+    </ng-template>
 </div>

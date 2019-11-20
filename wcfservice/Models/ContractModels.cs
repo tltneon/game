@@ -99,6 +99,8 @@ namespace wcfservice
         public string Basename { get; set; }
         [DataMember]
         public int Level { get; set; }
+        [DataMember]
+        public int ResearchPoints { get; set; }
     }
     [DataContract]
     public class BaseEntity

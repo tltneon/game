@@ -146,8 +146,8 @@ namespace gamelogic
                     {
                         return "noLifeComplex";
                     }
-                    ProceedActions.Log("Event", $"Игрок покупает юнит. На базе популяция {ItemsVars.GetPopulation(population.Level)} " +
-                        $"и уже {GetBaseUnitsCount(obj.baseid)} юнитов создано");
+                    ProceedActions.Log("Event", $"Игрок покупает юнит. На базе максимум популяции" +
+                        $" {ItemsVars.GetPopulation(population.Level)} и уже {GetBaseUnitsCount(obj.baseid)} юнитов создано");
                     if (ItemsVars.GetPopulation(population.Level) <= GetBaseUnitsCount(obj.baseid))
                     {
                         return "populationLimit";
@@ -156,7 +156,6 @@ namespace gamelogic
                     ProceedActions.DoBuyItem(obj.baseid, obj.result);
 
                     var u = SquadManager.GetUnit("bas" + obj.baseid.ToString(), obj.result);
-                    ProceedActions.Log("Event", $"В инстансе {obj.baseid.ToString()} {u.Count} юнитов типа {obj.result}");
 
                     using (var db = new Entities())
                     {
@@ -166,6 +165,7 @@ namespace gamelogic
                         }
                         else
                         {
+                            ProceedActions.Log("Event", $"В инстансе {obj.baseid.ToString()} {u.Count} юнитов типа {obj.result}");
                             var unit = db.Units.FirstOrDefault(o => o.Instance == u.Instance && o.Type == u.Type);
                             unit.Count++;
                         }
@@ -453,19 +453,19 @@ namespace gamelogic
                         var creditsStruct = HasBaseStructure(CurrentBase.BaseID, "resourceComplex");
                         if (creditsStruct != null)
                         {
-                            Resources.Credits += ItemsVars.GetCreditProducingAmount(creditsStruct.Level) / 10;
+                            Resources.Credits += (int)(ItemsVars.GetCreditProducingAmount(creditsStruct.Level) * 0.1);
                         }
 
                         var energyStruct = HasBaseStructure(CurrentBase.BaseID, "energyComplex");
                         if (energyStruct != null)
                         {
-                            Resources.Energy += ItemsVars.GetEnergyProducingAmount(energyStruct.Level) / 10;
+                            Resources.Energy += (int)(ItemsVars.GetEnergyProducingAmount(energyStruct.Level) * 0.1);
                         }
 
                         var neutrinoStruct = HasBaseStructure(CurrentBase.BaseID, "researchStation");
                         if (neutrinoStruct != null)
                         {
-                            Resources.Neutrino += ItemsVars.GetNeutrinoProducingAmount(neutrinoStruct.Level) / 10;
+                            Resources.Neutrino += ItemsVars.GetNeutrinoProducingAmount(neutrinoStruct.Level) * 0.1;
                         }
 
                         // базовое значение * уровень здания / 10 частей в минуте
@@ -473,7 +473,6 @@ namespace gamelogic
                     }
                 }
             }
-            ProceedActions.Log("Event", "Routine() iteration");
             return true;
         }
     }

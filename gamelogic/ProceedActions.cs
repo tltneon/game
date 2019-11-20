@@ -17,43 +17,54 @@ namespace gamelogic
         /// <param name="attackerID"></param>
         /// <param name="victimID"></param>
         /// <returns></returns>
-        public static string Battle(int attackerID, int victimID)
+        public static string Battle(Account attackerAcc, Base victimBase)
         {
-            if (BaseManager.GetBaseUnitsCount(attackerID) == 0)
+            if (BaseManager.GetBaseUnitsCount(attackerAcc.UserID) == 0)
             {
                 return "nounits";
             }
-            var attacker = PlayerManager.GetPlayerByID(attackerID);
-            var victim = PlayerManager.GetPlayerByID(victimID);
-            var attackerUnits = BaseManager.GetBaseUnits(attackerID);
-            var victimUnits = BaseManager.GetBaseUnits(victimID);
+            var attacker = PlayerManager.GetPlayerByID(attackerAcc.UserID);
+            var victim = PlayerManager.GetPlayerByID(victimBase.OwnerID);
+            var attackerUnits = BaseManager.GetBaseUnits(attackerAcc.UserID);
+            var victimUnits = BaseManager.GetBaseUnits(victimBase.OwnerID);
 
             Log("Event", $"Player {attacker.Playername} initiated a battle.");
 
-            var attackerPower = 0;
-            var victimPower = 0;
+            // Расчёт базовой силы на основе числа юнитов
+            var attackerPower = 0.0;
+            var victimPower = 0.0;
             foreach (var unit in attackerUnits)
             {
-                attackerPower += unit.Count * ItemsVars.GetCost(unit.Type);
+                attackerPower += (double)(unit.Count * ItemsVars.GetPower(unit.Type));
                 Log("Battle", $"Player {attacker.Playername} has {unit.Count} units of {unit.Type} class.");
             }
             foreach (var unit in victimUnits)
             {
+                victimPower += (double)(unit.Count * ItemsVars.GetPower(unit.Type));
                 Log("Battle", $"Player {victim.Playername} has {unit.Count} units of {unit.Type} class.");
-                victimPower += unit.Count * ItemsVars.GetCost(unit.Type);
             }
+
+            // Множители силы
+            var attackerBaseMultiplier = BaseManager.HasBaseStructure(
+                BaseManager.GetBaseInfo(attackerAcc).BaseID,
+                "aircraftsComplex"
+                );
+            attackerPower *= attackerBaseMultiplier != null
+                ? ItemsVars.GetBaseAttackMultiplier(attackerBaseMultiplier.Level)
+                : 1;
+            victimPower *= ItemsVars.GetBaseDefenceMultiplier(victimBase.Level);
 
             var result = "";
             if (attackerPower > victimPower)
             {
-                var delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
-                DoBattle(ref attacker, ref attackerUnits, ref victim, ref victimUnits, delta);
+                var delta = (attackerPower > 0 && victimPower > 0 ? 1 - (victimPower / attackerPower) : 1.0);
+                DoBattle(attacker, victim, delta);
                 result = "youwin";
             }
             else
             {
-                var delta = (attackerPower > 0 && victimPower > 0 ? attackerPower / victimPower : 1);
-                DoBattle(ref victim, ref victimUnits, ref attacker, ref attackerUnits, delta);
+                var delta = (attackerPower > 0 && victimPower > 0 ? 1 - (attackerPower / victimPower) : 1.0);
+                DoBattle(victim, attacker, delta);
                 result = "youlose";
             }
             Log("Event", $"Player {attacker.Playername} (units power is {attackerPower}) attacked {victim.Playername} " +
@@ -70,20 +81,22 @@ namespace gamelogic
         /// <param name="loser"></param>
         /// <param name="loserUnits"></param>
         /// <param name="delta"></param>
-        private static void DoBattle(ref Player winner, ref IEnumerable<Unit> winnerUnits, ref Player loser, ref IEnumerable<Unit> loserUnits, double delta)
+        private static void DoBattle(Player winner, Player loser, double delta)
         {
             using (var db = new Entities())
             {
-                winner.Wins++;
+                db.Players.FirstOrDefault(o => o.UserID == winner.UserID).Wins++;
 
-                foreach (var unit in winnerUnits)
+                var units = db.Units.Where(o => o.Instance == "bas" + winner.UserID && o.Count > 0);
+                foreach (var unit in units)
                 {
-                    unit.Count = (int)(unit.Count / delta);
+                    unit.Count = (int)Math.Round(unit.Count * delta);
                 }
 
-                loser.Loses++;
+                db.Players.FirstOrDefault(o => o.UserID == loser.UserID).Loses++;
 
-                foreach (var unit in loserUnits)
+                units = db.Units.Where(o => o.Instance == "bas" + loser.UserID && o.Count > 0);
+                foreach (var unit in units)
                 {
                     db.Entry(unit).State = EntityState.Deleted;
                 }
@@ -100,10 +113,10 @@ namespace gamelogic
         public static void DoBuyItem(int baseid, string itemName, int level = 0)
         {
             level++;
+            var cost = ItemsVars.GetCost(itemName);
             using (var db = new Entities())
             {
                 var resources = db.Resources.FirstOrDefault(o => o.Instance == "bas" + baseid.ToString());
-                var cost = ItemsVars.GetCost(itemName);
                 resources.Credits -= cost.Credits * level;
                 resources.Energy -= cost.Energy * level;
                 resources.Neutrino -= cost.Neutrino * level;
@@ -124,11 +137,18 @@ namespace gamelogic
             {
                 dirInfo.Create();
             }
-            using (var fstream = new FileStream($"{dir}/../csharpgame.log", FileMode.OpenOrCreate))
+            try
             {
-                var array = System.Text.Encoding.Default.GetBytes($"{DateTime.Now.ToString("h:mm:ss tt")} [{type}] {text}{Environment.NewLine}");
-                fstream.Seek(0, SeekOrigin.End);
-                await fstream.WriteAsync(array, 0, array.Length);
+                using (var fstream = new FileStream($"{dir}/../csharpgame.log", FileMode.OpenOrCreate))
+                {
+                    var array = System.Text.Encoding.Default.GetBytes($"{DateTime.Now.ToString("h:mm:ss tt")} [{type}] {text}{Environment.NewLine}");
+                    fstream.Seek(0, SeekOrigin.End);
+                    await fstream.WriteAsync(array, 0, array.Length);
+                }
+            }
+            catch
+            {
+                Log(type, text);
             }
             // System.Diagnostics.Debug.WriteLine
         }

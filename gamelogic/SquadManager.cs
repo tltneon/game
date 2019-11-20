@@ -95,7 +95,7 @@ namespace gamelogic
                 return result;
             }
 
-            return ProceedActions.Battle(attacker.UserID, victimBase.OwnerID);
+            return ProceedActions.Battle(attacker, victimBase);
         }
     }
 }

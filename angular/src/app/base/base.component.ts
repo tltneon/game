@@ -15,11 +15,13 @@ export class BaseComponent implements OnInit {
         energy: number;
         neutrino: number;
         population: number;
+        attackMlt: number;
     } = {
         credits: 0,
         energy: 0,
         neutrino: 0,
-        population: 0
+        population: 0,
+        attackMlt: 0,
     };
     structuresList: string[] = ["lifeComplex", "energyComplex", "aircraftsComplex", "resourceComplex", "researchStation"];
     unitsList: string[] = ["droneUnit", "jetUnit", "lincorUnit", "someGiantShitUnit"];
@@ -50,6 +52,10 @@ export class BaseComponent implements OnInit {
         num = num || 0;
         return num.toFixed(2);
     }
+    // высчитывает мультипликатор атаки базы
+    attackMultiplier(): string {
+        return this.formatNumber(this.resourceProduction.attackMlt + 1);
+    }
     // высчитывает мультипликатор защиты базы
     defenceMultiplier(): string {
         return this.formatNumber(this.baseData.level * 0.16 + 1);
@@ -77,11 +83,13 @@ export class BaseComponent implements OnInit {
         this.resourceProduction.energy = 0;
         this.resourceProduction.neutrino = 0;
         this.resourceProduction.population = 0;
+        this.resourceProduction.attackMlt = 0;
         this.baseData.structures.forEach(element => {
             this.resourceProduction.credits += this.gameVars.getInfo(element.type).baseCreditsProduction * element.level || 0;
             this.resourceProduction.energy += this.gameVars.getInfo(element.type).baseEnergyProduction * element.level || 0;
             this.resourceProduction.neutrino += this.gameVars.getInfo(element.type).baseNeutrinoProduction * element.level || 0;
             this.resourceProduction.population += this.gameVars.getInfo(element.type).basePopulationProduction * element.level || 0;
+            this.resourceProduction.attackMlt += this.gameVars.getInfo(element.type).baseAttackProduction * element.level || 0;
         });
         this.resourceProduction.credits /= 60;
         this.resourceProduction.energy /= 60;
@@ -102,8 +110,6 @@ export class BaseComponent implements OnInit {
     }
     // улучшает постройку
     upgradeStructure(structure: any): void {
-        this.setStructureTask(structure, 'upgrade', '', 123456789);
-        
         this.httpService.postRequest(
             "api/base/action", 
             {action: "upgradestructure", baseid: this.baseData.baseID, result: structure.type})
@@ -115,6 +121,8 @@ export class BaseComponent implements OnInit {
                                 this.gameVars.getInfo(structure.type).credits * structure.level,
                                 this.gameVars.getInfo(structure.type).energy * structure.level, 
                                 this.gameVars.getInfo(structure.type).neutrino * structure.level);
+                            this.setStructureTask(structure, 'upgrade', '', null);
+                            this.recalculateProduction();
                         }
                         alert(this.gameVars.getText(responce));
                     });
@@ -137,32 +145,37 @@ export class BaseComponent implements OnInit {
     }
     // создаёт юнит
     makeUnit(unitType: string): void {
-        this.setBaseTask('makeunit', unitType, 1234567);
-        this.httpService.postRequest(
-            "api/base/action", 
-            {action: "makeunit", result: unitType, baseid: this.baseData.baseID})
-                .subscribe(
-                    (responce: string) => {
-                        if(responce == "success") {
-                            let index = this.baseData.units.findIndex(p => p.type == unitType);
-                            if(index == -1)
-                                this.baseData.units[this.baseData.units.length] = {type: unitType, count: 1};
-                            else
-                                this.baseData.units[index].count++;
+        if(unitType != undefined)
+        {
+            this.httpService.postRequest(
+                "api/base/action", 
+                {action: "makeunit", result: unitType, baseid: this.baseData.baseID})
+                    .subscribe(
+                        (responce: string) => {
+                            if(responce == "success") {
+                                let index = this.baseData.units.findIndex(p => p.type == unitType);
+                                if(index == -1){
+                                    this.baseData.units[this.baseData.units.length] = {type: unitType, count: 1};
+                                }
+                                else
+                                {
+                                    this.baseData.units[index].count++;
+                                }
                                 this.reduceCounters(
                                     this.gameVars.getInfo(unitType).credits,
                                     this.gameVars.getInfo(unitType).energy, 
                                     this.gameVars.getInfo(unitType).neutrino);
-                        }
-                        alert(this.gameVars.getText(responce));
-                    },
-                    error => console.log(error));
+                                this.setBaseTask('makeunit', unitType, null);
+                            }
+                            alert(this.gameVars.getText(responce));
+                        },
+                        error => console.log(error));
+        }
     }
     // создаёт постройку
     buildStructure(structureType: string): void {
         if(structureType != undefined)
         {
-            this.setBaseTask('build', structureType, 1234567);
             this.httpService.postRequest(
                 "api/base/action", 
                 {action: "build", result: structureType, baseid: this.baseData.baseID})
@@ -182,6 +195,7 @@ export class BaseComponent implements OnInit {
                                     this.gameVars.getInfo(structureType).credits, 
                                     this.gameVars.getInfo(structureType).energy, 
                                     this.gameVars.getInfo(structureType).neutrino);
+                                this.setBaseTask('build', structureType, null);
                             }
                             alert(this.gameVars.getText(responce.toString()));
                             this.recalculateProduction();
@@ -191,11 +205,11 @@ export class BaseComponent implements OnInit {
     }
     // улучшает базу
     upgradeBase(): void {
-        this.setBaseTask('upgrade', '', 12345678);
         this.httpService.postRequest("api/base/action", {action: "upgrade", baseid: this.baseData.baseID}).subscribe(
             (responce) => {
                 if(responce == "success"){
                     this.baseData.level++;
+                    this.setBaseTask('upgrade', '', null);
                     this.reduceCounters(
                         this.gameVars.getInfo("base").upgrade.credits * this.baseData.level,
                         this.gameVars.getInfo("base").upgrade.energy * this.baseData.level, 
@@ -207,12 +221,15 @@ export class BaseComponent implements OnInit {
     }
     // переключает активность базы ака ремонтирует
     toggleBaseActiveness(): void {
-        this.setBaseTask(this.baseData.isActive ? 'repair' : '', '', 12345678);
         this.httpService.postRequest("api/base/action", {action: "repair", baseid: this.baseData.baseID}).subscribe(
             (responce) => {
-                responce == "success" 
-                    ? this.baseData.isActive = !this.baseData.isActive 
-                    : console.log(responce)
+                if(responce == "success"){
+                    this.baseData.isActive = !this.baseData.isActive 
+                    this.setBaseTask('repair', '', null);
+                }
+                else {
+                    console.log(responce)
+                }
                 alert(this.gameVars.getText(responce.toString()));
             },
             error => this.gameVars.registerError(error.message));
@@ -227,7 +244,7 @@ export class BaseComponent implements OnInit {
     }
     // грузит онлайновые данные
     loadOnlineData(): void {
-        this.httpService.postRequest("api/base/RetrieveBaseData", {}, true).subscribe(
+        this.httpService.postRequest("api/base/RetrieveBaseData", {}).subscribe(
             (responce) => {
                 if(responce == null)
                 {

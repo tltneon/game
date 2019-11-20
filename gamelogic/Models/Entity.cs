@@ -50,6 +50,7 @@ namespace gamelogic
         public DbSet<Squad> Squads { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 
     /// <summary>
@@ -147,5 +148,16 @@ namespace gamelogic
         public int Credits { get; set; }
         public int Energy { get; set; }
         public double Neutrino { get; set; }
+    }
+
+    /// <summary>
+    /// Таблица игровых сообщений
+    /// </summary>
+    public class Message
+    {
+        [Key]
+        public int ID { get; set; }
+        public int UserID { get; set; }
+        public string Text { get; set; }
     }
 }

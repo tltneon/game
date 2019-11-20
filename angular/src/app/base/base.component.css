@@ -2,7 +2,7 @@
 #block {display: inline-block;width: calc(100vw - 211px - 32px);}
 #baseinfo {top: calc(68px + 32px + 28px); position: fixed; right: 16px; border: 1px solid #5d5d5d; padding: 5px; background-color: #0608174d; 
 width: 220px;}
-.item {display: inline-block; border: 1px dotted #222425; margin: 5px; padding: 5px; background-color: #0608174d;}
+.item {display: inline-block; border: 1px dotted #222425; margin: 5px; padding: 5px; background-color: #0608174d; height: 195px;     vertical-align: top;}
 .item:hover {border: 1px dotted #0b345d; transition-duration: 0.7s;}
 .item:hover img {filter: grayscale(0%) brightness(120%); transition-duration: 0.7s;}
 .item .name {text-align: center; font-family: cursive; position: absolute; margin-top: -1.7em; background-color: #00000085; width: 256px;}

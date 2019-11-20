@@ -65,9 +65,15 @@ namespace gamelogic
             using (var db = new Entities())
             {
                 return db.Database.SqlQuery<StatsData>("" +
-                    "SELECT p.Playername, p.Wins, p.Loses, b.Basename, b.Level " +
-                    "FROM Players p, Bases b " +
-                    "WHERE p.UserID = b.OwnerID").ToList();
+                    "with asd(ResearchPoints, BaseID) as (" +
+                    "  select sum(s.Level), s.BaseID" +
+                    "  from Structures s" +
+                    "  group by s.BaseID" +
+                    ")" +
+                    "" +
+                    "SELECT p.Playername, p.Wins, p.Loses, b.Basename, b.Level, asd.ResearchPoints " +
+                    "FROM Players p, Bases b, asd " +
+                    "WHERE p.UserID = b.OwnerID and asd.BaseID = b.BaseID").ToList();
             }
         }
     }

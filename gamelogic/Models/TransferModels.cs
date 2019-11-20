@@ -17,6 +17,7 @@
         public int Loses { get; set; }
         public string Basename { get; set; }
         public int Level { get; set; }
+        public int ResearchPoints { get; set; }
     }
     public class BaseAction : WithToken
     {

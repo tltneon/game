@@ -59,7 +59,7 @@ namespace gamelogic
 
                     int newIdentityValue = user.UserID;
                     db.Players.Add(new Player { UserID = newIdentityValue, Playername = username });
-                    db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
+                    db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
                     db.Resources.Add(new Resource { Instance = "bas" + newIdentityValue, Credits = 200, Energy = 200, Neutrino = 0.0 });
                     db.SaveChanges();
                     result.success = true;

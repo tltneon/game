@@ -44,5 +44,17 @@ namespace webapi.Controllers
             client.Close();
             return entities;
         }
+
+        /// <summary>
+        /// Возвращает журнал событий
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<wcfservice.StatsData>> GetJournal()
+        {
+            var client = new Service1Client();
+            var entities = await client.GetStatsAsync();
+            client.Close();
+            return entities;
+        }
     }
 }

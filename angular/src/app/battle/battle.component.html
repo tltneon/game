@@ -20,46 +20,21 @@
         <h4>Send new squad</h4>
         <div style="width: 25%;
         display: inline-block;vertical-align: top;">
-            <div>Select units in squad:</div>
+            <div>Available units:</div>
             <br />
             <div>Select destination:
                 <select (change)="recalculateTime()" #destination.value="ngModel" name="destination" [(ngModel)]="destination">
                     <option *ngFor="let base of basesData" [value]="base.baseID">{{base.basename}} ({{base.baseID}})</option>
                 </select>
             </div>
-            <div>Estimation time travel: {{estiamatedTime}}s</div>
+            <div class="hide">Estimation time travel: {{estiamatedTime}}s</div>
             <div class="button" (click)="sendSquad(destination)">Send</div>
         </div>
-        <div style="width: 75%;
-        display: inline-block;vertical-align: top;">
-            <div class="item">
-                <div class="image"><img class="newStructure" /></div>
+        <div style="width: 75%;display: inline-block;vertical-align: top;">
+            <div class="item" *ngFor="let item of baseData?.units">
+                <div class="image"><img class="{{item.type}}" /></div>
                 <div class="desc">
-                    <div class="name">Unit</div>
-                    <div class="option">Choose count: </div>
-                    <div class="actions">
-                        <input type="number" />
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="image"><img class="newStructure" /></div>
-                <div class="desc">
-                    <div class="name">Unit</div>
-                    <div class="option">Choose count: </div>
-                    <div class="actions">
-                        <input type="number" />
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="image"><img class="newStructure" /></div>
-                <div class="desc">
-                    <div class="name">Unit</div>
-                    <div class="option">Choose count: </div>
-                    <div class="actions">
-                        <input type="number" />
-                    </div>
+                    <div class="name">{{item.type}} x {{item.count}}</div>
                 </div>
             </div>
         </div>

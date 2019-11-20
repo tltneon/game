@@ -383,6 +383,8 @@ namespace wcfservice
         
         private int LevelField;
         
+        private int ResearchPointsField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string Basename
         {
@@ -406,6 +408,19 @@ namespace wcfservice
             set
             {
                 this.LevelField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ResearchPoints
+        {
+            get
+            {
+                return this.ResearchPointsField;
+            }
+            set
+            {
+                this.ResearchPointsField = value;
             }
         }
     }

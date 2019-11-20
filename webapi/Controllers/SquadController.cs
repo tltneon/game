@@ -10,6 +10,18 @@ namespace webapi.Controllers
     public class SquadController : ApiController
     {
         /// <summary>
+        /// Возвращает данные о юнитах на базе
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<wcfservice.UnitsData>> GetBaseUnitsList(wcfservice.BaseAction msg)
+        {
+            var client = new Service1Client();
+            var entities = await client.GetBaseUnitsListAsync(msg);
+            client.Close();
+            return entities;
+        }
+
+        /// <summary>
         /// Выполняет действия игрока с отрядом
         /// </summary>
         /// <param name="msg"></param>

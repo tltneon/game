@@ -4,7 +4,7 @@ export class GameVars {
             name: "Drone",
             desctiption: "John Doe",
             power: 10,
-            credits: 100,
+            credits: 15,
             energy: 25
         },
         jetUnit: {
@@ -33,47 +33,48 @@ export class GameVars {
         lifeComplex: {
             name: "Living Complex",
             desctiption: "Increasing population",
-            credits: 300,
+            credits: 45,
             energy: 25,
             basePopulationProduction: 7
         },
         resourceComplex: {
             name: "Resource Complex",
             desctiption: "Producing credits",
-            credits: 100,
-            energy: 25,
+            credits: 23,
+            energy: 5,
             baseCreditsProduction: 10
         },
         energyComplex: {
             name: "Takomak",
             desctiption: "Producing energy",
-            credits: 100,
-            energy: 25,
+            credits: 17,
+            energy: 10,
             baseEnergyProduction: 10
         },
         aircraftsComplex: {
             name: "Aircrafts Factory",
             desctiption: "Allows to make units",
-            credits: 1000,
-            energy: 250
+            credits: 75,
+            energy: 40,
+            baseAttackProduction: 0.13
             
         },
         researchStation: {
             name: "Research Station",
             desctiption: "Producing neutrino",
-            credits: 100000,
-            energy: 250000,
+            credits: 10000,
+            energy: 25000,
             baseNeutrinoProduction: 0.000001
         },
         /* special */
         base: {
             repair: {
-                credits: 2000,
-                energy: 2000
+                credits: 20,
+                energy: 12
             },
             upgrade: {
-                credits: 5000,
-                energy: 5000
+                credits: 45,
+                energy: 70
             },
         }
     }
@@ -94,6 +95,7 @@ export class GameVars {
         "wrongdatareceived": "Wrong data received",
         "wrongpassword": "Wrong password",
         "wrongtoken": "Wrong user data",
+        "nounits": "You have no units to start attacking someone!",
     }
 
     getInfo(item: string) {

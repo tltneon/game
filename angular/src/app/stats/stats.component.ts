@@ -57,7 +57,8 @@ export class StatsComponent implements OnInit {
         basename: "basename" + i,
         level: t-i,
         wins: t-i,
-        loses: i
+        loses: i,
+        researchPoints: t-i,
       };
   }
 }

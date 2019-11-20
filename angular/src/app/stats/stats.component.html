@@ -22,6 +22,7 @@
             <th>Nickname</th>
             <th>Base name</th>
             <th>Base level</th>
+            <th>Research</th>
             <th>Wins</th>
             <th>Loses</th>
             <th>Score</th>
@@ -31,9 +32,10 @@
             <td>{{stat.playername}}</td>
             <td>{{stat.basename}}</td>
             <td>Level {{stat.level}}</td>
+            <td>{{stat.researchPoints}}</td>
             <td>{{stat.wins}}</td>
             <td>{{stat.loses}}</td>
-            <td>{{stat.level*2 + stat.wins - stat.loses - 1}}</td>
+            <td>{{stat.level*2 + stat.researchPoints + stat.wins - stat.loses - 1}}</td>
         </tr>
     </table>
 </div>

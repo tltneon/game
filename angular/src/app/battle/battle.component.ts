@@ -16,6 +16,7 @@ export class BattleComponent implements OnInit {
   basesData: BaseJSON[];
   estiamatedTime: number = 0;
   destination;
+  baseData: any = {};
 
   constructor(private httpService: HttpService, private gameVars: GameVars) { }
 
@@ -39,12 +40,20 @@ export class BattleComponent implements OnInit {
       else
       {
         this.basesData = responce;
-        console.log(responce);
       }
-      this.isDataLoaded = true;
     },
     error => this.gameVars.registerError(error.message));
-    //this.httpService.postRequest("api/squad/GetSquads", {}).subscribe((responce) => console.log(this, responce));
+    
+    this.httpService.postRequest("api/base/RetrieveBaseData", {}).subscribe(
+      (responce) => {
+          if(responce != null)
+          {
+              this.baseData = responce;
+              console.log(responce);
+          }
+          this.isDataLoaded = true;
+      },
+      error => this.gameVars.registerError(error.message));
   }
   
   loadOfflineData(): void {

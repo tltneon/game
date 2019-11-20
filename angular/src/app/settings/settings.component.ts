@@ -25,9 +25,12 @@ export class SettingsComponent implements OnInit {
   }
 
   setValue(password: string): void {
-    this.httpService.postRequest('api/account/setaccountpassword', {"username": Cookie.get('username'), "password": password}).subscribe(
-      (responce: string) => alert(this.gameVars.getText(responce)),
-      error => this.gameVars.registerError(error.message));
+    this.httpService.postRequest('api/account/setaccountpassword', {
+      "username": Cookie.get('username'), 
+      "password": password}
+        ).subscribe(
+        (responce: string) => alert(this.gameVars.getText(responce)),
+        error => this.gameVars.registerError(error.message));
   }
 
   logout(): void {
