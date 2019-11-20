@@ -35,7 +35,7 @@
             <td>{{stat.researchPoints}}</td>
             <td>{{stat.wins}}</td>
             <td>{{stat.loses}}</td>
-            <td>{{stat.level*2 + stat.researchPoints + stat.wins - stat.loses - 1}}</td>
+            <td>{{(stat.level-1)*3 + stat.researchPoints + stat.wins - stat.loses}}</td>
         </tr>
     </table>
 </div>
