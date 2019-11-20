@@ -1,11 +1,15 @@
 <div class="column">
     <div>Userlist</div>
     <div class="item" *ngFor="let item of data">
-        <div class="name">{{item.playername}}</div>
+        <div class="name" (click)="showUser(data.indexOf(item))">{{item.playername}}</div>
     </div>
 </div>
 <div class="column">
-    <div>Userdetails</div>
-    <div class="item">Name: {{data[0]?.playername}}</div>
-    <div class="item">Base: Planet 22</div>
+    <div *ngIf="curItem != -1">
+        <div>Userdetails</div>
+        <div class="item">Player ID: {{data[curItem]?.userID}}</div>
+        <div class="item">Name: {{data[curItem]?.playername}}</div>
+        <div class="item">Wins: {{data[curItem]?.wins}}</div>
+        <div class="item">Loses: {{data[curItem]?.loses}}</div>
+    </div>
 </div>

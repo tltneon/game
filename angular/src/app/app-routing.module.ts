@@ -23,14 +23,9 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
     { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
     { path: 'admin', component: AdminComponent, canActivate: [AdminGuard],
       children: [
-        {
-          path: '',
-          children: [
-            { path: 'users', component: AdminUsersComponent, outlet: 'sub', },
-            { path: 'bases', component: AdminBasesComponent, outlet: 'sub', },
-            { path: 'settings', component: AdminSettingsComponent, outlet: 'sub' }
-          ],
-        }
+        { path: 'users', component: AdminUsersComponent, },
+        { path: 'bases', component: AdminBasesComponent, },
+        { path: 'settings', component: AdminSettingsComponent,}
       ]
     },
     { path: '**', redirectTo: '/' }

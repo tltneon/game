@@ -1,9 +1,12 @@
 <div class="onethirdcolumn">
   <div class="atitle">Categories</div>
   <div *ngFor="let a of menu">
-    <div class="abutton"><a routerLink="{{a.routerLink}}">{{a.name}}</a></div>
+    <div class="abutton"><a routerLink="{{a.routerLink}}" (click)="changeLayer(a.routerLink)">{{a.name}}</a></div>
   </div>
 </div>
-<div class="twothirdcolumn">
+<div class="twothirdcolumn" *ngIf="level=='users'; else unset">
   <app-admin-users></app-admin-users>
 </div>
+<ng-template #unset> 
+    <app-admin-bases></app-admin-bases>
+</ng-template> 

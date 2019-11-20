@@ -6,14 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit {
+  level = "users";
+
   menu = [
     {name: "Users", routerLink: "users"},
     {name: "Bases", routerLink: "bases"},
-    {name: "Settings", routerLink: "settings"},
   ];
 
   constructor() { }
 
   ngOnInit() {}
 
+  changeLayer(level: string): void {
+    this.level = level;
+  }
 }

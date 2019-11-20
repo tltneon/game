@@ -1,3 +1,16 @@
-<p>
-admin-bases works!
-</p>
+<div class="column">
+    <div>Baselist</div>
+    <div class="item" *ngFor="let item of data">
+        <div class="name" (click)="showBase(data.indexOf(item))">{{item.basename}}</div>
+    </div>
+</div>
+<div class="column">
+    <div *ngIf="curItem != -1">
+        <div>Basedetails</div>
+        <div class="item">Base ID: {{data[curItem]?.baseID}}</div>
+        <div class="item">Basename: {{data[curItem]?.basename}}</div>
+        <div class="item">Active: {{data[curItem]?.isActive}}</div>
+        <div class="item">Level: {{data[curItem]?.level}}</div>
+        <div class="item">OwnerID: {{data[curItem]?.ownerID}}</div>
+    </div>
+</div>
