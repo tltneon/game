@@ -6,12 +6,13 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class HttpService {
     readonly rootUrl = 'http://localhost:16462/'; // webapi url
   
-    constructor(private http: HttpClient){ }
+    constructor(private http: HttpClient){}
       
     getRequest(url: string, httpOptions = {}) {
         console.log("get", this.rootUrl + url);
         return this.http.get(this.rootUrl + url, httpOptions);
-    }      
+    }
+
     postRequest(url: string, body: any, addToken = true, httpOptions = {}) {
         if(addToken) body.token = Cookie.get("token");
         console.log("post", this.rootUrl + url, body );

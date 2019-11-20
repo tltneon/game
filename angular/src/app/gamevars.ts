@@ -103,7 +103,7 @@ export class GameVars {
         return this.text[string] || string;
     }
 
-    registerError(msg: string) {
+    registerError(msg: string): void {
         document.body.querySelector("#errorSign").classList.add("error")
         let myContainer = <HTMLElement> document.body.querySelector("#errorSign").children[1].children[1];
         myContainer.innerHTML += '<li>' + msg + '</li>';

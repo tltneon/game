@@ -24,7 +24,7 @@ namespace webapi
                 Thread.Sleep(6000);
                 await Task.Run(() => {
                     var client = new Service1Client();
-                    client.DbStatus();
+                    client.DbStatus("e23je93jeyfg@_EO<Vdp-fo4-");
                     client.Close();
                 });
             }

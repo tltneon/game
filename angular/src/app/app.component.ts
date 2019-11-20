@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
       
     ngOnInit() {}
 
-    clear(){
+    clear(): void {
       document.body.querySelector("#errorSign").classList.remove("error");
       document.body.querySelector("#errorSign").children[1].children[1].innerHTML = '';
     }

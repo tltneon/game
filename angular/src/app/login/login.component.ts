@@ -12,19 +12,19 @@ import { GameVars } from '../gamevars';
 })
 export class LoginComponent implements OnInit {
   password: string;
-  login:string;
-  error:string = "Enter your credentials here:";
+  login: string;
+  error: string = "Enter your credentials here:";
 
   constructor(private httpService: HttpService, private router: Router, private gameVars: GameVars) { }
 
   ngOnInit() {}
 
-  auth(password, login){
+  auth(password: string, login: string): void {
     this.error = ". . .";
     document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active", "progress");
     this.httpService.postRequest("api/account/auth", {"username": login, "password": password}, false).subscribe(
-      (responce:string) => {
+      (responce: string) => {
         if(responce.slice(0,5) == "Token") {
           Cookie.set('token', responce);
           Cookie.set('username', login);
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
       error => this.gameVars.registerError(error.message));
   }
 
-  fakeauth() {
+  fakeauth(): void {
     Cookie.set('token', 'faketoken');
     this.router.navigate(['/']);
   }

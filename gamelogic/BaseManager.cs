@@ -306,11 +306,11 @@ namespace gamelogic
                 if (IsOwner(obj.baseid, obj.token))
                 {
                     var BaseData = GetBaseByID(obj.baseid);
-                    if (!CanAfford(obj.baseid, "repairBase", BaseData.Level))
+                    if (!CanAfford(obj.baseid, "repairBase", BaseData.Level - 2))
                     {
                         return "notenoughresources";
                     }
-                    ProceedActions.DoBuyItem(obj.baseid, "repairBase", BaseData.Level);
+                    ProceedActions.DoBuyItem(obj.baseid, "repairBase", BaseData.Level - 2);
 
                     using (var db = new Entities())
                     {

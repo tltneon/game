@@ -11,6 +11,10 @@
             <td><input placeholder="youraccountname" value="{{username}}" disabled /></td>
         </tr>
         <tr>
+            <td>Privileges</td>
+            <td><input value="{{role}}" disabled /></td>
+        </tr>
+        <tr>
             <td>New password</td>
             <td><input #password.value="ngModel" placeholder="************" name="password" [(ngModel)]="password" /></td>
         </tr>

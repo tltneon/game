@@ -11,7 +11,7 @@ import { GameVars } from '../gamevars';
   providers: [HttpService, GameVars]
 })
 export class BattleComponent implements OnInit {
-  isDataLoaded:boolean = false;
+  isDataLoaded: boolean = false;
   battlesData: BattlesJSON[];
   basesData: BaseJSON[];
   estiamatedTime: number = 0;
@@ -23,7 +23,7 @@ export class BattleComponent implements OnInit {
     this.loadOnlineData();
   }
 
-  doAction(act:string, key:string, to:number):void {
+  doAction(act: string, key: string, to: number): void {
     this.httpService.postRequest("api/squad/Action", {key: key, action: act, to: to}).subscribe (
       (responce: string) => {
         console.log("api/squad/Action => " + responce);
@@ -31,7 +31,8 @@ export class BattleComponent implements OnInit {
       },
       error => this.gameVars.registerError(error.message));
   }
-  loadOnlineData():void {
+
+  loadOnlineData(): void {
     this.httpService.getRequest("api/base/GetBaseList", {}).subscribe((responce:BaseJSON[]) => {
       if(responce == null)
         console.log("api/base/GetBaseList => null");
@@ -45,7 +46,8 @@ export class BattleComponent implements OnInit {
     error => this.gameVars.registerError(error.message));
     //this.httpService.postRequest("api/squad/GetSquads", {}).subscribe((responce) => console.log(this, responce));
   }
-  loadOfflineData():void {
+  
+  loadOfflineData(): void {
     this.isDataLoaded = true;
     this.battlesData = [
       {

@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { StatsJSON } from '../models/stats';
+import { GameVars } from '../gamevars';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.css'],
-  providers: [HttpService]
+  providers: [HttpService, GameVars]
 })
 export class StatsComponent implements OnInit {
-  isDataLoaded:boolean = false;
+  isDataLoaded: boolean = false;
   statsData: StatsJSON[] = [];
   timeLeftMin: number = 4;
   timeLeftSec: number = 59;
   interval;
-  index:number = 0;
+  index: number = 0;
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private gameVars: GameVars) { }
 
   ngOnInit() {
     this.loadOnlineData();
@@ -34,7 +35,7 @@ export class StatsComponent implements OnInit {
     }, 1000)
   }
 
-  loadOnlineData(){
+  loadOnlineData(): void {
     this.httpService.getRequest('api/statistic/GetStats').subscribe(
       (responce: StatsJSON[]) => { 
         console.log(responce);
@@ -43,11 +44,11 @@ export class StatsComponent implements OnInit {
         this.timeLeftMin = 4;
         this.timeLeftSec = 59;
       },
-      error => console.log(error.message)
+      error => this.gameVars.registerError(error.message)
     );
   }
 
-  loadOfflineData(){
+  loadOfflineData(): void {
     this.isDataLoaded = true;
     const t = 29;
     for(let i = 0; i<t; i++)

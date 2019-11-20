@@ -9,13 +9,16 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(
-  next: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot): boolean {
-    if(Cookie.get('token')) return true;
-    this.router.navigate(['/login']);
-    return false;
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): boolean {
+      if(Cookie.get('token')) {
+        return true;
+      }
+      this.router.navigate(['/login']);
+      return false;
   }
 }
+
 @Injectable({
   providedIn: 'root',
 })
@@ -23,9 +26,11 @@ export class AdminGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(
-  next: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot): boolean {
-    this.router.navigate(['/']);
-    return false;
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): boolean {
+      if(Cookie.get('role') == "#M)R(IEFN*") {
+        return true;
+      }
+      return false;
   }
 }
