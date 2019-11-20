@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
       (responce:string) => {
         if(responce.slice(0,5) == "Token") {
           Cookie.set('token', responce);
+          Cookie.set('username', login);
           this.router.navigate(['/']);
         }
         else {

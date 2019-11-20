@@ -33,7 +33,13 @@ namespace webapi.Controllers
         /// Возвращает тестовые данные
         /// </summary>
         /// <returns></returns>
-        public wcfservice.AuthData GetAccountData() => new wcfservice.AuthData { username = "testuser", password = "testpass" };
+        public async Task<string> SetAccountPassword(wcfservice.AuthData msg)
+        {
+            var client = new Service1Client();
+            var result = await client.SetAccountPasswordAsync(msg);
+            client.Close();
+            return result;
+        }
 
         /// <summary>
         /// Проверяет на некорректность ввода

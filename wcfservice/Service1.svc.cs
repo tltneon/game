@@ -47,6 +47,22 @@ namespace wcfservice
             }
         }
 
+        public string SetAccountPassword(AuthData obj)
+        {
+            var result = Tools.CheckAuthedInput(obj);
+            if (result != "passed")
+            {
+                return result;
+            }
+            var user = AccountManager.GetAccountByToken(obj.token);
+            obj.username = obj.username.ToLower();
+            if (user.Username == obj.username)
+            {
+                return AccountManager.ChangePassword(user.Username, obj.password);
+            }
+            return "wrongdata";
+        }
+
         /// <summary>
         /// Возвращает список всех игроков
         /// </summary>
@@ -239,6 +255,10 @@ namespace wcfservice
         /// <summary>
         ///  Это очень плохая реализация игрового лупа, очень плохая и ничем не защищена
         /// </summary>
-        public void DbStatus() => BaseManager.BaseGatherResources();
+        public void DbStatus(string msg)
+        {
+            if(msg == "e23je93jeyfg@_EO<Vdp-fo4-")
+                BaseManager.BaseGatherResources();
+        }
     }
 }

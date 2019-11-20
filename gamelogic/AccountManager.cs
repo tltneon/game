@@ -69,6 +69,17 @@ namespace gamelogic
                 }
         }
 
+        public static string ChangePassword(string username, string password)
+        {
+            using (var db = new Entities())
+            {
+                var user = db.Accounts.FirstOrDefault(o => o.Username == username);
+                user.Password = Base64Encode(password);
+                db.SaveChanges();
+            }
+            return "success";
+        }
+
         /// <summary>
         /// Возвращает аккаунт по его токену
         /// </summary>

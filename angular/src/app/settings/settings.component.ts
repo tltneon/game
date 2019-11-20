@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpService } from '../http.service';
-import { AccountJSON } from '../models/account';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 import { Router } from '@angular/router';
 
@@ -13,21 +12,22 @@ import { Router } from '@angular/router';
 
 
 export class SettingsComponent implements OnInit {
-  userData: AccountJSON;
-  password: string = '#password';
+  username: string;
+  password: string;
 
   constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-    this.httpService.getRequest('api/account/GetAccountData').subscribe(
-      (responce:AccountJSON) => this.userData = responce,
+    this.username = Cookie.get('username');
+  }
+
+  setValue(password: string): void {
+    this.httpService.postRequest('api/account/setaccountpassword', {"username": Cookie.get('username'), "password": password}).subscribe(
+      (responce) => alert(responce),
       error => console.log(error));
   }
 
-  setValue(password){
-  }
-
-  logout(){
+  logout(): void {
     Cookie.delete('token');
     this.router.navigate(['/login']);
   }

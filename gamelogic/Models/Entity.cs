@@ -15,12 +15,12 @@ namespace gamelogic
         /// <param name="db"></param>
         protected override void Seed(Entities db)
         {
-            db.Accounts.Add(new Account { UserID = 1, Username = "Admin", Password = AccountManager.Base64Encode("123456"), Role = 1, Token = "Tokenfgio" });
-            db.Accounts.Add(new Account { UserID = 2, Username = "User", Password = AccountManager.Base64Encode("123"), Role = 0, Token = "Tokenfl4o" });
-            db.Players.Add(new Player { UserID = 1, Playername = "Admin" });
-            db.Players.Add(new Player { UserID = 2, Playername = "User" });
-            db.Bases.Add(new Base { Basename = "AdminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
-            db.Bases.Add(new Base { Basename = "UserBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 1, IsActive = true });
+            db.Accounts.Add(new Account { UserID = 1, Username = "admin", Password = AccountManager.Base64Encode("123456"), Role = 1, Token = "Tokenfgio" });
+            db.Accounts.Add(new Account { UserID = 2, Username = "user", Password = AccountManager.Base64Encode("123"), Role = 0, Token = "Tokenfl4o" });
+            db.Players.Add(new Player { UserID = 1, Playername = "admin" });
+            db.Players.Add(new Player { UserID = 2, Playername = "user" });
+            db.Bases.Add(new Base { Basename = "adminBase", OwnerID = 1, CoordX = 1, CoordY = 1, Level = 1, IsActive = true });
+            db.Bases.Add(new Base { Basename = "userBase", OwnerID = 2, CoordX = 4, CoordY = 2, Level = 1, IsActive = true });
             db.Resources.Add(new Resource { Instance = "bas1", Credits = 200, Energy = 200, Neutrino = 0.0 });
             db.Resources.Add(new Resource { Instance = "bas2", Credits = 200, Energy = 200, Neutrino = 0.0 });
             db.Units.Add(new Unit { Instance = "bas1", Type = "droneUnit", Count = 1 });

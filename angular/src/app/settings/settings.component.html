@@ -8,15 +8,11 @@
         </tr>
         <tr>
             <td>Account name</td>
-            <td><input value="{{userData?.username}}" disabled /></td>
-        </tr>
-        <tr>
-            <td>Player name</td>
-            <td><input value="#playername" /></td>
+            <td><input placeholder="youraccountname" value="{{username}}" disabled /></td>
         </tr>
         <tr>
             <td>New password</td>
-            <td><input #password.value="ngModel" value="{{userData?.password}}" name="password" [(ngModel)]="password" /></td>
+            <td><input #password.value="ngModel" placeholder="************" name="password" [(ngModel)]="password" /></td>
         </tr>
         <tr>
             <td></td>

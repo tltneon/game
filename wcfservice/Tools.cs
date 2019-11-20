@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using gamelogic;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace wcfservice
 {
@@ -56,6 +57,11 @@ namespace wcfservice
             if (obj.token == null)
             {
                 return "notokenreceived";
+            }
+            const string pattern = @"[^a-zA-ZА-Яа-я0-9!№%*@#$^]";
+            if (Regex.IsMatch(obj.token, pattern))
+            {
+                return "wrongdatareceived";
             }
             if (!AccountManager.CheckToken(obj.token))
             {
