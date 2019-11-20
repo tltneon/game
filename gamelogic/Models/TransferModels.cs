@@ -30,4 +30,19 @@
         public string action { get; set; }
         public int to { get; set; }
     }
+
+
+    public class ReturnCode
+    {
+        public bool success { get; set; }
+    }
+    public class ReturnMessage : ReturnCode
+    {
+        public string message { get; set; }
+    }
+    public class ReturnAuthData : ReturnMessage
+    {
+        public string token { get; set; }
+        public int role { get; set; }
+    }
 }

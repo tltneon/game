@@ -32,6 +32,8 @@ export class SettingsComponent implements OnInit {
 
   logout(): void {
     Cookie.delete('token');
+    Cookie.delete('role');
+    Cookie.delete('username');
     this.router.navigate(['/login']);
   }
 }

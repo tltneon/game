@@ -8,7 +8,7 @@ namespace wcfservice
     public interface IService1
     {
         [OperationContract]
-        string SendAuthData(AuthData data);
+        ReturnAuthData SendAuthData(AuthData data);
 
         [OperationContract]
         string SetAccountPassword(AuthData data);
@@ -189,5 +189,27 @@ namespace wcfservice
         public string type { get; set; }
         [DataMember]
         public int count { get; set; }
+    }
+
+
+    [DataContract]
+    public class ReturnCode
+    {
+        [DataMember]
+        public bool success { get; set; }
+    }
+    [DataContract]
+    public class ReturnMessage : ReturnCode
+    {
+        [DataMember]
+        public string message { get; set; }
+    }
+    [DataContract]
+    public class ReturnAuthData : ReturnMessage
+    {
+        [DataMember]
+        public string token { get; set; }
+        [DataMember]
+        public int role { get; set; }
     }
 }

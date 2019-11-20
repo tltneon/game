@@ -195,6 +195,104 @@ namespace wcfservice
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReturnCode", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ReturnMessage))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ReturnAuthData))]
+    public partial class ReturnCode : object, System.Runtime.Serialization.IExtensibleDataObject
+    {
+        
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private bool successField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return this.extensionDataField;
+            }
+            set
+            {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool success
+        {
+            get
+            {
+                return this.successField;
+            }
+            set
+            {
+                this.successField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReturnMessage", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ReturnAuthData))]
+    public partial class ReturnMessage : wcfservice.ReturnCode
+    {
+        
+        private string messageField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string message
+        {
+            get
+            {
+                return this.messageField;
+            }
+            set
+            {
+                this.messageField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReturnAuthData", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
+    public partial class ReturnAuthData : wcfservice.ReturnMessage
+    {
+        
+        private int roleField;
+        
+        private string tokenField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int role
+        {
+            get
+            {
+                return this.roleField;
+            }
+            set
+            {
+                this.roleField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string token
+        {
+            get
+            {
+                return this.tokenField;
+            }
+            set
+            {
+                this.tokenField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PlayerData", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatsData))]
     public partial class PlayerData : object, System.Runtime.Serialization.IExtensibleDataObject
@@ -671,6 +769,9 @@ namespace wcfservice
     [System.Runtime.Serialization.DataContractAttribute(Name="SquadEntity", Namespace="http://schemas.datacontract.org/2004/07/wcfservice")]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.AuthData))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.WithToken))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ReturnAuthData))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ReturnMessage))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.ReturnCode))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.PlayerData[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.PlayerData))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(wcfservice.StatsData[]))]
@@ -817,10 +918,10 @@ public interface IService1
 {
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
-    string SendAuthData(wcfservice.AuthData data);
+    wcfservice.ReturnAuthData SendAuthData(wcfservice.AuthData data);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SendAuthData", ReplyAction="http://tempuri.org/IService1/SendAuthDataResponse")]
-    System.Threading.Tasks.Task<string> SendAuthDataAsync(wcfservice.AuthData data);
+    System.Threading.Tasks.Task<wcfservice.ReturnAuthData> SendAuthDataAsync(wcfservice.AuthData data);
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SetAccountPassword", ReplyAction="http://tempuri.org/IService1/SetAccountPasswordResponse")]
     string SetAccountPassword(wcfservice.AuthData data);
@@ -923,12 +1024,12 @@ public partial class Service1Client : System.ServiceModel.ClientBase<IService1>,
     {
     }
     
-    public string SendAuthData(wcfservice.AuthData data)
+    public wcfservice.ReturnAuthData SendAuthData(wcfservice.AuthData data)
     {
         return base.Channel.SendAuthData(data);
     }
     
-    public System.Threading.Tasks.Task<string> SendAuthDataAsync(wcfservice.AuthData data)
+    public System.Threading.Tasks.Task<wcfservice.ReturnAuthData> SendAuthDataAsync(wcfservice.AuthData data)
     {
         return base.Channel.SendAuthDataAsync(data);
     }

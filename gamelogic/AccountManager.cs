@@ -14,24 +14,25 @@ namespace gamelogic
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static string AuthClient(AuthData data)
+        public static ReturnAuthData AuthClient(AuthData data)
         {
             data.username = data.username.ToLower();
-            //ProceedActions.Log("Event", $"{data.username} {data.password}");
-            //var user = dal.AccountQuery.GetUserByName(data.username);
-            //ProceedActions.Log("Event", $"{user.Username} {user.Password} {user.Token} | {data.username} {data.password}");
             var user = GetUserByName(data.username);
             if (user != null)
             {
+                var result = new ReturnAuthData { success = false };
                 if (Base64Decode(user.Password) == data.password)
                 {
-                    return user.Token;
+                    result.success = true;
+                    result.token = user.Token;
+                    result.role = user.Role;
+                    return result;
                 }
                 else
                 {
                     ProceedActions.Log("Event", $"Неудачная попытка авторизоваться под аккаунтом {user.Username}");
-                    const string error = "wrongpassword";
-                    return error;
+                    result.message = "wrongpassword";
+                    return result;
                 }
             }
             else
@@ -46,8 +47,9 @@ namespace gamelogic
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static string CreateUser(string username, string password)
+        public static ReturnAuthData CreateUser(string username, string password)
         {
+            var result = new ReturnAuthData { success = false };
             using (var db = new Entities())
                 try
                 {
@@ -60,12 +62,16 @@ namespace gamelogic
                     db.Bases.Add(new Base { Basename = username + "Base", OwnerID = newIdentityValue, CoordX = 1, CoordY = 1, Level = 0, IsActive = true });
                     db.Resources.Add(new Resource { Instance = "bas" + newIdentityValue, Credits = 200, Energy = 200, Neutrino = 0.0 });
                     db.SaveChanges();
-                    return user.Token;
+                    result.success = true;
+                    result.token = user.Token;
+                    result.role = user.Role;
+                    return result;
                 }
                 catch (Exception ex)
                 {
                     ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция AccountManager.CreateUser");
-                    return ex.Message;
+                    result.message = ex.Message;
+                    return result;
                 }
         }
 

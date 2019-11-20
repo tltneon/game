@@ -3,6 +3,7 @@ import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 import { GameVars } from '../gamevars';
+import { AccountJSON } from '../models/account';
 
 @Component({
   selector: 'app-login',
@@ -24,17 +25,20 @@ export class LoginComponent implements OnInit {
     document.body.querySelector('#auth').innerHTML = "Processing...";
     document.body.querySelector("#processing").classList.add("active", "progress");
     this.httpService.postRequest("api/account/auth", {"username": login, "password": password}, false).subscribe(
-      (responce: string) => {
-        if(responce.slice(0,5) == "Token") {
-          Cookie.set('token', responce);
+      (responce: AccountJSON) => {
+        if(responce.success){
+          Cookie.set('token', responce.token);
+          switch(responce.role){
+            case 1: Cookie.set('role', "#M)R(IEFN*"); break;
+            default: break;
+          }
           Cookie.set('username', login);
           this.router.navigate(['/']);
         }
         else {
-          this.error = responce;
           document.body.querySelector("#auth").innerHTML = "Authorize";
           document.body.querySelector("#processing").classList.remove("active", "progress");
-          this.error = this.gameVars.getText(responce);
+          this.error = this.gameVars.getText(responce.message);
         }
       },
       error => this.gameVars.registerError(error.message));

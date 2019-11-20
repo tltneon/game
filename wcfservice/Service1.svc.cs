@@ -16,25 +16,33 @@ namespace wcfservice
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string SendAuthData(AuthData data)
+        public ReturnAuthData SendAuthData(AuthData data)
         {
+            var result = new ReturnAuthData { success = false };
             if (data == null)
             {
-                return "nodatareceived";
+                result.message = "nodatareceived";
+                return result;
             }
             if (data.username == null || data.password == null || data.username.Length < 3 || 
                 data.password.Length < 3 || data.username.Length > 20 || data.password.Length > 20)
             {
-                return "wrongdatareceived";
+                result.message = "wrongdatareceived";
+                return result;
             }
             const string pattern = @"[^a-zA-ZА-Яа-я0-9!№%*@#$^]";
             if (Regex.IsMatch(data.username, pattern))
             {
-                return "wrongdatareceived";
+                result.message = "wrongdatareceived";
+                return result;
             }
             try
             {
-                return AccountManager.AuthClient(Tools.SmartMapper<AuthData, gamelogic.Models.AuthData>(data));
+                return Tools.SmartMapper<gamelogic.Models.ReturnAuthData, ReturnAuthData>(
+                    AccountManager.AuthClient(
+                        Tools.SmartMapper<AuthData, gamelogic.Models.AuthData>(data)
+                        )
+                    );
             }
             catch (Exception ex)
             {
@@ -43,7 +51,8 @@ namespace wcfservice
                 System.Diagnostics.Debug.WriteLine($"Трассировка стека: {ex.StackTrace}");
 
                 ProceedActions.Log("Exception", $"Исключение: {ex.Message}, функция Service1.SendAuthData");
-                return ex.Message;
+                result.message = ex.Message;
+                return result;
             }
         }
 

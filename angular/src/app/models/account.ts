@@ -1,6 +1,7 @@
 export class AccountJSON {
     userid: number;
-    username: string;
-    password: string;
+    success: boolean;
+    message: string;
     role: number;
+    token: string;
 }
